@@ -1,0 +1,7 @@
+{
+    "name": "hutech/hutech-coffee",
+    "description": "Thuc hanh phat trien phan mem ma nguon mo",
+    "require": {
+        "php-di/php-di": "^7.0"
+    }
+}
