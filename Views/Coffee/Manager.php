@@ -47,8 +47,8 @@
                     <td><?= $coffee->image ?></td>
                     <td><?= $coffee->description ?></td>
                     <td>
-                        <a href="/coffee/edit/<?= $coffee->id ?>" class="btn btn-primary">Sửa</a>
-                        <a href="/coffee/delete/<?= $coffee->id ?>" class="btn btn-danger">Xóa</a>
+                        <a href="?uri=edit&id=<?= $coffee->id ?>" class="btn btn-info">Sửa</a>
+                        <a href="?uri=delete&id=<?= $coffee->id ?>" class="btn btn-danger">Xóa</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
