@@ -2,7 +2,5 @@
     "name": "hutech/hutech-coffee",
     "description": "Thuc hanh phat trien phan mem ma nguon mo",
     "license": "GPL-3.0-only",
-    "require": {
-        "php-di/php-di": "^7.0"
-    }
+    "require": {}
 }
