@@ -2,7 +2,6 @@
 
 namespace Hutech\Services;
 
-
 use Hutech\Repositories\CoffeeRepository;
 
 include_once './Repositories/CoffeeRepository.php';

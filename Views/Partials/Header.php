@@ -14,7 +14,7 @@
 				<div class="full">
 					<div class="center-desk">
 						<div class="logo">
-							<a href="?uri=/">Hutech</a>
+							<a href="/hutech-coffee">Hutech</a>
 						</div>
 					</div>
 				</div>
@@ -25,26 +25,26 @@
 						<span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarsExample04">
-						<ul class="navbar-nav mr-auto">
+						<ul class="navbar-nav mr-auto" id="navbar">
 							<li class="nav-item ">
-								<a class="nav-link" href="?uri=/">Trang chủ</a>
+								<a class="nav-link" href="/hutech-coffee">Trang chủ</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="?uri=order">Gọi món</a>
+								<a class="nav-link" href="/hutech-coffee/order">Gọi món</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="?uri=cart">Giỏ hàng</a>
+								<a class="nav-link" href="/hutech-coffee/cart">Giỏ hàng</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="?uri=manager">Quản lý</a>
+								<a class="nav-link" href="/hutech-coffee/manager">Quản lý</a>
 							</li>
 							<?php if (isset($_SESSION['user'])) : ?>
 								<li class="nav-item">
-									<a class="nav-link" href="?uri=logout">Đăng xuất</a>
+									<a class="nav-link" href="/hutech-coffee/logout">Đăng xuất</a>
 								</li>
 							<?php else : ?>
 								<li class="nav-item">
-									<a class="nav-link" href="?uri=login">Đăng nhập</a>
+									<a class="nav-link" href="/hutech-coffee/login">Đăng nhập</a>
 								</li>
 							<?php endif; ?>
 						</ul>
@@ -54,7 +54,7 @@
 			<div class="col-md-4 re_no">
 				<ul class="infomaco">
 					<li><i class="fa fa-phone" aria-hidden="true"></i> (028) 5445 7777</li>
-					<li><a href="Javascript:void(0)"><i class="fa fa-envelope-o" aria-hidden="true"></i> hutech@hutech.edu.vn</a></li>
+					<li><a href="mailto:hutech@hutech.edu.vn"><i class="fa fa-envelope-o" aria-hidden="true"></i> hutech@hutech.edu.vn</a></li>
 				</ul>
 			</div>
 		</div>

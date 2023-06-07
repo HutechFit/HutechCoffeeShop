@@ -8,11 +8,11 @@ class UserController
 {
     public function login(): void
     {
-        require_once('Views/User/Login.php');
+        require_once 'Views/User/Login.php';
     }
 
     public function index(): void
     {
-        require_once('Views/User/Register.php');
+        require_once 'Views/User/Register.php';
     }
 }

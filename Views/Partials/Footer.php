@@ -2,31 +2,16 @@
 	<div class="footer">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-12">
-					<a class="logo_bottom" href="?uri=/">Hutech</a>
-				</div>
-				<div class="col-md-12">
-					<form class="form_subscri">
-						<div class="row">
-							<div class="col-md-12">
-								<input class="subsrib" placeholder="Enter your email" type="text" name="Enter your email">
-							</div>
-							<div class="col-md-12">
-								<button class="subsci_btn">Subscribe</button>
-							</div>
-						</div>
-					</form>
-				</div>
 				<div class="col-lg-9 col-md-8">
 					<div class="row">
 						<div class="col-md-6">
 							<div class="infoma text_align_left">
-								<h3>Thông tin</h3>
+								<h3>Danh mục</h3>
 								<ul class="menu_bottom">
-									<li><a href="?uri=/">Trang chủ</a></li>
-									<li><a href="?uri=order">Gọi món</a></li>
-									<li><a href="?uri=cart">Giỏ hàng</a></li>
-									<li><a href="?uri=manager">Quản lý</a></li>
+									<li><a href="/hutech-coffee">Trang chủ</a></li>
+									<li><a href="/hutech-coffee/order">Gọi món</a></li>
+									<li><a href="/hutech-coffee/cart">Giỏ hàng</a></li>
+									<li><a href="/hutech-coffee/manager">Quản lý</a></li>
 								</ul>
 							</div>
 						</div>
@@ -45,19 +30,17 @@
 				</div>
 				<div class="col-lg-3 col-md-4">
 					<div class="infoma">
-						<h3>Follow Us</h3>
+						<h3>Thông tin</h3>
 						<ul class="social_icon">
-							<li><a href="Javascript:void(0)"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-							<li><a href="Javascript:void(0)"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-							<li><a href="Javascript:void(0)"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
-							<li><a href="Javascript:void(0)"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-							<li><a href="Javascript:void(0)"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
+							<li><a href="https://www.facebook.com/itHutech"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                            <li><a href="https://www.hutech.edu.vn/"><i class="fa fa-globe" aria-hidden="true"></i></a></li>
+							<li><a href="https://www.youtube.com/@ITHUTECHCHANNEL"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
 						</ul>
 						<ul class="conta">
-							<li><i class="fa fa-map-marker" aria-hidden="true"></i> Ho Chi Minh City
+							<li><i class="fa fa-map-marker" aria-hidden="true"></i> Hồ Chí Minh
 							</li>
-							<li><i class="fa fa-phone" aria-hidden="true"></i>Call (028) 5445 77770</li>
-							<li> <i class="fa fa-envelope" aria-hidden="true"></i><a href="Javascript:void(0)"> hutech@hutech.edu.vn</a></li>
+							<li><i class="fa fa-phone" aria-hidden="true"></i>Gọi (028) 5445 77770</li>
+							<li> <i class="fa fa-envelope" aria-hidden="true"></i><a href="mailto:hutech@hutech.edu.vn"> hutech@hutech.edu.vn</a></li>
 						</ul>
 					</div>
 				</div>
@@ -68,7 +51,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<p>© <?php echo date("Y"); ?>
-							All Rights Reserved. <a href="https://www.hutech.edu.vn/"> Hutech Coffeee</a></p>
+                            Đã đăng ký Bản quyền. <a href="https://www.hutech.edu.vn/"> Hutech Coffeee</a></p>
 					</div>
 				</div>
 			</div>

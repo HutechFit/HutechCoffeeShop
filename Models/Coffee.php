@@ -9,7 +9,7 @@ include_once './Models/BaseModel.php';
 class Coffee extends BaseModel
 {
 	public string $name;
-	public float $price;
+	public int|float $price;
 	public string $image;
 	public string $description;
     public string $category;

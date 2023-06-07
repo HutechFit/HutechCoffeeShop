@@ -28,7 +28,7 @@ class Route extends Container
      */
     public function run(): void
     {
-        $uri = $_GET['uri'] ?? '/';
+        $uri = str_replace('/' . str_replace('/', '', explode('/', $_SERVER['REQUEST_URI'])[1]), '', $_SERVER['REQUEST_URI']);
 
         if (array_key_exists($uri, $this->routes)) {
 

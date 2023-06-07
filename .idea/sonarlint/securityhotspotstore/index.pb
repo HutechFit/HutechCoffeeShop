@@ -15,14 +15,8 @@ D
 Views/User/Login.php,f\f\ff7c7dfaa6a2296c7f985507816723e6a2d69889
 G
 Views/User/Register.php,f\f\ffdd37c813c57b102bba113a4793f2ca3c923f48
-I
-Views/Partials/Footer.php,6\8\68864ce660219c1b756c8ed9c04f71690c3a715d
-7
-LICENSE,0\3\0398ccd0f49298b10a3d76a47800d2ebecd49859
 4
 .env,3\c\3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
-=
-composer.json,3\9\3957b91a0d8450cea0115cfd5af69eac90d75897
 D
 Views/Coffee/Add.php,f\5\f5b5904051de887a7e2868f630b5844a49caee27
 F
