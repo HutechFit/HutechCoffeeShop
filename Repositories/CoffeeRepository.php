@@ -8,9 +8,7 @@ include_once './Factories/CoffeeFactory.php';
 
 class CoffeeRepository
 {
-    private CoffeeFactory $coffeeFactory;
-
-    public function __construct()
+    public function __construct(private CoffeeFactory $coffeeFactory)
     {
         $this->coffeeFactory = new CoffeeFactory();
     }

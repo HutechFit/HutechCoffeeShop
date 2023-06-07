@@ -23,3 +23,11 @@ I
 .env,3\c\3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
 =
 composer.json,3\9\3957b91a0d8450cea0115cfd5af69eac90d75897
+D
+Views/Coffee/Add.php,f\5\f5b5904051de887a7e2868f630b5844a49caee27
+F
+Views/Coffee/Order.php,8\b\8b56e623577209c962849dbafbdbc010ff9d9171
+E
+Views/Coffee/Edit.php,c\5\c57c66fee7df50b386b5df56a1f69366a205e30b
+H
+Views/Coffee/Manager.php,3\a\3ab982b9018b33e87a5c62860d30f27567bf0756

@@ -7,13 +7,10 @@ use Hutech\Repositories\CoffeeRepository;
 
 include_once './Repositories/CoffeeRepository.php';
 
-class CoffeeService
+readonly class CoffeeService
 {
-    protected CoffeeRepository $coffeeRepository;
-
-    public function __construct(CoffeeRepository $coffeeRepository)
+    public function __construct(protected CoffeeRepository $coffeeRepository)
     {
-        $this->coffeeRepository = $coffeeRepository;
     }
 
     public function getAll(): array

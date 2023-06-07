@@ -8,14 +8,10 @@ use Hutech\Services\CoffeeService;
 
 include_once './Services/CoffeeService.php';
 
-class CoffeeController
+readonly class CoffeeController
 {
-    protected CoffeeService $coffeeService;
-
-    public function __construct(CoffeeService $coffeeService)
-    {
-        $this->coffeeService = $coffeeService;
-    }
+    public function __construct(protected CoffeeService $coffeeService)
+    {}
 
     public function getAll() : void
     {
@@ -26,5 +22,11 @@ class CoffeeController
     public function add(): void
     {
         require_once './Views/Coffee/Add.php';
+    }
+
+    public function edit(): void
+    {
+        $coffee = $this->coffeeService->getById($_GET['id']);
+        require_once './Views/Coffee/Edit.php';
     }
 }
