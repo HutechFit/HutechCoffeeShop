@@ -6,7 +6,7 @@ namespace Hutech\Models;
 
 include_once './Models/BaseModel.php';
 
-class Coffee extends BaseModel
+class Product extends BaseModel
 {
 	public string $name;
 	public int|float $price;
@@ -22,25 +22,5 @@ class Coffee extends BaseModel
         $this->image = $image;
         $this->description = $description;
         $this->category = $category;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getPrice(): float
-    {
-        return $this->price;
-    }
-
-    public function getImage(): string
-    {
-        return $this->image;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
     }
 }

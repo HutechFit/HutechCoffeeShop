@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hutech\Container;
 
 use Psr\Container\ContainerExceptionInterface;
@@ -30,12 +32,13 @@ class Container implements ContainerInterface
      */
     public function get($id): mixed
     {
-        if (!isset($this->services[$id])) {
+        if (!$this->has($id)) {
             $this->services[$id] = $this->resolveDependency($id);
         }
 
         return $this->services[$id];
     }
+
     public function has($id): bool
     {
         return isset($this->services[$id]);

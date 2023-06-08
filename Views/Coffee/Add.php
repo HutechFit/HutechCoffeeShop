@@ -22,8 +22,11 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <form id="request" class="main_form" method="post" action="?uri=add" enctype="multipart/form-data">
+                                <form id="request" class="main_form" method="post" action="/hutech-coffee/insert" enctype="multipart/form-data">
                                     <div class="row">
+                                        <div class="col-md-12 ">
+                                            <input class="contactus" placeholder="Mã sản phẩm" type="number" name="Id">
+                                        </div>
                                         <div class="col-md-12 ">
                                             <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name">
                                         </div>
@@ -31,21 +34,17 @@
                                             <input class="contactus" placeholder="Giá tiền" type="number" name="Price">
                                         </div>
                                         <div class="col-md-12">
-                                            <input class="contactus" placeholder="Hình ảnh" type="file" name="Image">
+                                            <input class="contactus" placeholder="Hình ảnh" type="file" name="Image" id="Image">
                                         </div>
                                         <div class="col-md-12">
                                             <textarea class="textarea" placeholder="Mô tả sản phẩm" type="type" name="Description"></textarea>
                                         </div>
                                         <div class="col-md-12">
-                                            <select class="contactus" name="CategoryId" aria-label="Chọn loại sản phẩm">
-                                                <option value="1">Cà phê</option>
-                                                <option value="2">Trà</option>
-                                                <option value="3">Sinh tố</option>
-                                            </select>
+                                            <input class="contactus" placeholder="Loại sản phẩm" type="text" name="Category">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <button class="send_btn">Thêm</button>
+                                        <button name="submit" type="submit" class="send_btn">Thêm</button>
                                     </div>
                                 </form>
                             </div>

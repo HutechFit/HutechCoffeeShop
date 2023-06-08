@@ -13,10 +13,11 @@
 	<div class="d-flex align-items-center justify-content-center vh-25 service">
 		<div class="text-center">
 			<h1 class="display-1 fw-bold">404</h1>
-			<p class="fs-3"> <span class="text-danger">Opps!</span> Trang bạn tìm kiếm không tồn tại.</p>
+			<p class="fs-3"> <span class="text-danger">Opps!</span> Không tìm thấy trang.</p>
 			<p class="lead">
-				Trang bạn đang tìm kiếm có thể đã bị xóa, đổi tên hoặc tạm thời không có.
-			</p>
+                Có vẻ như trang bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.
+			</p> <br>
+            <a href="/hutech-coffee" class="read_more">Trở về trang chủ</a>
 		</div>
 	</div>
 	<?php include_once 'Views/Partials/Footer.php'; ?>

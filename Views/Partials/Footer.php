@@ -50,7 +50,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
-						<p>© <?php echo date("Y"); ?>
+						<p>© <?= date("Y"); ?>
                             Đã đăng ký Bản quyền. <a href="https://www.hutech.edu.vn/"> Hutech Coffeee</a></p>
 					</div>
 				</div>

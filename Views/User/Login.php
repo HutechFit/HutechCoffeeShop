@@ -36,7 +36,7 @@
                                     </div>
                                 </form>
                                 <div class="col-md-12 text-center">
-                                    <p class="mt-3 text-light">Bạn chưa có tài khoản? <a class="text-info" href="?uri=register">Đăng ký</a></p>
+                                    <p class="mt-3 text-light">Bạn chưa có tài khoản? <a class="text-info" href="/hutech-coffee/register">Đăng ký</a></p>
                                 </div>
                             </div>
                         </div>

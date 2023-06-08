@@ -30,6 +30,10 @@ class Route extends Container
     {
         $uri = str_replace('/' . str_replace('/', '', explode('/', $_SERVER['REQUEST_URI'])[1]), '', $_SERVER['REQUEST_URI']);
 
+        if (str_contains($uri, '?')) {
+            $uri = substr($uri, 0, strpos($uri, '?'));
+        }
+
         if (array_key_exists($uri, $this->routes)) {
 
             $action = $this->routes[$uri];

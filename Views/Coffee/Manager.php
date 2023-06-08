@@ -20,7 +20,7 @@
                 <p class="lead">
                     Hãy thêm cà phê mới.
                 </p> <br>
-                <a href="?uri=add" class="read_more">Thêm cà phê</a>
+                <a href="/hutech-coffee/add" class="read_more">Thêm cà phê</a>
             </div>
         </div>
     <?php else : ?>
@@ -43,12 +43,30 @@
                 <tr>
                     <td><?= $coffee->id ?></td>
                     <td><?= $coffee->name ?></td>
-                    <td><?= $coffee->price ?></td>
-                    <td><?= $coffee->image ?></td>
-                    <td><?= $coffee->description ?></td>
                     <td>
-                        <a href="?uri=edit&id=<?= $coffee->id ?>" class="btn btn-info">Sửa</a>
-                        <a href="?uri=delete&id=<?= $coffee->id ?>" class="btn btn-danger">Xóa</a>
+                        <?php if ($coffee->price) : ?>
+                            <?= numfmt_format_currency(numfmt_create('vi_VN', NumberFormatter::CURRENCY), $coffee->price, 'VND') ?>
+                        <?php else : ?>
+                            <?= numfmt_format_currency(numfmt_create('vi_VN', NumberFormatter::CURRENCY), 0, 'VND') ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ($coffee->image) : ?>
+                            <img src="<?= $coffee->image ?>" alt="<?= $coffee->name ?>" width="100" height="100">
+                        <?php else : ?>
+                            <img src="https://fakeimg.pl/100x100?text=No+image" alt="<?= $coffee->name ?>" width="100" height="100">
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ($coffee->description) : ?>
+                            <?= $coffee->description ?>
+                        <?php else : ?>
+                            <i>Chưa có mô tả</i>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <a href="/hutech-coffee/edit&id=<?= $coffee->id ?>" class="btn btn-info">Sửa</a>
+                        <a href="/hutech-coffee/delete?id=<?= $coffee->id ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">Xóa</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -56,7 +74,7 @@
     </table>
     </div>
     <div class="text-center">
-        <a href="?uri=add" class="read_more">Thêm cà phê</a>
+        <a href="/hutech-coffee/add" class="read_more">Thêm cà phê</a>
     </div>
     <?php endif; ?>
     <?php include_once 'Views/Partials/Footer.php'; ?>
@@ -65,6 +83,20 @@
         $(document).ready( function () {
             $('#myTable').DataTable({
                 "autoWidth": false,
+                "language": {
+                    "lengthMenu": "Hiển thị _MENU_ dòng",
+                    "zeroRecords": "Không tìm thấy dữ liệu",
+                    "info": "Hiển thị trang _PAGE_ trên _PAGES_",
+                    "infoEmpty": "Không có dữ liệu",
+                    "infoFiltered": "(lọc từ _MAX_ dòng)",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first":      "Đầu",
+                        "last":       "Cuối",
+                        "next":       "Sau",
+                        "previous":   "Trước"
+                    },
+                },
             });
         });
     </script>

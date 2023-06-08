@@ -60,3 +60,14 @@
 		</div>
 	</div>
 </div>
+
+<script>
+    const url = window.location.href;
+    const activePage = url;
+    $('#navbar').each(function () {
+        var linkPage = this.href;
+        if (activePage === linkPage) {
+            $(this).closest("li").addClass("active");
+        }
+    });
+</script>

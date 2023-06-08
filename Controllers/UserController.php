@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hutech\Controllers;
 
-class UserController
+readonly class UserController
 {
     public function login(): void
     {

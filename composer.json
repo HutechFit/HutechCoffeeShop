@@ -3,6 +3,7 @@
     "description": "Thuc hanh phat trien phan mem ma nguon mo",
     "license": "GPL-3.0-only",
     "require": {
-        "psr/container": "^2.0"
+        "psr/container": "^2.0",
+        "ext-intl": "*"
     }
 }

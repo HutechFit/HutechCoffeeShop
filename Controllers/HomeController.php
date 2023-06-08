@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hutech\Controllers;
 
-class HomeController
+readonly class HomeController
 {
 	public function index(): void
 	{

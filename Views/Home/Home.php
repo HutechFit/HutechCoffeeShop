@@ -85,7 +85,7 @@
 					</div>
 				</div>
 				<div class="col-md-12">
-					<a class="read_more" href="?uri=order">Đặt món</a>
+					<a class="read_more" href="/hutech-coffee/order">Đặt món</a>
 				</div>
 			</div>
 		</div>
