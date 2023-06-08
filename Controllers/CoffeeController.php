@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Hutech\Controllers;
 
-use Hutech\Models\Product;
+use Hutech\Factories\ProductFactory;
 use Hutech\Services\ProductService;
 
 include_once './Services/ProductService.php';
+include_once './Factories/ProductFactory.php';
 
 readonly class CoffeeController
 {
-    public function __construct(protected ProductService $coffeeService)
+    public function __construct(protected ProductService $coffeeService, protected ProductFactory $coffeeFactory)
     {}
 
     public function getAll() : void
@@ -28,14 +29,15 @@ readonly class CoffeeController
     public function insert(): void
     {
         if (isset($_POST['submit'])) {
-            $this->coffeeService->create(new Product(
-                id: $_POST['Id'],
-                name: $_POST['Name'],
-                price: (float) $_POST['Price'],
-                image: $this->uploadImage($_POST['Image']) ?? '',
-                description: $_POST['Description'],
-                category: $_POST['Category']
-            ));
+            $this->coffeeService->create(
+                $this->coffeeFactory->create(
+                    id: $_POST['Id'],
+                    name: $_POST['Name'],
+                    price: (float) $_POST['Price'],
+                    image: $this->uploadImage($_POST['Image']) ?? '',
+                    description: $_POST['Description'],
+                    category: $_POST['Category']
+                ));
         }
 
         header('Location: /hutech-coffee/manager');
