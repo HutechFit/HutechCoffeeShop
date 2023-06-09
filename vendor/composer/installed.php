@@ -3,7 +3,7 @@
         'name' => 'hutech/hutech-coffee',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8091e09c679a570e73b5753beb77a4bfa6d865c5',
+        'reference' => 'e03753759411e842c322a189d452e32f444ccefc',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'hutech/hutech-coffee' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8091e09c679a570e73b5753beb77a4bfa6d865c5',
+            'reference' => 'e03753759411e842c322a189d452e32f444ccefc',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
