@@ -12,7 +12,8 @@ include_once './Factories/ProductFactory.php';
 
 readonly class CoffeeController
 {
-    const FILE_PATH = './Files/';
+    private const FILE_PATH = './Files/';
+
     public function __construct(protected ProductService $coffeeService, protected ProductFactory $coffeeFactory)
     {}
 
@@ -95,15 +96,21 @@ readonly class CoffeeController
         return $uniqueFileName != null ? $this::FILE_PATH . $uniqueFileName : $uniqueFileName;
     }
 
+    private function removeImage($image): void
+    {
+        if (file_exists($image)) {
+            unlink($image);
+        }
+    }
+
     public function delete(): void
     {
         $coffee = $this->coffeeService->getById((int) $_GET['id']);
 
         if ($coffee) {
-            $imageFile = $coffee->image;
 
-            if (file_exists($imageFile)) {
-                unlink($imageFile);
+            if ($coffee->image) {
+                $this->removeImage($coffee->image);
             }
 
             $this->coffeeService->delete((int) $_GET['id']);
