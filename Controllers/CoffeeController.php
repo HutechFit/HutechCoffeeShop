@@ -34,10 +34,10 @@ readonly class CoffeeController
         if (isset($_POST['submit'])) {
             $this->coffeeService->create(
                 $this->coffeeFactory->create(
-                    id: $_POST['Id'],
+                    id: (int) $_POST['Id'],
                     name: $_POST['Name'],
                     price: (float) $_POST['Price'],
-                    image: isset($_FILES['Image']) ? $this->uploadImage($_FILES['Image']) ?? '' : null,
+                    image: isset($_FILES['Image']) ? $this->uploadImage($_FILES['Image']) ?? '' : '',
                     description: $_POST['Description'],
                     category: $_POST['Category']
                 )
@@ -77,15 +77,6 @@ readonly class CoffeeController
             }
 
             $uniqueFileName = uniqid() . '.' . $fileExtension;
-
-            if ($fileExtension !== 'webp') {
-                $image = imagecreatefromstring(file_get_contents($fileTemp));
-                imagepalettetotruecolor($image);
-                imagealphablending($image, true);
-                imagesavealpha($image, true);
-                imagewebp($image, $this::FILE_PATH . $uniqueFileName);
-                imagedestroy($image);
-            }
 
             if (empty($errors)) {
                 move_uploaded_file($fileTemp, $this::FILE_PATH . $uniqueFileName);
