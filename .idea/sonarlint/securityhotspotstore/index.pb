@@ -34,8 +34,6 @@ L
 Factories/ProductFactory.php,0\e\0ec048d0d6d66fcfe64a23e67fa7047319fc50d3
 D
 Models/BaseModel.php,3\4\343c6ccd50404b496fa9a164740956cd5767bfbd
-C
-Utils/Container.php,a\2\a2be30bd3c91eb25af68e8d938d9be2aadf2fde1
 N
 Controllers/HomeController.php,2\f\2f3231eb1be92588335f14ef7e3e837ce67ae1f3
 N
@@ -54,7 +52,5 @@ D
 	.htaccess,f\1\f14dd8fe84b7e99eb63debbf029152463832e7ad
 H
 Views/Coffee/Manager.php,3\a\3ab982b9018b33e87a5c62860d30f27567bf0756
-?
-Utils/Route.php,8\1\8183822fe13bd37b915f550caf9728f362369cce
 E
 Views/Coffee/Edit.php,c\5\c57c66fee7df50b386b5df56a1f69366a205e30b

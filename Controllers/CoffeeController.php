@@ -15,9 +15,10 @@ readonly class CoffeeController
     private const FILE_PATH = './Files/';
 
     public function __construct(protected ProductService $coffeeService, protected ProductFactory $coffeeFactory)
-    {}
+    {
+    }
 
-    public function getAll() : void
+    public function getAll(): void
     {
         $coffees = $this->coffeeService->getAll();
         require_once './Views/Coffee/Manager.php';
@@ -36,10 +37,11 @@ readonly class CoffeeController
                     id: $_POST['Id'],
                     name: $_POST['Name'],
                     price: (float) $_POST['Price'],
-                    image: $this->uploadImage($_POST['Image']) ?? '',
+                    image: isset($_FILES['Image']) ? $this->uploadImage($_FILES['Image']) ?? '' : null,
                     description: $_POST['Description'],
                     category: $_POST['Category']
-                ));
+                )
+            );
         }
 
         header('Location: /hutech-coffee/manager');
