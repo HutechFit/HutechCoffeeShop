@@ -42,8 +42,6 @@ N
 Controllers/UserController.php,9\c\9ccebdbea576cccfd85fe638d4f13cec75cf97b2
 I
 Views/Partials/Header.php,6\5\654280445188b9b5738166431cfd8960c4c92d2c
-=
-composer.json,3\9\3957b91a0d8450cea0115cfd5af69eac90d75897
 K
 Services/ProductService.php,6\5\65af915f6d338ca55cd5e08a82833061dd2f77af
 R

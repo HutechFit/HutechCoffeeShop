@@ -12,6 +12,7 @@ include_once './Factories/ProductFactory.php';
 
 readonly class CoffeeController
 {
+    const FILE_PATH = './Files/';
     public function __construct(protected ProductService $coffeeService, protected ProductFactory $coffeeFactory)
     {}
 
@@ -48,8 +49,8 @@ readonly class CoffeeController
         $uniqueFileName = null;
 
         if (isset($image)) {
-            if (!file_exists('./Files')) {
-                mkdir('./Files', 0777, true);
+            if (!file_exists($this::FILE_PATH)) {
+                mkdir($this::FILE_PATH, 0777, true);
             }
 
             if (getimagesize($_FILES["Image"]["tmp_name"]) === false) {
@@ -62,10 +63,10 @@ readonly class CoffeeController
             $fileTemp = $image['tmp_name'];
             $tmp = explode('.', $fileName);
             $fileExtension = strtolower(end($tmp));
-            $extensions = array("jpeg", "jpg", "png");
+            $extensions = array("jpeg", "jpg", "png", "webp");
 
             if (in_array($fileExtension, $extensions) === false) {
-                $errors[] = "Phần mở rộng không được hỗ trợ, vui lòng chọn file có phần mở rộng là jpg, jpeg, png";
+                $errors[] = "Phần mở rộng không được hỗ trợ, vui lòng chọn file có phần mở rộng là jpg, jpeg, png, webp";
             }
 
             if ($fileSize > 2097152) {
@@ -74,15 +75,24 @@ readonly class CoffeeController
 
             $uniqueFileName = uniqid() . '.' . $fileExtension;
 
+            if ($fileExtension !== 'webp') {
+                $image = imagecreatefromstring(file_get_contents($fileTemp));
+                imagepalettetotruecolor($image);
+                imagealphablending($image, true);
+                imagesavealpha($image, true);
+                imagewebp($image, $this::FILE_PATH . $uniqueFileName);
+                imagedestroy($image);
+            }
+
             if (empty($errors)) {
-                move_uploaded_file($fileTemp, "./Files/" . $uniqueFileName);
+                move_uploaded_file($fileTemp, $this::FILE_PATH . $uniqueFileName);
             } else {
                 print_r($errors);
                 exit;
             }
         }
 
-        return './Files/' . $uniqueFileName;
+        return $uniqueFileName != null ? $this::FILE_PATH . $uniqueFileName : $uniqueFileName;
     }
 
     public function delete(): void

@@ -40,8 +40,6 @@ N
 Controllers/UserController.php,9\c\9ccebdbea576cccfd85fe638d4f13cec75cf97b2
 I
 Views/Partials/Header.php,6\5\654280445188b9b5738166431cfd8960c4c92d2c
-=
-composer.json,3\9\3957b91a0d8450cea0115cfd5af69eac90d75897
 B
 Models/Product.php,5\5\558f0757405d2100d9c66419a92c3f20f04b6257
 R
