@@ -49,8 +49,6 @@ readonly class CoffeeController
 
     private function uploadImage(mixed $image): ?string
     {
-        $uniqueFileName = null;
-
         if (isset($image)) {
             if (!file_exists($this::FILE_PATH)) {
                 mkdir($this::FILE_PATH, 0777, true);
@@ -66,7 +64,7 @@ readonly class CoffeeController
             $fileTemp = $image['tmp_name'];
             $tmp = explode('.', $fileName);
             $fileExtension = strtolower(end($tmp));
-            $extensions = array("jpeg", "jpg", "png", "webp");
+            $extensions = ["jpeg", "jpg", "png", "webp"];
 
             if (in_array($fileExtension, $extensions) === false) {
                 $errors[] = "Phần mở rộng không được hỗ trợ, vui lòng chọn file có phần mở rộng là jpg, jpeg, png, webp";
@@ -84,9 +82,11 @@ readonly class CoffeeController
                 print_r($errors);
                 exit;
             }
+
+            return $this::FILE_PATH . $uniqueFileName;
         }
 
-        return $uniqueFileName != null ? $this::FILE_PATH . $uniqueFileName : $uniqueFileName;
+        return null;
     }
 
     private function removeImage($image): void
