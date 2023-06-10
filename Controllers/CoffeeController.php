@@ -29,23 +29,23 @@ readonly class CoffeeController
         require_once './Views/Coffee/Add.php';
     }
 
-    public function insert(): void
-    {
-        if (isset($_POST['submit'])) {
-            $this->coffeeService->create(
-                $this->coffeeFactory->create(
-                    id: (int) $_POST['Id'],
-                    name: $_POST['Name'],
-                    price: (float) $_POST['Price'],
-                    image: isset($_FILES['Image']) ? $this->uploadImage($_FILES['Image']) ?? '' : '',
-                    description: $_POST['Description'],
-                    category: $_POST['Category']
-                )
-            );
-        }
-
-        header('Location: /hutech-coffee/manager');
-    }
+//    public function insert(): void
+//    {
+//        if (isset($_POST['submit'])) {
+//            $this->coffeeService->create(
+//                $this->coffeeFactory->create(
+//                    id: (int) $_POST['Id'],
+//                    name: $_POST['Name'],
+//                    price: (float) $_POST['Price'],
+//                    image: isset($_FILES['Image']) ? $this->uploadImage($_FILES['Image']) ?? '' : '',
+//                    description: $_POST['Description'],
+//                    category: $_POST['Category']
+//                )
+//            );
+//        }
+//
+//        header('Location: /hutech-coffee/manager');
+//    }
 
     private function uploadImage(mixed $image): ?string
     {
@@ -96,19 +96,19 @@ readonly class CoffeeController
         }
     }
 
-    public function delete(): void
-    {
-        $coffee = $this->coffeeService->getById((int) $_GET['id']);
-
-        if ($coffee) {
-
-            if ($coffee->image) {
-                $this->removeImage($coffee->image);
-            }
-
-            $this->coffeeService->delete((int) $_GET['id']);
-        }
-
-        header('Location: /hutech-coffee/manager');
-    }
+//    public function delete(): void
+//    {
+//        $coffee = $this->coffeeService->getById((int) $_GET['id']);
+//
+//        if ($coffee) {
+//
+//            if ($coffee->image) {
+//                $this->removeImage($coffee->image);
+//            }
+//
+//            $this->coffeeService->delete((int) $_GET['id']);
+//        }
+//
+//        header('Location: /hutech-coffee/manager');
+//    }
 }
