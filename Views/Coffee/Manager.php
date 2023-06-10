@@ -52,9 +52,9 @@
                     </td>
                     <td>
                         <?php if ($coffee->image) : ?>
-                            <img src="<?= $coffee->image ?>" alt="<?= $coffee->name ?>" width="100" height="100">
+                            <img loading="lazy" src="<?= $coffee->image ?>" alt="<?= $coffee->name ?>" width="100" height="100">
                         <?php else : ?>
-                            <img src="https://fakeimg.pl/100x100?text=No+image" alt="<?= $coffee->name ?>" width="100" height="100">
+                            <img loading="lazy" src="https://fakeimg.pl/100x100?text=No+image" alt="<?= $coffee->name ?>" width="100" height="100">
                         <?php endif; ?>
                     </td>
                     <td>

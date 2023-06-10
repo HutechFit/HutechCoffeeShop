@@ -18,26 +18,11 @@ readonly class ProductService
 
     public function getAll(): array
     {
-        return $this->coffeeRepository->getAll();
+        return $this->coffeeRepository->findAll();
     }
 
     public function getById(int $id): Product|null
     {
-        return $this->coffeeRepository->getById($id);
-    }
-
-    public function create(Product $coffee): void
-    {
-        $this->coffeeRepository->create($coffee);
-    }
-
-    public function update(Product $coffee): void
-    {
-        $this->coffeeRepository->update($coffee);
-    }
-
-    public function delete(int $id): void
-    {
-        $this->coffeeRepository->delete($id);
+        return $this->coffeeRepository->find($id);
     }
 }

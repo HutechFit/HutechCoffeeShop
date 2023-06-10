@@ -29,7 +29,7 @@
 							</div>
 							<div class="col-md-7">
 								<div class="coff_img">
-									<figure><img src="./Static/images/coff_img.png" alt="Coffee logo" /></figure>
+									<figure><img loading="lazy" src="./Static/images/coff_img.png" alt="Coffee logo" /></figure>
 								</div>
 							</div>
 						</div>
@@ -55,7 +55,7 @@
 						<div class="item">
 							<div class="service_box text_align_center">
 								<div class="ser_img">
-									<figure><img src="./Static/images/ser_img1.png" alt="#" /></figure>
+									<figure><img loading="lazy"  src="./Static/images/ser_img1.png" alt="#" /></figure>
 								</div>
 								<h3>Cappuccino Coffee</h3>
 								<p>Cà phê mang đậm hương vị của sữa tươi và bọt sữa
@@ -65,7 +65,7 @@
 						<div class="item">
 							<div class="service_box text_align_center">
 								<div class="ser_img">
-									<figure><img src="./Static/images/ser_img3.png" alt="#" /></figure>
+									<figure><img loading="lazy"  src="./Static/images/ser_img3.png" alt="#" /></figure>
 								</div>
 								<h3>Cà phê đen</h3>
 								<p>Cà phê đen mang đậm hương vị của cà phê
@@ -75,7 +75,7 @@
 						<div class="item">
 							<div class="service_box text_align_center">
 								<div class="ser_img">
-									<figure><img src="./Static/images/ser_img2.png" alt="#" /></figure>
+									<figure><img loading="lazy"  src="./Static/images/ser_img2.png" alt="#" /></figure>
 								</div>
 								<h3>Cà phê moka</h3>
 								<p>Cà phê mang đậm hương vị của cacao
