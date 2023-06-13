@@ -31,18 +31,18 @@ class Product extends BaseModel
         max: 255,
         minMessage: 'Image must be at least {{ limit }} characters long',
         maxMessage: 'Image cannot be longer than {{ limit }} characters')]
-    public string $image;
+    public ?string $image;
 
     #[Assert\Length(
         min: 1,
         max: 255,
         minMessage: 'Description must be at least {{ limit }} characters long',
         maxMessage: 'Description cannot be longer than {{ limit }} characters')]
-    public string $description;
+    public ?string $description;
 
-    public int $category;
+    public ?int $category;
 
-    public function __construct(?int $id, string $name, float|int $price, string $image, string $description, int $category)
+    public function __construct(?int $id, string $name, float|int $price, ?string $image, ?string $description, ?int $category)
     {
         parent::__construct($id);
         $this->name = $name;
