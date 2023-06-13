@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hutech\Controllers;
 
 use Hutech\Factories\ProductFactory;
+use Hutech\Services\CategoryService;
 use Hutech\Services\ProductService;
 use Nette\Utils\FileSystem;
 use Nette\Utils\Image;
@@ -13,6 +14,7 @@ use Nette\Utils\UnknownImageFileException;
 use Symfony\Component\Validator\Validation;
 
 include_once './Services/ProductService.php';
+include_once './Services/CategoryService.php';
 include_once './Factories/ProductFactory.php';
 
 session_start();
@@ -21,7 +23,11 @@ readonly class CoffeeController
 {
     private const FILE_PATH = './Upload/';
 
-    public function __construct(protected ProductService $coffeeService, protected ProductFactory $coffeeFactory)
+    public function __construct(
+        protected ProductService $coffeeService,
+        protected ProductFactory $coffeeFactory,
+        protected CategoryService $categoryService
+    )
     {
     }
 
@@ -74,12 +80,12 @@ readonly class CoffeeController
 
     public function edit(): void
     {
-        $coffee = $this->coffeeService->getById($_GET['id']);
+        $coffee = $this->coffeeService->getById((int) $_GET['id']);
 
         if ($coffee) {
             require_once './Views/Coffee/Edit.php';
         } else {
-            header('Location: /hutech-coffee/manager');
+            require_once './Views/Home/404.php';
         }
     }
 
@@ -90,7 +96,7 @@ readonly class CoffeeController
     public function update(): void
     {
         if (isset($_POST['submit'])) {
-            $coffee = $this->coffeeService->getById($_POST['Id']);
+            $coffee = $this->coffeeService->getById((int) $_POST['Id']);
 
             if ($coffee) {
                 $imgPath = $coffee->image;
@@ -119,6 +125,8 @@ readonly class CoffeeController
                 }
 
                 $this->coffeeService->update($product);
+            } else {
+                require_once './Views/Home/404.php';
             }
         }
 
@@ -127,13 +135,13 @@ readonly class CoffeeController
 
     public function delete(): void
     {
-        $coffee = $this->coffeeService->getById($_GET['id']);
+        $coffee = $this->coffeeService->getById((int) $_GET['id']);
 
         if ($coffee) {
             if ($coffee->image) {
                 $this->removeImage($coffee->image);
             }
-            $this->coffeeService->delete($_GET['id']);
+            $this->coffeeService->delete((int) $_GET['id']);
         }
 
         header('Location: /hutech-coffee/manager');

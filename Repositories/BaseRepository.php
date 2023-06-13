@@ -30,15 +30,7 @@ abstract class BaseRepository
     {
         $stmt = $this->pdo->prepare("SELECT * FROM $this->table WHERE id = :id");
         $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function getFields(...$fields) : ?array
-    {
-        $fields = implode(', ', $fields);
-        $stmt = $this->pdo->prepare("SELECT $fields FROM $this->table");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
     public function insert(object $data): void

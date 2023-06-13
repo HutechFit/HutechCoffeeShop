@@ -21,7 +21,7 @@ class ProductRepository extends BaseRepository
         return $this->getAll();
     }
 
-    public function findById($id): ?Product
+    public function findById($id): ?object
     {
         return $this->getById($id);
     }
