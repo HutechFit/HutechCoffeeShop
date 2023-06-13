@@ -4,30 +4,23 @@ declare(strict_types=1);
 
 namespace Hutech\Models;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\Table;
-use Hutech\Repositories\CategoryRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 include_once './Models/BaseModel.php';
 
-#[Entity(repositoryClass: CategoryRepository::class)]
-#[Table(name: 'categories')]
 class Category extends BaseModel
 {
-    #[Column(name: 'name', length: 50)]
+    #[Assert\NotBlank(message: 'Name is required')]
+    #[Assert\Length(
+        min: 1,
+        max: 50,
+        minMessage: 'Name must be at least {{ limit }} characters long',
+        maxMessage: 'Name cannot be longer than {{ limit }} characters')]
     public string $name;
 
-    #[OneToMany(mappedBy: 'category', targetEntity: Product::class)]
-    public Collection $products;
-
-    public function __construct($id, $name)
+    public function __construct(?int $id, string $name)
     {
         parent::__construct($id);
         $this->name = $name;
-        $this->products = new ArrayCollection();
     }
 }

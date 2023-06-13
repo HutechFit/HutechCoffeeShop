@@ -5,8 +5,7 @@ declare(strict_types=1);
 use Hutech\Controllers\CoffeeController;
 use Hutech\Controllers\HomeController;
 use Hutech\Controllers\UserController;
-use Hutech\Routing\Route;
-
+use Hutech\Utils\Route;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -32,5 +31,5 @@ try {
         ->setRoute('/register', [UserController::class, 'index'])
         ->run();
 } catch (NotFoundExceptionInterface|ContainerExceptionInterface|ReflectionException $e) {
-    echo $e->getMessage();
+    print_r($e->getMessage());
 }

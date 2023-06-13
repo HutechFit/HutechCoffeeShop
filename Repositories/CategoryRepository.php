@@ -4,18 +4,38 @@ declare(strict_types=1);
 
 namespace Hutech\Repositories;
 
-use Doctrine\ORM\EntityRepository;
-use Hutech\Models\Category;
-
 include_once './Models/Category.php';
 
-/**
- * @method Category|null find($id, $lockMode = null, $lockVersion = null)
- * @method Category|null findOneBy(array $criteria, array $orderBy = null)
- * @method Category[] findAll()
- * @method Category[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
-class CategoryRepository extends EntityRepository
-{
 
+class CategoryRepository extends BaseRepository
+{
+    public function __construct()
+    {
+        parent::__construct('categories');
+    }
+
+    public function findAll(): ?array
+    {
+        return $this->getAll();
+    }
+
+    public function findById($id): ?object
+    {
+        return $this->getById($id);
+    }
+
+    public function add(object $category): void
+    {
+        $this->insert($category);
+    }
+
+    public function modify(object $category): void
+    {
+        $this->update($category);
+    }
+
+    public function remove($id): void
+    {
+        $this->delete($id);
+    }
 }

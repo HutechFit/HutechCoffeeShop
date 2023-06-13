@@ -5,10 +5,9 @@
     "require": {
         "psr/container": "^2.0",
         "ext-intl": "*",
-        "ext-gd": "*",
-        "doctrine/orm": "^2.15",
+        "ext-pdo": "*",
         "vlucas/phpdotenv": "^5.5",
-        "doctrine/migrations": "^3.6",
-        "symfony/cache": "^6.3"
+        "nette/utils": "^4.0",
+        "symfony/validator": "^6.3"
     }
 }

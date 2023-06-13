@@ -35,6 +35,16 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input class="contactus" placeholder="Hình ảnh" type="file" name="Image" id="Image">
+                                            <?php if (isset($_SESSION['image_error'])) : ?>
+                                                <div class="col-md-12">
+                                                    <p class="text-danger">
+                                                        <?= is_array($_SESSION['image_error'])
+                                                            ? implode('<br/>', $_SESSION['image_error'])
+                                                            : $_SESSION['image_error']; ?>
+                                                    </p>
+                                                </div>
+                                                <?php unset($_SESSION['image_error']); ?>
+                                            <?php endif; ?>
                                         </div>
                                         <div class="col-md-12">
                                             <textarea class="textarea" placeholder="Mô tả sản phẩm" type="type" name="Description"></textarea>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Hutech\Container;
+namespace Hutech\Utils;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -55,8 +55,7 @@ class Container implements ContainerInterface
             return $item();
         }
 
-        $reflectionItem = new ReflectionClass($item);
-        return $this->getInstance($reflectionItem);
+        return $this->getInstance(new ReflectionClass($item));
     }
 
     /**
@@ -68,16 +67,16 @@ class Container implements ContainerInterface
     {
         $constructor = $item->getConstructor();
 
-        if (is_null($constructor) || $constructor->getNumberOfRequiredParameters() == 0) {
+        if (is_null($constructor) || $constructor->getNumberOfRequiredParameters() === 0) {
             return $item->newInstance();
         }
 
         $params = [];
 
         foreach ($constructor->getParameters() as $param) {
-            if ($type = $param->getType()) {
-                $params[] = $this->get($type->getName());
-            }
+            $params = $param->getType()
+                ? [...$params, $this->get($param->getType()->getName())]
+                : $params;
         }
 
         return $item->newInstanceArgs($params);

@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace Hutech\Models;
 
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
+use Symfony\Component\Validator\Constraints as Assert;
 
 abstract class BaseModel
 {
-    #[Id, Column(type: Types::INTEGER), GeneratedValue]
-    public int $id;
+    #[Assert\Positive(message: 'Id must be positive')]
+    public ?int $id;
 
-    /**
-     * @param int $id
-     */
-    public function __construct(int $id)
+    public function __construct(?int $id = null)
     {
         $this->id = $id;
     }

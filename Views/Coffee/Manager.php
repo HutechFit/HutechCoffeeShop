@@ -30,51 +30,51 @@
         <caption>Danh sách cà phê</caption>
 		<thead>
 			<tr>
-				<th scope="col">Mã cà phê</th>
-				<th scope="col">Tên cà phê</th>
+				<th scope="col">Mã sản phẩm</th>
+				<th scope="col">Tên sản phẩm</th>
 				<th scope="col">Giá</th>
 				<th scope="col">Hình ảnh</th>
 				<th scope="col">Mô tả</th>
-                <th scope="col">Loại</th>
+<!--                <th scope="col">Loại</th>-->
 				<th scope="col">Thao tác</th>
 			</tr>
 		</thead>
 		<tbody>
             <?php foreach ($coffees as $coffee) : ?>
                 <tr>
-                    <td><?= $coffee->id ?></td>
-                    <td><?= $coffee->name ?></td>
+                    <td><?= $coffee['id'] ?></td>
+                    <td><?= $coffee['name'] ?></td>
                     <td>
-                        <?php if ($coffee->price) : ?>
-                            <?= numfmt_format_currency(numfmt_create('vi_VN', NumberFormatter::CURRENCY), $coffee->price, 'VND') ?>
+                        <?php if ($coffee['price']) : ?>
+                            <?= numfmt_format_currency(numfmt_create('vi_VN', NumberFormatter::CURRENCY), $coffee['price'], 'VND') ?>
                         <?php else : ?>
                             <?= numfmt_format_currency(numfmt_create('vi_VN', NumberFormatter::CURRENCY), 0, 'VND') ?>
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?php if ($coffee->image) : ?>
-                            <img loading="lazy" src="<?= $coffee->image ?>" alt="<?= $coffee->name ?>" width="100" height="100">
+                        <?php if ($coffee['image']) : ?>
+                            <img loading="lazy" src="<?= $coffee['image'] ?>" alt="<?= $coffee['name'] ?>" width="100" height="100">
                         <?php else : ?>
-                            <img loading="lazy" src="https://fakeimg.pl/100x100?text=No+image" alt="<?= $coffee->name ?>" width="100" height="100">
+                            <img loading="lazy" src="https://fakeimg.pl/100x100?text=No+image" alt="<?= $coffee['name'] ?>" width="100" height="100">
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?php if ($coffee->description) : ?>
-                            <?= $coffee->description ?>
+                        <?php if ($coffee['description']) : ?>
+                            <?= $coffee['description'] ?>
                         <?php else : ?>
                             <i>Chưa có mô tả</i>
                         <?php endif; ?>
                     </td>
+<!--                    <td>-->
+<!--                        --><?php //if ($coffee->category->name) : ?>
+<!--                            --><?php //= $coffee->category->name ?>
+<!--                        --><?php //else : ?>
+<!--                            <i>Chưa phân loại</i>-->
+<!--                        --><?php //endif; ?>
+<!--                    </td>-->
                     <td>
-                        <?php if ($coffee->category->name) : ?>
-                            <?= $coffee->category->name ?>
-                        <?php else : ?>
-                            <i>Chưa phân loại</i>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <a href="/hutech-coffee/edit&id=<?= $coffee->id ?>" class="btn btn-info">Sửa</a>
-                        <a href="/hutech-coffee/delete?id=<?= $coffee->id ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">Xóa</a>
+                        <a href="/hutech-coffee/edit&id=<?= $coffee['id'] ?>" class="btn btn-info">Sửa</a>
+                        <a href="/hutech-coffee/delete?id=<?= $coffee['id'] ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">Xóa</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

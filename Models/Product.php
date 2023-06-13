@@ -4,52 +4,45 @@ declare(strict_types=1);
 
 namespace Hutech\Models;
 
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\Table;
-use Hutech\Repositories\ProductRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 include_once './Models/BaseModel.php';
 
-#[Entity(repositoryClass: ProductRepository::class)]
-#[Table(name: 'products')]
 class Product extends BaseModel
 {
-    #[Column(length: 50)]
+    #[Assert\NotBlank(message: 'Name is required')]
+    #[Assert\Length(
+        min: 1,
+        max: 50,
+        minMessage: 'Name must be at least {{ limit }} characters long',
+        maxMessage: 'Name cannot be longer than {{ limit }} characters')]
     public string $name;
 
-    #[Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Assert\NotBlank(message: 'Price is required')]
+    #[Assert\Range(
+        minMessage: 'Price must be at least {{ limit }}',
+        maxMessage: 'Price cannot be longer than {{ limit }}',
+        min: 0,
+        max: 1000000)]
     public int|float $price;
 
-    #[Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        min: 1,
+        max: 255,
+        minMessage: 'Image must be at least {{ limit }} characters long',
+        maxMessage: 'Image cannot be longer than {{ limit }} characters')]
     public string $image;
 
-    #[Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        min: 1,
+        max: 255,
+        minMessage: 'Description must be at least {{ limit }} characters long',
+        maxMessage: 'Description cannot be longer than {{ limit }} characters')]
     public string $description;
 
-    #[ManyToOne(targetEntity: Category::class, inversedBy: 'products')]
-    #[JoinColumn(name: 'category_id', referencedColumnName: 'id')]
-    public Category|null $category;
+    public int $category;
 
-    /**
-     * @param int $id
-     * @param string $name
-     * @param float|int $price
-     * @param string $image
-     * @param string $description
-     * @param Category|null $category
-     */
-    public function __construct(
-        int $id,
-        string $name,
-        float|int $price,
-        string $image,
-        string $description,
-        ?Category $category
-    )
+    public function __construct(?int $id, string $name, float|int $price, string $image, string $description, int $category)
     {
         parent::__construct($id);
         $this->name = $name;

@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Hutech\Routing;
+namespace Hutech\Utils;
 
-use Hutech\Container\Container;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;

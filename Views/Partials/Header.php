@@ -27,13 +27,13 @@
 					<div class="collapse navbar-collapse" id="navbarsExample04">
 						<ul class="navbar-nav mr-auto" id="navbar">
 							<li class="nav-item ">
-								<a class="nav-link" href="/hutech-coffee">Trang chủ</a>
+								<a class="nav-link" href="/hutech-coffee/">Trang chủ</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="/hutech-coffee/order">Gọi món</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="/hutech-coffee/cart">Giỏ hàng</a>
+							<li class="nav-item disabled">
+								<a class="nav-link" href="/hutech-coffee/cart" >Giỏ hàng</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="/hutech-coffee/manager">Quản lý</a>

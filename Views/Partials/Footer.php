@@ -66,3 +66,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
 <script src="./Static/js/owl.carousel.min.js"></script>
 <script src="./Static/js/custom.js"></script>
+
+<script>
+    $(document).ready(function() {
+        const currentPath = window.location.pathname;
+        $('#navbar li a[href="' + currentPath + '"]').parent().addClass('active');
+    });
+</script>
