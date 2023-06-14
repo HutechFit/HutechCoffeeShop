@@ -15,7 +15,6 @@ use Symfony\Component\Validator\Validation;
 
 include_once './Services/ProductService.php';
 include_once './Services/CategoryService.php';
-include_once './Factories/ProductFactory.php';
 
 session_start();
 
@@ -95,41 +94,46 @@ readonly class CoffeeController
      */
     public function update(): void
     {
-        if (isset($_POST['submit'])) {
-            $coffee = $this->coffeeService->getById((int) $_POST['Id']);
+        if (!isset($_POST['submit'])) {
+            header('Location: /hutech-coffee/manager');
+            return;
+        }
 
-            if ($coffee) {
-                $imgPath = $coffee->image;
+        $coffee = $this->coffeeService->getById((int) $_POST['Id']);
 
-                if ($_FILES['Image']['name']) {
-                    $this->removeImage($coffee->image);
-                    $imgPath = $this->uploadImage($_FILES['Image']) ?? '';
-                    if (!$imgPath) {
-                        header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
-                        exit;
-                    }
-                }
+        if (!$coffee) {
+            require_once './Views/Home/404.php';
+            return;
+        }
 
-                $product = $this->coffeeFactory->update(
-                    id: $_POST['Id'],
-                    name: $_POST['Name'],
-                    price: $_POST['Price'],
-                    image: $imgPath,
-                    description: $_POST['Description'],
-                    category: $_POST['Category']
-                );
+        $imgPath = $coffee->image;
 
-                if (!$this->validation($product)) {
-                    header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
-                    exit;
-                }
-
-                $this->coffeeService->update($product);
-            } else {
-                require_once './Views/Home/404.php';
+        if ($_FILES['Image']['name']) {
+            if ($imgPath && file_exists($this::FILE_PATH . $coffee->image)) {
+                FileSystem::delete($this::FILE_PATH . $coffee->image);
+            }
+            $imgPath = $this->uploadImage($_FILES['Image']) ?? '';
+            if (!$imgPath) {
+                header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
+                exit;
             }
         }
 
+        $product = $this->coffeeFactory->update(
+            id: $_POST['Id'],
+            name: $_POST['Name'],
+            price: $_POST['Price'],
+            image: $imgPath,
+            description: $_POST['Description'],
+            category: $_POST['Category']
+        );
+
+        if (!$this->validation($product)) {
+            header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
+            exit;
+        }
+
+        $this->coffeeService->update($product);
         header('Location: /hutech-coffee/manager');
     }
 
@@ -138,8 +142,8 @@ readonly class CoffeeController
         $coffee = $this->coffeeService->getById((int) $_GET['id']);
 
         if ($coffee) {
-            if ($coffee->image) {
-                $this->removeImage($coffee->image);
+            if ($coffee->image && file_exists($this::FILE_PATH . $coffee->image)) {
+                FileSystem::delete($this::FILE_PATH . $coffee->image);
             }
             $this->coffeeService->delete((int) $_GET['id']);
         }
@@ -189,13 +193,6 @@ readonly class CoffeeController
         }
 
         return $this::FILE_PATH . $fileName;
-    }
-
-    private function removeImage($image): void
-    {
-        if (file_exists($image)) {
-            FileSystem::delete($image);
-        }
     }
 
     private function validation($product): bool

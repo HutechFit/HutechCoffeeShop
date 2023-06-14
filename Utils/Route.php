@@ -8,8 +8,6 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
 
-include_once 'Container.php';
-
 class Route extends Container
 {
     private array $routes = [];

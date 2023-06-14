@@ -2,6 +2,23 @@
     "name": "hutech/hutech-coffee",
     "description": "Thuc hanh phat trien phan mem ma nguon mo",
     "license": "GPL-3.0-only",
+    "authors": [
+        {
+            "name": "Nguyen Xuan Nhan",
+            "email": "nguyenxuannhan407@gmail.com",
+            "role": "Software Engineer"
+        },
+        {
+            "name": "Nguyen Dinh Anh",
+            "email": "nd.anh@hutech.edu.vn",
+            "role": "Lecturer"
+        },
+        {
+            "name": "Tran Dang Khoa",
+            "email": "td.khoa@hutech.edu.vn",
+            "role": "Lecturer"
+        }
+    ],
     "require": {
         "psr/container": "^2.0",
         "ext-intl": "*",
@@ -9,5 +26,10 @@
         "vlucas/phpdotenv": "^5.5",
         "nette/utils": "^4.0",
         "symfony/validator": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hutech\\": "./"
+        }
     }
 }

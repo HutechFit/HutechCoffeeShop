@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Hutech\Repositories;
 
-include_once './Models/Category.php';
-
+include_once './Repositories/BaseRepository.php';
 
 class CategoryRepository extends BaseRepository
 {

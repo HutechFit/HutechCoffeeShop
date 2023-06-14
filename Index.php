@@ -10,8 +10,6 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 include_once './vendor/autoload.php';
-include_once './Utils/Route.php';
-include_once './Controllers/HomeController.php';
 include_once './Controllers/CoffeeController.php';
 include_once './Controllers/UserController.php';
 

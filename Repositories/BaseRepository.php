@@ -13,7 +13,7 @@ abstract class BaseRepository
 {
     private PDO $pdo;
 
-    public function __construct(protected string $table)
+    public function __construct(protected $table)
     {
         global $pdo;
         $this->pdo = $pdo;
@@ -26,14 +26,14 @@ abstract class BaseRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getById(int $id) : ?object
+    public function getById($id) : ?object
     {
         $stmt = $this->pdo->prepare("SELECT * FROM $this->table WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
-    public function insert(object $data): void
+    public function insert($data): void
     {
         $this->pdo->beginTransaction();
 
@@ -49,7 +49,7 @@ abstract class BaseRepository
         }
     }
 
-    public function update(object $data) : void
+    public function update($data) : void
     {
         $this->pdo->beginTransaction();
 
@@ -65,7 +65,7 @@ abstract class BaseRepository
         }
     }
 
-    public function delete(int $id) : void
+    public function delete($id) : void
     {
         $this->pdo->beginTransaction();
 

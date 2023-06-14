@@ -29,6 +29,10 @@ class ComposerStaticInit69f34f89f904c844f369124e62eb9d0d
             'Psr\\Container\\' => 14,
             'PhpOption\\' => 10,
         ),
+        'H' => 
+        array (
+            'Hutech\\' => 7,
+        ),
         'G' => 
         array (
             'GrahamCampbell\\ResultType\\' => 26,
@@ -71,6 +75,10 @@ class ComposerStaticInit69f34f89f904c844f369124e62eb9d0d
         'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
+        ),
+        'Hutech\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/',
         ),
         'GrahamCampbell\\ResultType\\' => 
         array (

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Hutech\Repositories;
 
-use Hutech\Models\Product;
-
-include_once './Models/Product.php';
 include_once './Repositories/BaseRepository.php';
 
 class ProductRepository extends BaseRepository
@@ -26,12 +23,12 @@ class ProductRepository extends BaseRepository
         return $this->getById($id);
     }
 
-    public function add(Product $product): void
+    public function add($product): void
     {
         $this->insert($product);
     }
 
-    public function modify(Product $product): void
+    public function modify($product): void
     {
         $this->update($product);
     }

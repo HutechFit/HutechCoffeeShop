@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Hutech\Services;
 
-use Hutech\Models\Category;
 use Hutech\Repositories\CategoryRepository;
 
-include_once './Models/Category.php';
 include_once './Repositories/CategoryRepository.php';
 
 readonly class CategoryService
@@ -21,12 +19,12 @@ readonly class CategoryService
         return $this->categoryRepository->findAll();
     }
 
-    public function getById(int $id): ?object
+    public function getById($id): ?object
     {
         return $this->categoryRepository->findById($id);
     }
 
-    public function create(Category $category): void
+    public function create($category): void
     {
         $this->categoryRepository->add($category);
     }
@@ -36,7 +34,7 @@ readonly class CategoryService
         $this->categoryRepository->remove($id);
     }
 
-    public function update(Category $category): void
+    public function update($category): void
     {
         $this->categoryRepository->update($category);
     }

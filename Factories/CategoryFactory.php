@@ -4,8 +4,6 @@ namespace Hutech\Factories;
 
 use Hutech\Models\Category;
 
-include_once './Models/Category.php';
-
 readonly class CategoryFactory
 {
     public static function create(string $name) : Category

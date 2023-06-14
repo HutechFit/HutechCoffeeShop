@@ -25,10 +25,10 @@
                                 <form id="request" class="main_form" method="post" action="?uri=add" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-md-12 ">
-                                            <input class="contactus" placeholder="Tài khoản" type="text" name="Name">
+                                            <input class="contactus" placeholder="Tài khoản" type="text" name="Username">
                                         </div>
                                         <div class="col-md-12">
-                                            <input class="contactus" placeholder="Mật khẩu" type="password" name="Price">
+                                            <input class="contactus" placeholder="Mật khẩu" type="password" name="Password">
                                         </div>
                                     </div>
                                     <div class="col-md-12">

@@ -6,8 +6,6 @@ namespace Hutech\Models;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-include_once './Models/BaseModel.php';
-
 class Category extends BaseModel
 {
     #[Assert\NotBlank(message: 'Name is required')]

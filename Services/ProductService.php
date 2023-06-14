@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Hutech\Services;
 
-use Hutech\Models\Product;
 use Hutech\Repositories\ProductRepository;
 
-include_once './Models/Product.php';
 include_once './Repositories/ProductRepository.php';
 
 readonly class ProductService
@@ -21,22 +19,22 @@ readonly class ProductService
         return $this->productRepository->findAll();
     }
 
-    public function getById(int $id): ?object
+    public function getById($id): ?object
     {
         return $this->productRepository->findById($id);
     }
 
-    public function create(Product $product): void
+    public function create($product): void
     {
         $this->productRepository->add($product);
     }
 
-    public function delete(int $id): void
+    public function delete($id): void
     {
         $this->productRepository->remove($id);
     }
 
-    public function update(Product $product): void
+    public function update($product): void
     {
         $this->productRepository->update($product);
     }

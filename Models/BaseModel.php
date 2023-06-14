@@ -11,7 +11,7 @@ abstract class BaseModel
     #[Assert\Positive(message: 'Id must be positive')]
     public ?int $id;
 
-    public function __construct(?int $id = null)
+    public function __construct(?int $id)
     {
         $this->id = $id;
     }
