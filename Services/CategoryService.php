@@ -29,7 +29,7 @@ readonly class CategoryService
         $this->categoryRepository->add($category);
     }
 
-    public function delete(int $id): void
+    public function delete($id): void
     {
         $this->categoryRepository->remove($id);
     }

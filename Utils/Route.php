@@ -41,7 +41,7 @@ class Route extends Container
 
                 if (!class_exists($controller) || !method_exists($controller, $method)) {
                     require_once './Views/Home/404.php';
-                    die();
+                    die;
                 }
 
                 $this->register($controller, $controller);

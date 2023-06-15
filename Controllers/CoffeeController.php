@@ -38,6 +38,7 @@ readonly class CoffeeController
 
     public function add(): void
     {
+        $categories = $this->categoryService->getAll();
         require_once './Views/Coffee/Add.php';
     }
 
@@ -63,7 +64,7 @@ readonly class CoffeeController
                 price: $_POST['Price'],
                 image: $imgPath,
                 description: $_POST['Description'],
-                category: $_POST['Category']
+                category_id: $_POST['category_id']
             );
 
             if (!$this->validation($product)) {
@@ -82,6 +83,7 @@ readonly class CoffeeController
         $coffee = $this->coffeeService->getById((int) $_GET['id']);
 
         if ($coffee) {
+            $categories = $this->categoryService->getAll();
             require_once './Views/Coffee/Edit.php';
         } else {
             require_once './Views/Home/404.php';
@@ -112,7 +114,9 @@ readonly class CoffeeController
             if ($imgPath && file_exists($this::FILE_PATH . $coffee->image)) {
                 FileSystem::delete($this::FILE_PATH . $coffee->image);
             }
+
             $imgPath = $this->uploadImage($_FILES['Image']) ?? '';
+
             if (!$imgPath) {
                 header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
                 exit;
@@ -125,7 +129,7 @@ readonly class CoffeeController
             price: $_POST['Price'],
             image: $imgPath,
             description: $_POST['Description'],
-            category: $_POST['Category']
+            category_id: $_POST['category_id']
         );
 
         if (!$this->validation($product)) {
@@ -171,10 +175,10 @@ readonly class CoffeeController
         $fileTemp = $image['tmp_name'];
         $tmp = explode('.', $fileName);
         $fileExtension = strtolower(end($tmp));
-        $extensions = ["jpeg", "jpg", "png", "webp"];
+        $extensions = ["jpeg", "jpg", "png"];
 
-        if (in_array($fileExtension, $extensions) === false) {
-            $errors[] = "Phần mở rộng không được hỗ trợ, vui lòng chọn file có phần mở rộng là jpg, jpeg, png, webp";
+        if (!in_array($fileExtension, $extensions)) {
+            $errors[] = "Phần mở rộng không được hỗ trợ, vui lòng chọn file có phần mở rộng là jpg, jpeg, png";
         }
 
         if ($fileSize > 2097152) {

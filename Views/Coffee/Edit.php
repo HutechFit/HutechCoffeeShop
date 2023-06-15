@@ -22,25 +22,26 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <form id="request" class="main_form" method="post" action="?uri=add" enctype="multipart/form-data">
+                            <form id="request" class="main_form" method="post" action="/hutech-coffee/update" enctype="multipart/form-data">
                                 <div class="row">
-                                    <input type="hidden" name="Id" value="<?php echo $coffee->Id; ?>">
+                                    <input type="hidden" name="Id" value="<?= $coffee['id']; ?>">
                                     <div class="col-md-12 ">
-                                        <input class="contactus form-control" placeholder="Tên sản phẩm" type="text" name="Name" value="<?php echo $coffee->Name; ?>"
+                                        <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name" value="<?= $coffee['name']; ?>"
                                     </div>
                                     <div class="col-md-12">
-                                        <input class="contactus form-control" placeholder="Giá tiền" type="number" name="Price" value="<?php echo $coffee->Price; ?>">
+                                        <input class="contactus" placeholder="Giá tiền" type="number" name="Price" value="<?= $coffee['price']; ?>">
                                     </div>
                                     <div class="col-md-12">
-                                        <input class="contactus form-control" placeholder="Hình ảnh" type="file" name="Image">
+                                        <input class="contactus" placeholder="Hình ảnh" type="file" name="Image">
+                                        <small class="text-info"><?= $coffee['image']; ?></small>
                                     </div>
                                     <div class="col-md-12">
-                                        <textarea class="textarea form-control" placeholder="Mô tả sản phẩm" type="type" name="Description">
-                                            <?php echo $coffee->Description; ?>
+                                        <textarea class="textarea" placeholder="Mô tả sản phẩm" type="type" name="Description">
+                                            <?= $coffee['description']; ?>
                                         </textarea>
                                     </div>
                                     <div class="col-md-12">
-                                        <select class="contactus form-control" name="CategoryId">
+                                        <select class="contactus" name="CategoryId">
                                             <option value="1">Cà phê</option>
                                             <option value="2">Trà</option>
                                             <option value="3">Sinh tố</option>

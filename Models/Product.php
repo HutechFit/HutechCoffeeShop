@@ -8,18 +8,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Product extends BaseModel
 {
-    #[Assert\NotBlank(message: 'Name is required')]
+    #[Assert\NotBlank(message: 'Tên sản phẩm không được để trống')]
     #[Assert\Length(
         min: 1,
         max: 50,
-        minMessage: 'Name must be at least {{ limit }} characters long',
-        maxMessage: 'Name cannot be longer than {{ limit }} characters')]
+        minMessage: 'Độ dài tên sản phẩm phải lớn hơn {{ limit }} ký tự',
+        maxMessage: 'Độ dài tên sản phẩm phải nhỏ hơn {{ limit }} ký tự')]
     public string $name;
 
-    #[Assert\NotBlank(message: 'Price is required')]
+    #[Assert\NotBlank(message: 'Giá sản phẩm không được để trống')]
     #[Assert\Range(
-        minMessage: 'Price must be at least {{ limit }}',
-        maxMessage: 'Price cannot be longer than {{ limit }}',
+        minMessage: 'Giá sản phẩm phải lớn hơn {{ limit }}',
+        maxMessage: 'Giá sản phẩm phải nhỏ hơn {{ limit }}',
         min: 0,
         max: 1000000)]
     public int|float $price;
@@ -27,26 +27,36 @@ class Product extends BaseModel
     #[Assert\Length(
         min: 1,
         max: 255,
-        minMessage: 'Image must be at least {{ limit }} characters long',
-        maxMessage: 'Image cannot be longer than {{ limit }} characters')]
+        minMessage: 'Đường dẫn ảnh phải lớn hơn {{ limit }} ký tự',
+        maxMessage: 'Đường dẫn ảnh phải nhỏ hơn {{ limit }} ký tự')]
     public ?string $image;
 
     #[Assert\Length(
         min: 1,
         max: 255,
-        minMessage: 'Description must be at least {{ limit }} characters long',
-        maxMessage: 'Description cannot be longer than {{ limit }} characters')]
+        minMessage: 'Độ dài mô tả phải lớn hơn {{ limit }} ký tự',
+        maxMessage: 'Độ dài mô tả phải nhỏ hơn {{ limit }} ký tự')]
     public ?string $description;
 
-    public ?int $category;
+    public ?int $category_id;
 
-    public function __construct(?int $id, string $name, float|int $price, ?string $image, ?string $description, ?int $category)
+    public function __construct($id, $name, $price, $image, $description, $category_id)
     {
         parent::__construct($id);
         $this->name = $name;
         $this->price = $price;
         $this->image = $image;
         $this->description = $description;
-        $this->category = $category;
+        $this->category_id = $category_id;
+    }
+
+    public function __destruct()
+    {
+        parent::__destruct();
+        $this->name = '';
+        $this->price = 0;
+        $this->image = null;
+        $this->description = null;
+        $this->category_id = null;
     }
 }

@@ -10,7 +10,7 @@ class ProductRepository extends BaseRepository
 {
     public function __construct()
     {
-        parent::__construct('product');
+        parent::__construct('Product');
     }
 
     public function findAll(): ?array

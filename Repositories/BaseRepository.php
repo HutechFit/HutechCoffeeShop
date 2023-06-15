@@ -35,47 +35,42 @@ abstract class BaseRepository
 
     public function insert($data): void
     {
-        $this->pdo->beginTransaction();
-
-        try {
+        $this->executeTransaction(function () use ($data) {
             $fields = implode(', ', array_keys(get_object_vars($data)));
             $values = ':' . implode(', :', array_keys(get_object_vars($data)));
             $stmt = $this->pdo->prepare("INSERT INTO $this->table ($fields) VALUES ($values)");
             $stmt->execute(get_object_vars($data));
-
-            $this->pdo->commit();
-        } catch (Exception) {
-            $this->pdo->rollBack();
-        }
+        });
     }
 
     public function update($data) : void
     {
-        $this->pdo->beginTransaction();
-
-        try {
+        $this->executeTransaction(function () use ($data) {
             $fields = implode(', ', array_keys(get_object_vars($data)));
             $values = ':' . implode(', :', array_keys(get_object_vars($data)));
             $stmt = $this->pdo->prepare("UPDATE $this->table SET $fields = $values WHERE id = :id");
             $stmt->execute(get_object_vars($data));
-
-            $this->pdo->commit();
-        } catch (Exception) {
-            $this->pdo->rollBack();
-        }
+        });
     }
 
     public function delete($id) : void
     {
+        $this->executeTransaction(function () use ($id) {
+            $stmt = $this->pdo->prepare("DELETE FROM $this->table WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+        });
+    }
+
+    private function executeTransaction($callback): void
+    {
         $this->pdo->beginTransaction();
 
         try {
-            $stmt = $this->pdo->prepare("DELETE FROM $this->table WHERE id = :id");
-            $stmt->execute(['id' => $id]);
-
+            $callback();
             $this->pdo->commit();
-        } catch (Exception) {
+        } catch (Exception $e) {
             $this->pdo->rollBack();
+            print_r('Đã có lỗi xảy ra: ' . $e->getMessage());
         }
     }
 }

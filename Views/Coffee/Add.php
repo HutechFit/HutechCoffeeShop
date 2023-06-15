@@ -25,13 +25,30 @@
                                 <form id="request" class="main_form" method="post" action="/hutech-coffee/insert" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-md-12 ">
-                                            <input class="contactus" placeholder="Mã sản phẩm" type="number" name="Id">
-                                        </div>
-                                        <div class="col-md-12 ">
                                             <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name">
+                                            <div class="col-md-12">
+                                                <?php if (isset($_SESSION['name_error'])) : ?>
+                                                    <p class="text-danger">
+                                                        <?= is_array($_SESSION['name_error'])
+                                                            ? implode('<br/>', $_SESSION['name_error'])
+                                                            : $_SESSION['name_error']; ?>
+                                                    </p>
+                                                    <?php unset($_SESSION['name_error']); ?>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                         <div class="col-md-12">
                                             <input class="contactus" placeholder="Giá tiền" type="number" name="Price">
+                                            <div class="col-md-12">
+                                                <?php if (isset($_SESSION['price_error'])) : ?>
+                                                    <p class="text-danger">
+                                                        <?= is_array($_SESSION['price_error'])
+                                                            ? implode('<br/>', $_SESSION['price_error'])
+                                                            : $_SESSION['price_error']; ?>
+                                                    </p>
+                                                    <?php unset($_SESSION['price_error']); ?>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                         <div class="col-md-12">
                                             <input class="contactus" placeholder="Hình ảnh" type="file" name="Image" id="Image">
@@ -48,9 +65,21 @@
                                         </div>
                                         <div class="col-md-12">
                                             <textarea class="textarea" placeholder="Mô tả sản phẩm" type="type" name="Description"></textarea>
+                                            <div class="col-md-12">
+                                                <?php if (isset($_SESSION['description_error'])) : ?>
+                                                    <p class="text-danger">
+                                                        <?= $_SESSION['description_error']; ?>
+                                                    </p>
+                                                    <?php unset($_SESSION['description_error']); ?>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <input class="contactus" placeholder="Loại sản phẩm" type="text" name="Category">
+                                            <select class="contactus" name="category_id" aria-label="category_id">
+                                                <?php foreach ($categories as $category) : ?>
+                                                    <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-12">

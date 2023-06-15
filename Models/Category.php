@@ -8,17 +8,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Category extends BaseModel
 {
-    #[Assert\NotBlank(message: 'Name is required')]
+    #[Assert\NotBlank(message: 'Tên loại sản phẩm không được để trống')]
     #[Assert\Length(
         min: 1,
         max: 50,
-        minMessage: 'Name must be at least {{ limit }} characters long',
-        maxMessage: 'Name cannot be longer than {{ limit }} characters')]
+        minMessage: 'Độ dài tên loại sản phẩm phải lớn hơn {{ limit }} ký tự',
+        maxMessage: 'Độ dài tên loại sản phẩm phải nhỏ hơn {{ limit }} ký tự')]
     public string $name;
 
     public function __construct(?int $id, string $name)
     {
         parent::__construct($id);
         $this->name = $name;
+    }
+
+    public function __destruct()
+    {
+        parent::__destruct();
+        $this->name = '';
     }
 }
