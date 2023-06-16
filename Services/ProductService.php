@@ -36,7 +36,6 @@ readonly class ProductService
 
     public function update($product): void
     {
-        $this->productRepository->update($product);
+        $this->productRepository->modify($product);
     }
-
 }

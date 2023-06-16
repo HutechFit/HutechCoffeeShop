@@ -26,7 +26,7 @@
     <?php else : ?>
     <div class="d-flex justify-content-lg-center vh-25 service"
          style="background: #FFFFFF">
-	<table id="myTable" class="table table-striped">
+	<table id="myTable" class="table table-striped table-hover">
         <caption>Danh sách cà phê</caption>
 		<thead>
 			<tr>
@@ -35,7 +35,7 @@
 				<th scope="col">Giá</th>
 				<th scope="col">Hình ảnh</th>
 				<th scope="col">Mô tả</th>
-<!--                <th scope="col">Loại</th>-->
+                <th scope="col">Loại sản phẩm</th>
 				<th scope="col">Thao tác</th>
 			</tr>
 		</thead>
@@ -65,15 +65,15 @@
                             <i>Chưa có mô tả</i>
                         <?php endif; ?>
                     </td>
-<!--                    <td>-->
-<!--                        --><?php //if ($coffee->category->name) : ?>
-<!--                            --><?php //= $coffee->category->name ?>
-<!--                        --><?php //else : ?>
-<!--                            <i>Chưa phân loại</i>-->
-<!--                        --><?php //endif; ?>
-<!--                    </td>-->
                     <td>
-                        <a href="/hutech-coffee/edit&id=<?= $coffee['id'] ?>" class="btn btn-info">Sửa</a>
+                        <?php if ($coffee['category_id']) : ?>
+                            <?= $categories[$coffee['category_id'] - 1]['name'] ?>
+                        <?php else : ?>
+                            <i>Chưa phân loại</i>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <a href="/hutech-coffee/edit?id=<?= $coffee['id'] ?>" class="btn btn-info">Sửa</a>
                         <a href="/hutech-coffee/delete?id=<?= $coffee['id'] ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">Xóa</a>
                     </td>
                 </tr>

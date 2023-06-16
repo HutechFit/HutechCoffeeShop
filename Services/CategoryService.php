@@ -36,6 +36,6 @@ readonly class CategoryService
 
     public function update($category): void
     {
-        $this->categoryRepository->update($category);
+        $this->categoryRepository->modify($category);
     }
 }

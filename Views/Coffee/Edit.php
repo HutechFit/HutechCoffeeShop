@@ -24,32 +24,70 @@
                         <div class="col-md-12">
                             <form id="request" class="main_form" method="post" action="/hutech-coffee/update" enctype="multipart/form-data">
                                 <div class="row">
-                                    <input type="hidden" name="Id" value="<?= $coffee['id']; ?>">
+                                    <input type="hidden" name="Id" value="<?= $coffee->id; ?>">
                                     <div class="col-md-12 ">
-                                        <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name" value="<?= $coffee['name']; ?>"
+                                        <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name" value="<?= $coffee->name; ?>">
+                                        <div class="col-md-12">
+                                            <?php if (isset($_SESSION['name_error'])) : ?>
+                                                <p class="text-danger">
+                                                    <?= $_SESSION['name_error']; ?>
+                                                </p>
+                                                <?php unset($_SESSION['name_error']); ?>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <input class="contactus" placeholder="Giá tiền" type="number" name="Price" value="<?= $coffee['price']; ?>">
+                                        <input class="contactus" placeholder="Giá tiền" type="number" name="Price" step="1000" min="0" max="100000000" value="<?= $coffee->price; ?>">
+                                        <div class="col-md-12">
+                                            <?php if (isset($_SESSION['price_error'])) : ?>
+                                                <p class="text-danger">
+                                                    <?= $_SESSION['price_error']; ?>
+                                                </p>
+                                                <?php unset($_SESSION['price_error']); ?>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                     <div class="col-md-12">
+                                        <?php if ($coffee->image) : ?>
+                                            <a class="text-info" href="<?= 'https://localhost/hutech-coffee/' . ltrim($coffee->image, './'); ?>" target="_blank">
+                                                Nhấp vào đây để xem ảnh hiện tại
+                                            </a>
+                                        <?php endif; ?>
                                         <input class="contactus" placeholder="Hình ảnh" type="file" name="Image">
-                                        <small class="text-info"><?= $coffee['image']; ?></small>
+                                        <?php if (isset($_SESSION['image_error'])) : ?>
+                                            <div class="col-md-12">
+                                                <p class="text-danger">
+                                                    <?= is_array($_SESSION['image_error'])
+                                                        ? implode('<br/>', $_SESSION['image_error'])
+                                                        : $_SESSION['image_error']; ?>
+                                                </p>
+                                            </div>
+                                            <?php unset($_SESSION['image_error']); ?>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="col-md-12">
-                                        <textarea class="textarea" placeholder="Mô tả sản phẩm" type="type" name="Description">
-                                            <?= $coffee['description']; ?>
-                                        </textarea>
+                                        <textarea class="textarea" placeholder="Mô tả sản phẩm" type="type" name="Description"><?= $coffee->description; ?></textarea>
+                                        <div class="col-md-12">
+                                            <?php if (isset($_SESSION['description_error'])) : ?>
+                                                <p class="text-danger">
+                                                    <?= $_SESSION['description_error']; ?>
+                                                </p>
+                                                <?php unset($_SESSION['description_error']); ?>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <select class="contactus" name="CategoryId">
-                                            <option value="1">Cà phê</option>
-                                            <option value="2">Trà</option>
-                                            <option value="3">Sinh tố</option>
+                                        <select class="contactus" name="category_id" aria-label="category_id">
+                                            <?php foreach ($categories as $category) : ?>
+                                                <option value="<?= $category['id']; ?>" <?= $category['id'] === $coffee->category_id ? 'selected' : ''; ?>>
+                                                    <?= $category['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <button class="send_btn">Thêm</button>
+                                    <button class="send_btn" onclick="return confirm('Bạn có chắc chắn muốn cập nhật sản phẩm này?')" type="submit" name="submit">Cập nhật</button>
                                 </div>
                             </form>
                         </div>

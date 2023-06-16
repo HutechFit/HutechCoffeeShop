@@ -1,18 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hutech\Factories;
 
 use Hutech\Models\Category;
 
 readonly class CategoryFactory
 {
-    public static function create(string $name) : Category
+    public static function create($id, $name) : Category
     {
-        return new Category(null, $name);
-    }
-
-    public static function update(int $id, string $name) : Category
-    {
-        return new Category($id, $name);
+        return new Category((int) $id, $name);
     }
 }

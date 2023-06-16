@@ -11,10 +11,17 @@ use ReflectionException;
 class Route extends Container
 {
     private array $routes = [];
+    private array $middleware = [];
 
     public function setRoute($uri, $action): static
     {
         $this->routes[$uri] = $action;
+        return $this;
+    }
+
+    public function addMiddleware($middleware): static
+    {
+        $this->middleware[] = $middleware;
         return $this;
     }
 

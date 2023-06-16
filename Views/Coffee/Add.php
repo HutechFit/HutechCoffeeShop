@@ -29,22 +29,18 @@
                                             <div class="col-md-12">
                                                 <?php if (isset($_SESSION['name_error'])) : ?>
                                                     <p class="text-danger">
-                                                        <?= is_array($_SESSION['name_error'])
-                                                            ? implode('<br/>', $_SESSION['name_error'])
-                                                            : $_SESSION['name_error']; ?>
+                                                        <?= $_SESSION['name_error']; ?>
                                                     </p>
                                                     <?php unset($_SESSION['name_error']); ?>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <input class="contactus" placeholder="Giá tiền" type="number" name="Price">
+                                            <input class="contactus" placeholder="Giá tiền" type="number" name="Price" step="1000" min="0" max="100000000">
                                             <div class="col-md-12">
                                                 <?php if (isset($_SESSION['price_error'])) : ?>
                                                     <p class="text-danger">
-                                                        <?= is_array($_SESSION['price_error'])
-                                                            ? implode('<br/>', $_SESSION['price_error'])
-                                                            : $_SESSION['price_error']; ?>
+                                                        <?= $_SESSION['price_error']; ?>
                                                     </p>
                                                     <?php unset($_SESSION['price_error']); ?>
                                                 <?php endif; ?>

@@ -11,7 +11,7 @@ use Nette\Utils\FileSystem;
 use Nette\Utils\Image;
 use Nette\Utils\ImageException;
 use Nette\Utils\UnknownImageFileException;
-use Symfony\Component\Validator\Validation;
+use Nette\Utils\Validators;
 
 include_once './Services/ProductService.php';
 include_once './Services/CategoryService.php';
@@ -33,6 +33,7 @@ readonly class CoffeeController
     public function getAll(): void
     {
         $coffees = $this->coffeeService->getAll();
+        $categories = $this->categoryService->getAll();
         require_once './Views/Coffee/Manager.php';
     }
 
@@ -60,6 +61,7 @@ readonly class CoffeeController
             }
 
             $product = $this->coffeeFactory->create(
+                id: null,
                 name: $_POST['Name'],
                 price: $_POST['Price'],
                 image: $imgPath,
@@ -123,7 +125,7 @@ readonly class CoffeeController
             }
         }
 
-        $product = $this->coffeeFactory->update(
+        $product = $this->coffeeFactory->create(
             id: $_POST['Id'],
             name: $_POST['Name'],
             price: $_POST['Price'],
@@ -201,12 +203,27 @@ readonly class CoffeeController
 
     private function validation($product): bool
     {
-        $errors = Validation::createValidator()->validate($product);
+        if (!Validators::isInRange($product->price, [0, 100000000]) || Validators::isNone($product->price)) {
+            $_SESSION['price_error'] = 'Giá sản phẩm không được để trống và phải nhỏ hơn 100000000';
+        }
 
-        if (count($errors) > 0) {
-            foreach ($errors as $error) {
-                $_SESSION[$error->getPropertyPath() . '_error'] = $error->getMessage();
-            }
+        if (!Validators::isInRange(strlen($product->name), [1, 50])) {
+            $_SESSION['name_error'] = 'Tên sản phẩm không được để trống và phải nhỏ hơn 50';
+        }
+
+        if (!Validators::isInRange(strlen($product->image), [0, 255])) {
+            $_SESSION['description_error'] = 'Đường dẫn ảnh sản phẩm phải nhỏ hơn 255';
+        }
+
+        if (!Validators::isInRange(strlen($product->description), [0, 255])) {
+            $_SESSION['description_error'] = 'Mô tả sản phẩm phải nhỏ hơn 255';
+        }
+
+        if (isset($_SESSION['price_error'])
+            || isset($_SESSION['category_error'])
+            || isset($_SESSION['name_error'])
+            || isset($_SESSION['image_error'])
+            || isset($_SESSION['description_error'])) {
             return false;
         }
 
