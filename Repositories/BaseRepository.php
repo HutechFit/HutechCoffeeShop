@@ -46,10 +46,12 @@ abstract class BaseRepository
     public function update($data) : void
     {
         $this->executeTransaction(function () use ($data) {
-            $fields = implode(', ', array_keys(get_object_vars($data)));
-            $values = ':' . implode(', :', array_keys(get_object_vars($data)));
-            $stmt = $this->pdo->prepare("UPDATE $this->table SET $fields = $values WHERE id = :id");
-            $stmt->execute(get_object_vars($data));
+            $fields = implode(' = ?, ', array_keys(get_object_vars($data)));
+            $fields .= ' = ?';
+            $values = array_values(get_object_vars($data));
+            $values[] = $data->id;
+            $stmt = $this->pdo->prepare("UPDATE $this->table SET $fields WHERE id = ?");
+            $stmt->execute($values);
         });
     }
 

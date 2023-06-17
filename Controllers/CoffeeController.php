@@ -65,7 +65,7 @@ readonly class CoffeeController
                 name: $_POST['Name'],
                 price: $_POST['Price'],
                 image: $imgPath,
-                description: $_POST['Description'],
+                description: $_POST['Description'] ?? '',
                 category_id: $_POST['category_id']
             );
 
@@ -129,8 +129,8 @@ readonly class CoffeeController
             id: $_POST['Id'],
             name: $_POST['Name'],
             price: $_POST['Price'],
-            image: $imgPath,
-            description: $_POST['Description'],
+            image: $imgPath ?? '',
+            description: $_POST['Description'] ?? '',
             category_id: $_POST['category_id']
         );
 
