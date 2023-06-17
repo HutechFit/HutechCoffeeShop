@@ -220,7 +220,6 @@ readonly class CoffeeController
         }
 
         if (isset($_SESSION['price_error'])
-            || isset($_SESSION['category_error'])
             || isset($_SESSION['name_error'])
             || isset($_SESSION['image_error'])
             || isset($_SESSION['description_error'])) {

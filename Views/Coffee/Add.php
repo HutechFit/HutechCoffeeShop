@@ -29,9 +29,11 @@
                                             <div class="col-md-12">
                                                 <?php if (isset($_SESSION['name_error'])) : ?>
                                                     <p class="text-danger">
-                                                        <?= $_SESSION['name_error']; ?>
+                                                        <?=
+                                                        $_SESSION['name_error'];
+                                                        unset($_SESSION['name_error']);
+                                                        ?>
                                                     </p>
-                                                    <?php unset($_SESSION['name_error']); ?>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -40,9 +42,11 @@
                                             <div class="col-md-12">
                                                 <?php if (isset($_SESSION['price_error'])) : ?>
                                                     <p class="text-danger">
-                                                        <?= $_SESSION['price_error']; ?>
+                                                        <?=
+                                                        $_SESSION['price_error'];
+                                                        unset($_SESSION['price_error']);
+                                                        ?>
                                                     </p>
-                                                    <?php unset($_SESSION['price_error']); ?>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -51,12 +55,15 @@
                                             <?php if (isset($_SESSION['image_error'])) : ?>
                                                 <div class="col-md-12">
                                                     <p class="text-danger">
-                                                        <?= is_array($_SESSION['image_error'])
+                                                        <?=
+                                                        is_array($_SESSION['image_error'])
                                                             ? implode('<br/>', $_SESSION['image_error'])
-                                                            : $_SESSION['image_error']; ?>
+                                                            : $_SESSION['image_error'];
+                                                        unset($_SESSION['image_error'])
+                                                        ?>
                                                     </p>
                                                 </div>
-                                                <?php unset($_SESSION['image_error']); ?>
+                                                <?php ; ?>
                                             <?php endif; ?>
                                         </div>
                                         <div class="col-md-12">
@@ -64,9 +71,11 @@
                                             <div class="col-md-12">
                                                 <?php if (isset($_SESSION['description_error'])) : ?>
                                                     <p class="text-danger">
-                                                        <?= $_SESSION['description_error']; ?>
+                                                        <?=
+                                                        $_SESSION['description_error'];
+                                                        unset($_SESSION['description_error']);
+                                                        ?>
                                                     </p>
-                                                    <?php unset($_SESSION['description_error']); ?>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
