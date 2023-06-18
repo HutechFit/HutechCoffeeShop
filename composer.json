@@ -23,8 +23,7 @@
         "psr/container": "^2.0",
         "ext-intl": "*",
         "ext-pdo": "*",
-        "vlucas/phpdotenv": "^5.5",
-        "nette/utils": "^4.0"
+        "vlucas/phpdotenv": "^5.5"
     },
     "autoload": {
         "psr-4": {
