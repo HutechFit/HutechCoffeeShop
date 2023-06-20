@@ -41,16 +41,14 @@
                             <?php else : ?>
                                 <img loading="lazy" src="https://fakeimg.pl/100x100?text=No+image" alt="<?= $coffee['name'] ?>">
                             <?php endif; ?>
-                            <a href="#"
-                               class="text-white"
-                               id="addToCart"
-                               data-name="<?= $coffee['name'] ?>"
-                               data-id="<?= $coffee['id'] ?>"
-                               data-price="<?= $coffee['price'] ?>">
+                            <button class="text-white addToCart"
+                                    data-name="<?= $coffee['name'] ?>"
+                                    data-id="<?= $coffee['id'] ?>"
+                                    data-price="<?= $coffee['price'] ?>">
                                 <div class="date">
                                     <h3>Mua</h3>
                                 </div>
-                            </a>
+                            </button>
                         </figure>
                         <div class="blog_text">
                             <h3 data-bs-toggle="tooltip" data-bs-placement="top" title="<?= $coffee['description'] ?>">
@@ -74,7 +72,7 @@
 <?php include_once 'Views/Partials/Footer.php'; ?>
 <script>
     $(document).ready(function () {
-        $('#addToCart').click(function (e) {
+        $('.addToCart').click(function (e) {
             e.preventDefault();
             let data = {
                 id: $(this).data('id'),
@@ -88,6 +86,7 @@
                     method: 'POST',
                     data: data,
                     success: function (response) {
+                        console.log(response);
                         if (response) {
                             alert('Thêm vào giỏ hàng thành công');
                         } else {

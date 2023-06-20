@@ -26,6 +26,7 @@ try {
         ->setRoute('/update', [CoffeeController::class, 'update'])
         ->setRoute('/delete', [CoffeeController::class, 'delete'])
         ->setRoute('/order', [CartController::class, 'index'])
+        ->setRoute('/addToCart', [CartController::class, 'addToCart'])
         ->setRoute('/login', [UserController::class, 'login'])
         ->setRoute('/logout', [UserController::class, 'logout'])
         ->setRoute('/signup', [UserController::class, 'addUser'])
