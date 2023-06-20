@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Hutech\Controllers\CartController;
 use Hutech\Controllers\CoffeeController;
 use Hutech\Controllers\HomeController;
 use Hutech\Controllers\UserController;
@@ -11,6 +12,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 include_once './vendor/autoload.php';
 include_once './Controllers/CoffeeController.php';
+include_once './Controllers/CartController.php';
 include_once './Controllers/UserController.php';
 
 $route = new Route();
@@ -23,6 +25,7 @@ try {
         ->setRoute('/insert', [CoffeeController::class, 'insert'])
         ->setRoute('/update', [CoffeeController::class, 'update'])
         ->setRoute('/delete', [CoffeeController::class, 'delete'])
+        ->setRoute('/order', [CartController::class, 'index'])
         ->setRoute('/login', [UserController::class, 'login'])
         ->setRoute('/logout', [UserController::class, 'logout'])
         ->setRoute('/signup', [UserController::class, 'addUser'])

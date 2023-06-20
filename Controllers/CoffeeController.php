@@ -137,7 +137,7 @@ readonly class CoffeeController
         $coffee = $this->coffeeService->getById((int) $_GET['id']);
 
         if ($coffee) {
-            if ($coffee->image && file_exists($this::FILE_PATH . $coffee->image)) {
+            if ($coffee->image && file_exists($coffee->image)) {
                 unlink($coffee->image);
             }
             $this->coffeeService->delete((int) $_GET['id']);

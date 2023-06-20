@@ -16,18 +16,18 @@
              style="background: #FFFFFF">
             <div class="text-center">
                 <h1 class="display-1 fw-bold text-info">Trống</h1><br>
-                <p class="fs-3"> <span class="text-danger">Opps!</span> Có vẻ như bạn chưa thêm cà phê nào.</p>
+                <p class="fs-3"> <span class="text-danger">Opps!</span> Có vẻ như bạn chưa thêm sản phẩm nào.</p>
                 <p class="lead">
-                    Hãy thêm cà phê mới.
+                    Hãy thêm sản phẩm mới.
                 </p> <br>
-                <a href="/hutech-coffee/add" class="read_more">Thêm cà phê</a>
+                <a href="/hutech-coffee/add" class="read_more">Thêm sản phẩm</a>
             </div>
         </div>
     <?php else : ?>
     <div class="d-flex justify-content-lg-center vh-25 service"
          style="background: #FFFFFF">
 	<table id="myTable" class="table table-striped table-hover">
-        <caption>Danh sách cà phê</caption>
+        <caption>Danh sách sản phẩm</caption>
 		<thead>
 			<tr>
 				<th scope="col">Mã sản phẩm</th>
@@ -82,7 +82,7 @@
     </table>
     </div>
     <div class="text-center">
-        <a href="/hutech-coffee/add" class="read_more">Thêm cà phê</a>
+        <a href="/hutech-coffee/add" class="read_more">Thêm sản phẩm</a>
     </div>
     <?php endif; ?>
     <?php include_once 'Views/Partials/Footer.php'; ?>
