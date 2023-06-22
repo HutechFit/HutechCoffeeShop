@@ -33,10 +33,15 @@
 								<a class="nav-link" href="/hutech-coffee/order">Gọi món</a>
 							</li>
 							<li class="nav-item disabled">
-								<a class="nav-link" href="/hutech-coffee/cart" >Giỏ hàng</a>
+								<a class="nav-link" href="/hutech-coffee/cart">Giỏ hàng <span class="badge badge-pill badge-warning">
+                                        <?=
+                                        isset($_COOKIE['cart'])
+                                            ? count(json_decode(base64_decode($_COOKIE['cart']), true))
+                                            : 0;
+                                        ?></span></a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="/hutech-coffee/manager">Quản lý</a>
+								<a class="nav-link" id="cart" href="/hutech-coffee/manager">Quản lý</a>
 							</li>
 							<?php if (isset($_SESSION['user'])) : ?>
 								<li class="nav-item">
