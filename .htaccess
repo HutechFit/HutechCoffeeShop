@@ -15,7 +15,7 @@ php_value max_execution_time 300
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Cấu hình trỏ từ localhost/hutech-coffee/* sang hutech-coffee.local/*
+# Cấu hình cho request từ hutech-coffee.local/hutech-coffee/* sang hutech-coffee.local/*
 RewriteCond %{HTTP_HOST} ^localhost$ [NC,OR]
 RedirectMatch ^/hutech-coffee/(.*)$ https://hutech-coffee.local/$1
 RedirectMatch ^/hutech-coffee$ https://hutech-coffee.local/

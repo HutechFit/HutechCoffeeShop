@@ -70,6 +70,6 @@
 <script>
     $(document).ready(function() {
         const currentPath = window.location.pathname;
-        $('#navbar li a[href="' + currentPath + '"]').parent().addClass('active');
+        $('#navbar li a[href="' + '/hutech-coffee' + currentPath + '"]').parent().addClass('active');
     });
 </script>

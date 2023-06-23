@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <form id="request" class="main_form" method="post" action="/hutech-coffee/insert" enctype="multipart/form-data">
+                                <form id="request" class="main_form" method="post" action="/insert" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-md-12 ">
                                             <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name">

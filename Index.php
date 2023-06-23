@@ -30,6 +30,8 @@ try {
         ->setRoute('/cart', [CartController::class, 'showCart'])
         ->setRoute('/cartUpdate', [CartController::class, 'cartUpdate'])
         ->setRoute('/removeItem', [CartController::class, 'cartDelete'])
+        ->setRoute('/checkout', [CartController::class, 'payment'])
+        ->setRoute('/payment-result', [CartController::class, 'paymentResult'])
         ->setRoute('/login', [UserController::class, 'login'])
         ->setRoute('/logout', [UserController::class, 'logout'])
         ->setRoute('/signup', [UserController::class, 'addUser'])

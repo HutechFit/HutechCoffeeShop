@@ -53,7 +53,6 @@
                                             <div class="form-outline">
                                                 <input id="form1"
                                                        min="1"
-                                                       step="1"
                                                        max="100"
                                                        type="number"
                                                        value="<?= $item['quantity'] ?>"
@@ -69,11 +68,16 @@
                                                     data-mdb-toggle="tooltip"
                                                     title="Xoá sản phẩm">
                                                 <i class="fas fa-trash" style="color: white"></i>
-                                            </>
+                                            </button>
                                         </div>
 
                                         <p class="text-start text-md-center">
-                                            <strong><?= numfmt_format_currency(numfmt_create('vi_VN', NumberFormatter::CURRENCY), $item['price'] * $item['quantity'], 'VND') ?></strong>
+                                            <strong>
+                                                <?= numfmt_format_currency(
+                                                    numfmt_create('vi_VN', NumberFormatter::CURRENCY),
+                                                    $item['price'] * $item['quantity'], 'VND'
+                                                ) ?>
+                                            </strong>
                                         </p>
                                     </div>
                                 </div>
@@ -95,30 +99,34 @@
                                     <label class="form-label"
                                            for="form1"></label>
                                     <?php if (isset($_SESSION['discount'])): ?>
-                                        <div class="alert alert-success alert-dismissible fade show"
-                                             role="alert">
-                                            <strong>Đã áp dụng mã giảm giá!</strong> <?= $_SESSION['discount']['name'] ?>
-                                            <button type="button"
-                                                    class="btn-close"
-                                                    data-bs-dismiss="alert"
-                                                    aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        Đã áp dụng mã giảm giá <?= $_SESSION['discount'] ?> thành công!
+                                        <button type="button"
+                                                class="close"
+                                                data-dismiss="alert"
+                                                aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
                                     <?php elseif (isset($_SESSION['discount_error'])): ?>
-                                        <div class="alert alert-danger alert-dismissible fade show"
-                                             role="alert">
-                                            <strong><?= $_SESSION['discount_error'] ?></strong>
-                                            <button type="button"
-                                                    class="btn-close"
-                                                    data-bs-dismiss="alert"
-                                                    aria-label="Close"></button>
-                                        </div>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <?=
+                                        $_SESSION['discount_error'];
+                                        unset($_SESSION['discount_error']);
+                                        ?>
+                                        <button type="button"
+                                                class="close"
+                                                data-dismiss="alert"
+                                                aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
                                     <?php endif; ?>
                                 </div>
 
                                 <button type="button"
-                                        class="btn btn-outline-warning btn-lg ms-3">Áp dụng
+                                        class="btn btn-outline-warning btn-lg ms-3">
+                                    Áp dụng
                                 </button>
                             </div>
                         </div>
@@ -133,17 +141,8 @@
                                  src="https://asset.brandfetch.io/idxAg10C0L/idATb3amIw.svg"
                                  alt="Striped"/>
                             <img width="45px"
-                                 src="https://developers.momo.vn/v3/vi/assets/images/logo-custom2-57d6118fe524633b89befe8cb63a3956.png"
-                                 alt="Momo"/>
-                            <img width="45px"
                                  src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png"
                                  alt="PayPal"/>
-                            <img width="45px"
-                                 src="https://www.svgrepo.com/show/362033/visa.svg"
-                                 alt="Visa"/>
-                            <img width="45px"
-                                 src="https://www.svgrepo.com/show/508701/mastercard-full.svg"
-                                 alt="MasterCard"/>
                         </div>
                     </div>
                 </div>
@@ -154,34 +153,34 @@
                         </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                <li class="list-group-item d-flex justify-content-between border-0 px-0">
                                     Sản phẩm
                                     <span>
                                         <?= numfmt_format_currency(
                                             numfmt_create('vi_VN', NumberFormatter::CURRENCY),
                                             array_sum(
-                                                array_map(function ($item) {
-                                                    return $item['price'] * $item['quantity'];
-                                                }, $cart)
+                                                array_map(
+                                                    function ($item) {
+                                                        return $item['price'] * $item['quantity'];
+                                                    },
+                                                    $cart
+                                                )
                                             ),
                                             'VND'
                                         ) ?>
                                 </span>
                                 </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                <li class="list-group-item d-flex justify-content-between border-0 px-0">
                                     <div>
                                         <strong>Tổng số tiền</strong>
-                                        <strong>
-                                            <p class="mb-0">(đã bao gồm 5% VAT)</p>
-                                        </strong>
+                                        <p class="mb-0">(đã bao gồm 5% VAT)</p>
                                     </div>
                                     <span>
                                         <?= numfmt_format_currency(
                                             numfmt_create('vi_VN', NumberFormatter::CURRENCY),
                                             ceil(
-                                                array_sum(
-                                                    array_map(function ($item) {
-                                                        return $item['price'] * $item['quantity'] * 1.05;
+                                                array_sum(array_map(function ($item) {
+                                                    return $item['price'] * $item['quantity'] * 1.05;
                                                     }, $cart)
                                                 ) / 1000
                                             ) * 1000,
@@ -191,11 +190,62 @@
                                 </li>
                             </ul>
 
+                            <div id="payment-info"
+                                 style="display: none">
+                                <form action="/checkout" id="frmCreateOrder" method="post">
+                                    <label>
+                                        <input type="hidden"
+                                               name="amount"
+                                               value="<?= ceil(
+                                                   array_sum(
+                                                       array_map(function ($item) {
+                                                           return $item['price'] * $item['quantity'] * 1.05;
+                                                       }, $cart)
+                                                   ) / 1000
+                                               ) * 1000 ?>">
+                                    </label>
+
+                                    <div class="form-group">
+                                        <input type="email"
+                                               class="form-control"
+                                               id="email"
+                                               placeholder="Nhập email của bạn"
+                                               required>
+                                        <label for="email"></label>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <select class="form-control"
+                                                id="payment-method"
+                                                name="payment-method">
+                                            <option value="vnpay">VNPay</option>
+                                            <option value="striped">Striped</option>
+                                            <option value="paypal">PayPal</option>
+                                        </select>
+                                        <label for="payment-method"></label>
+                                    </div>
+
+                                    <button type="submit"
+                                            id="payment"
+                                            class="btn btn-outline-success btn-lg btn-block">
+                                        Thanh toán
+                                    </button>
+                                </form>
+
+                            </div>
+
                             <button type="button"
                                     id="checkout"
                                     class="btn btn-outline-info btn-lg btn-block">
                                 Tiến hành thanh toán
                             </button>
+
+                            <br>
+
+                            <?php if (isset($_SESSION['payment_error'])) {
+                                echo '<p class="text-danger justify-content-center">' . $_SESSION['payment_error'] . '</p>';
+                                unset($_SESSION['payment_error']);
+                            } ?>
 
                             <button type="button"
                                     id="clear-cart"
@@ -230,13 +280,13 @@
     $(document).ready(function () {
         $('.quantity-input').change(function () {
             $.ajax({
-                url: '/hutech-coffee/cartUpdate',
+                url: '/cartUpdate',
                 type: 'POST',
                 data: {
                     id: $(this).data('id'),
                     quantity: $(this).val()
                 },
-                success: function (response) {
+                success: function () {
                     location.reload();
                 }
             });
@@ -247,18 +297,26 @@
         $('#remove-item').click(function () {
             if (confirm('Bạn có chắc chắn muốn xóa sản phẩm ' + $(this).data('id') + ' khỏi giỏ hàng?')) {
                 $.ajax({
-                    url: '/hutech-coffee/removeItem',
+                    url: '/removeItem',
                     type: 'POST',
                     data: {
                         id: $(this).data('id')
                     },
-                    success: function (response) {
+                    success: function () {
                         location.reload();
                     }
                 });
             }
         });
     });
+
+    $(document).ready(function () {
+        $('#checkout').click(function () {
+            $('#payment-info').show();
+            $('#checkout').hide();
+        });
+    });
+
 </script>
 </body>
 </html>

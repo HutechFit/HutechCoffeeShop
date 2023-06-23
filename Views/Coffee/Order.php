@@ -86,7 +86,7 @@
             };
             if (confirm('Xác nhận thêm ' + $(this).data('name').toLowerCase() + ' vào giỏ hàng?')) {
                 $.ajax({
-                    url: '/hutech-coffee/addToCart',
+                    url: '/addToCart',
                     method: 'POST',
                     data: data,
                     success: function (response) {

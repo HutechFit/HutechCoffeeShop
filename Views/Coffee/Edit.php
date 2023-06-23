@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <form id="request" class="main_form" method="post" action="/hutech-coffee/update" enctype="multipart/form-data">
+                            <form id="request" class="main_form" method="post" action="/update" enctype="multipart/form-data">
                                 <div class="row">
                                     <input type="hidden" name="Id" value="<?= $coffee->id; ?>">
                                     <div class="col-md-12 ">
