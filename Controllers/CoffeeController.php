@@ -16,7 +16,7 @@ session_start();
 
 readonly class CoffeeController
 {
-    private const FILE_PATH = './Upload/';
+    private const FILE_PATH = '/Uploads/';
 
     public function __construct(
         protected ProductService $coffeeService,
