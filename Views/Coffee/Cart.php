@@ -209,6 +209,7 @@
                                         <input type="email"
                                                class="form-control"
                                                id="email"
+                                               name="email"
                                                placeholder="Nhập email của bạn"
                                                required>
                                         <label for="email"></label>

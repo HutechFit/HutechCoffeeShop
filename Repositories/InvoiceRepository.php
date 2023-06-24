@@ -6,11 +6,11 @@ namespace Hutech\Repositories;
 
 include_once './Repositories/BaseRepository.php';
 
-class CategoryRepository extends BaseRepository
+class InvoiceRepository extends BaseRepository
 {
     public function __construct()
     {
-        parent::__construct('Category');
+        parent::__construct('Invoice');
     }
 
     public function findAll(): ?array
@@ -23,14 +23,14 @@ class CategoryRepository extends BaseRepository
         return $this->getById($id);
     }
 
-    public function add($category): void
+    public function add($invoice): void
     {
-        $this->insert($category);
+        $this->insert($invoice);
     }
 
-    public function modify($category): void
+    public function modify($invoice): void
     {
-        $this->update($category);
+        $this->update($invoice);
     }
 
     public function remove($id): void

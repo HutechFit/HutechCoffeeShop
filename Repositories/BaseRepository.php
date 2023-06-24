@@ -11,7 +11,7 @@ include_once './Utils/Database.php';
 
 abstract class BaseRepository
 {
-    private PDO $pdo;
+    public PDO $pdo;
 
     public function __construct(protected $table)
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Hutech\Controllers\CartController;
 use Hutech\Controllers\CoffeeController;
 use Hutech\Controllers\HomeController;
+use Hutech\Controllers\PaymentController;
 use Hutech\Controllers\UserController;
 use Hutech\Utils\Route;
 use Psr\Container\ContainerExceptionInterface;
@@ -13,6 +14,8 @@ use Psr\Container\NotFoundExceptionInterface;
 include_once './vendor/autoload.php';
 include_once './Controllers/CoffeeController.php';
 include_once './Controllers/CartController.php';
+include_once './Controllers/PaymentController.php';
+include_once './Controllers/HomeController.php';
 include_once './Controllers/UserController.php';
 
 $route = new Route();
@@ -30,8 +33,8 @@ try {
         ->setRoute('/cart', [CartController::class, 'showCart'])
         ->setRoute('/cartUpdate', [CartController::class, 'cartUpdate'])
         ->setRoute('/removeItem', [CartController::class, 'cartDelete'])
-        ->setRoute('/checkout', [CartController::class, 'payment'])
-        ->setRoute('/payment-result', [CartController::class, 'paymentResult'])
+        ->setRoute('/checkout', [PaymentController::class, 'payment'])
+        ->setRoute('/payment-result', [PaymentController::class, 'paymentResult'])
         ->setRoute('/login', [UserController::class, 'login'])
         ->setRoute('/logout', [UserController::class, 'logout'])
         ->setRoute('/signup', [UserController::class, 'addUser'])
