@@ -14,9 +14,14 @@
 <body class="main-layout inner_page">
 <?php include_once 'Views/Partials/Header.php'; ?>
 <?php if (empty($cart)) : ?>
-    <div class="d-flex align-items-center justify-content-center vh-25">
+    <div class="d-flex
+                align-items-center
+                justify-content-center
+                vh-25">
         <div class="text-center">
-            <h1 class="display-1 fw-bold text-info">Chưa có món nào</h1><br>
+            <h1 class="display-1
+                       fw-bold
+                       text-info">Chưa có món nào</h1><br>
             <p class="fs-3"><span class="text-danger">Opps!</span> Giỏ hàng của bạn đang trống.</p>
             <p class="lead">
                 Vui đặt món để thưởng thức những ly cà phê thơm ngon.
@@ -37,8 +42,14 @@
                         <div class="card-body">
                             <?php foreach ($cart as $item): ?>
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                                        <div class="bg-image hover-overlay hover-zoom ripple rounded"
+                                    <div class="col-lg-3
+                                                col-md-12
+                                                mb-4
+                                                mb-lg-0">
+                                        <div class="bg-image
+                                                    hover-overlay
+                                                    hover-zoom
+                                                    ripple rounded"
                                              data-mdb-ripple-color="light">
                                             <img src="<?= $item['image'] ?>"
                                                  alt="<?= $item['name'] ?>"
@@ -62,7 +73,11 @@
                                                        for="form1">Số lượng</label>
                                             </div>
                                             <button id="remove-item"
-                                                    class="btn btn-danger btn-sm me-1 mb-2"
+                                                    class="btn
+                                                           btn-danger
+                                                           btn-sm
+                                                           me-1
+                                                           mb-2"
                                                     type="button"
                                                     data-id="<?= $item['id'] ?>"
                                                     data-mdb-toggle="tooltip"
@@ -94,13 +109,18 @@
                                     <input type="text"
                                            id="form1"
                                            name="discount"
-                                           class="form-control form-control-lg"
+                                           class="form-control
+                                                  form-control-lg
+                                                  discount-input"
                                            placeholder="Nhập mã giảm giá"/>
                                     <label class="form-label"
                                            for="form1"></label>
                                     <?php if (isset($_SESSION['discount'])): ?>
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        Đã áp dụng mã giảm giá <?= $_SESSION['discount'] ?> thành công!
+                                    <div class="alert
+                                                alert-success
+                                                alert-dismissible
+                                                fade show" role="alert">
+                                        Đã áp dụng mã giảm giá <b><?= $_SESSION['discount'] ?></b> thành công!
                                         <button type="button"
                                                 class="close"
                                                 data-dismiss="alert"
@@ -109,7 +129,11 @@
                                         </button>
                                     </div>
                                     <?php elseif (isset($_SESSION['discount_error'])): ?>
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <div class="alert
+                                                alert-danger
+                                                alert-dismissible
+                                                fade show"
+                                         role="alert">
                                         <?=
                                         $_SESSION['discount_error'];
                                         unset($_SESSION['discount_error']);
@@ -125,7 +149,11 @@
                                 </div>
 
                                 <button type="button"
-                                        class="btn btn-outline-warning btn-lg ms-3">
+                                        id="apply-discount"
+                                        class="btn
+                                               btn-outline-warning
+                                               btn-lg
+                                               ms-3">
                                     Áp dụng
                                 </button>
                             </div>
@@ -152,8 +180,13 @@
                             <h5 class="mb-0 text-dark">Tổng tiền</h5>
                         </div>
                         <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item d-flex justify-content-between border-0 px-0">
+                            <ul class="list-group
+                                       list-group-flush">
+                                <li class="list-group-item
+                                           d-flex
+                                           justify-content-between
+                                           border-0
+                                           px-0">
                                     Sản phẩm
                                     <span>
                                         <?= numfmt_format_currency(
@@ -170,7 +203,21 @@
                                         ) ?>
                                 </span>
                                 </li>
-                                <li class="list-group-item d-flex justify-content-between border-0 px-0">
+                                <?php if (isset($_SESSION['discount'])): ?>
+                                <li class="list-group-item
+                                           d-flex
+                                           justify-content-between
+                                           border-0
+                                           px-0">
+                                    <p>Giảm giá</p>
+                                    <span>-<?= $_SESSION['value'] ?? 0 ?></span>
+                                </li>
+                                <?php endif; ?>
+                                <li class="list-group-item
+                                           d-flex
+                                           justify-content-between
+                                           border-0
+                                           px-0">
                                     <div>
                                         <strong>Tổng số tiền</strong>
                                         <p class="mb-0">(đã bao gồm 5% VAT)</p>
@@ -180,7 +227,7 @@
                                             numfmt_create('vi_VN', NumberFormatter::CURRENCY),
                                             ceil(
                                                 array_sum(array_map(function ($item) {
-                                                    return $item['price'] * $item['quantity'] * 1.05;
+                                                    return $item['price'] * $item['quantity'] * 1.05 - ($_SESSION['total'] ?? 0);
                                                     }, $cart)
                                                 ) / 1000
                                             ) * 1000,
@@ -199,7 +246,7 @@
                                                value="<?= ceil(
                                                    array_sum(
                                                        array_map(function ($item) {
-                                                           return $item['price'] * $item['quantity'] * 1.05;
+                                                           return $item['price'] * $item['quantity'] * 1.05 - ($_SESSION['total'] ?? 0);
                                                        }, $cart)
                                                    ) / 1000
                                                ) * 1000 ?>">
@@ -225,29 +272,23 @@
                                         </select>
                                         <label for="payment-method"></label>
                                     </div>
-
                                     <button type="submit"
                                             id="payment"
                                             class="btn btn-outline-success btn-lg btn-block">
                                         Thanh toán
                                     </button>
                                 </form>
-
                             </div>
-
                             <button type="button"
                                     id="checkout"
                                     class="btn btn-outline-info btn-lg btn-block">
                                 Tiến hành thanh toán
                             </button>
-
                             <br>
-
                             <?php if (isset($_SESSION['payment_error'])) {
                                 echo '<p class="text-danger justify-content-center">' . $_SESSION['payment_error'] . '</p>';
                                 unset($_SESSION['payment_error']);
                             } ?>
-
                             <button type="button"
                                     id="clear-cart"
                                     class="btn btn-outline-danger btn-lg btn-block mt-3">
@@ -276,9 +317,7 @@
                 location.reload();
             }
         });
-    });
 
-    $(document).ready(function () {
         $('.quantity-input').change(function () {
             $.ajax({
                 url: '/cartUpdate',
@@ -292,9 +331,7 @@
                 }
             });
         });
-    });
 
-    $(document).ready(function () {
         $('#remove-item').click(function () {
             if (confirm('Bạn có chắc chắn muốn xóa sản phẩm ' + $(this).data('id') + ' khỏi giỏ hàng?')) {
                 $.ajax({
@@ -309,15 +346,25 @@
                 });
             }
         });
-    });
 
-    $(document).ready(function () {
         $('#checkout').click(function () {
             $('#payment-info').show();
             $('#checkout').hide();
         });
-    });
 
+        $('#apply-discount').click(function () {
+            $.ajax({
+                url: '/discount',
+                type: 'POST',
+                data: {
+                    code: $('.discount-input').val()
+                },
+                success: function () {
+                    location.reload();
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>

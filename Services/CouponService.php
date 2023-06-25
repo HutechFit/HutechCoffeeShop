@@ -14,8 +14,8 @@ readonly class CouponService
     {
     }
 
-    public function isExistCoupon($value): bool
+    public function getCoupon($value): ?array
     {
-        return $this->couponRepository->isExistCode($value);
+        return $this->couponRepository->getCouponByValue($value);
     }
 }

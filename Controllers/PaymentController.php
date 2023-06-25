@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Hutech\Controllers;
 
-use DateTime;
-use Exception;
 use Hutech\Enum\PaymentMethod;
+use Hutech\Factories\CouponFactory;
 use Hutech\Factories\InvoiceFactory;
 use Hutech\Factories\ItemInvoiceFactory;
+use Hutech\Services\CouponService;
 use Hutech\Services\InvoiceService;
 use Hutech\Services\ItemInvoiceService;
 
 include_once './Services/InvoiceService.php';
 include_once './Services/ItemInvoiceService.php';
+include_once './Services/CouponService.php';
 
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 date_default_timezone_set('Asia/Ho_Chi_Minh');
@@ -24,50 +25,92 @@ readonly class PaymentController
     public function __construct(
         protected InvoiceService $invoiceService,
         protected ItemInvoiceService $itemInvoiceService,
+        protected CouponService $couponService,
         protected InvoiceFactory $invoiceFactory,
-        protected ItemInvoiceFactory $itemInvoiceFactory
+        protected ItemInvoiceFactory $itemInvoiceFactory,
+        protected CouponFactory $couponFactory
     )
     {
     }
 
+    /**
+     * Xử lý thanh toán
+     * @return void
+     */
     public function payment(): void
     {
-        $id = rand(1, 1000000);
-
-        $paymentMethod = match ($_POST['payment-method']) {
-            'striped' => PaymentMethod::STIPE,
-            'paypal' => PaymentMethod::PAYPAL,
-            'vnpay' => PaymentMethod::VNPAY,
-            default => PaymentMethod::CASH
+        match ($_POST['payment-method']) {
+            'striped' => $this->striped(),
+            'paypal' => $this->paypal(),
+            'vnpay' => $this->vnpay(),
+            default => header('Location: /hutech-coffee/cart')
         };
-
-        $total = $_POST['amount'];
-        $payment_date = (new DateTime())->format('Y-m-d H:i:s');
-
-        $invoice = $this->invoiceFactory->create($id, $total, $payment_date, $paymentMethod->value);
-
-        $this->invoiceService->create($invoice);
-
-        $cartData = json_decode(base64_decode($_COOKIE['cart']), true);
-
-        foreach ($cartData as $coffee) {
-            $itemInvoice = $this->itemInvoiceFactory->create($id, $coffee['id'], $coffee['quantity']);
-            $this->itemInvoiceService->create($itemInvoice);
-        }
-
-        $this->sendEmailInvoice($_POST['email'] ?? '', $id, $total, $payment_date, $paymentMethod->value);
-
-        header('Location: /hutech-coffee/cart');
-
-
-//        match ($_POST['payment-method']) {
-//            'striped' => $this->striped(),
-//            'paypal' => $this->paypal(),
-//            'vnpay' => $this->vnpay(),
-//            default => header('Location: /hutech-coffee/cart')
-//        };
     }
 
+    /**
+     * Xử lý mã giảm giá
+     * @return void
+     */
+    public function discount(): void
+    {
+        $discount = $_POST['code'] ?? '';
+
+        $coupon = $this->couponService->getCoupon($discount);
+
+        if (empty($discount)) {
+            $_SESSION['discount_error'] = 'Mã giảm giá không được để trống';
+            header('Location: /hutech-coffee/cart');
+            exit;
+        }
+
+        if (isset($_COOKIE['discount'])) {
+            $_SESSION['discount_error'] = 'Bạn đã sử dụng mã giảm giá rồi';
+            header('Location: /hutech-coffee/cart');
+            exit;
+        }
+
+        if (empty($coupon)) {
+            $_SESSION['discount_error'] = 'Mã giảm giá không tồn tại';
+            header('Location: /hutech-coffee/cart');
+            exit;
+        }
+
+        if (date('Y-m-d') > date('Y-m-d', strtotime($coupon[0]['expired']))) {
+            $_SESSION['discount_error'] = 'Mã giảm giá đã hết hạn';
+            header('Location: /hutech-coffee/cart');
+            exit;
+        }
+
+        $cartData = json_decode(base64_decode($_COOKIE['cart']), true);
+        $total = 0;
+
+        foreach ($cartData as $coffee) {
+            $total += $coffee['price'] * $coffee['quantity'];
+        }
+
+        $total = match ($coupon[0]['value'] <=> 100) {
+            -1 => $total * (1 - $coupon[0]['value'] / 100),
+            0 => 0,
+            1 => $total - $coupon[0]['value']
+        };
+
+        setcookie('discount', base64_encode(json_encode($coupon)), time() + 86400, '/');
+
+        $_SESSION['total'] = $total;
+        $_SESSION['discount'] = $coupon[0]['code'];
+        $_SESSION['value'] = match ($coupon[0]['value'] <=> 100) {
+            -1 => $coupon[0]['value'] . '%',
+            0 => '100%',
+            1 => number_format($coupon[0]['value']) . 'đ',
+        };
+
+        header('Location: /hutech-coffee/cart');
+    }
+
+    /**
+     * Trả về kết quả thanh toán
+     * @return void
+     */
     public function paymentResult(): void
     {
         $vnp_SecureHash = $_GET['vnp_SecureHash'] ?? '';
@@ -97,14 +140,28 @@ readonly class PaymentController
 
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
 
-//        if ($secureHash == $vnp_SecureHash && $_GET['vnp_ResponseCode'] === '00') {
-//              Lưu dữ liệu đơn hàng vào CSDL
-//        }
+        if ($secureHash == $vnp_SecureHash && $_GET['vnp_ResponseCode'] === '00') {
+              $this->saveBill($_GET['vnp_TxnRef'], 'vnpay', $_GET['vnp_Amount'] / 100, date('Y-m-d H:i:s', strtotime($_GET['vnp_PayDate'])));
+        }
+
+        # Huỷ toàn bộ giỏ hàng
+        unset($_SESSION['cart']);
+        unset($_SESSION['total']);
+        unset($_SESSION['discount']);
+        unset($_SESSION['value']);
+        unset($_SESSION['discount_error']);
+        unset($_SESSION['error']);
+        setcookie('cart', '', time() - 86400, '/');
+        setcookie('discount', '', time() - 86400, '/');
 
         require_once 'Views/Coffee/Payment.php';
     }
 
-    private function vnpay(): void
+    /**
+     * Xử lý thanh toán bằng VNPAY
+     * @return never
+     */
+    private function vnpay(): never
     {
         $vnp_TxnRef = strval(rand(1, 1000000));
         $vnp_Amount = $_POST['amount'];
@@ -167,18 +224,35 @@ readonly class PaymentController
         die();
     }
 
+    /**
+     * Xử lý thanh toán bằng Stripe
+     * @return void
+     */
     private function striped(): void
     {
         $_SESSION['payment_error'] = 'Stripe đang được phát triển';
         header('Location: /hutech-coffee/cart');
     }
 
+    /**
+     * Xử lý thanh toán bằng Paypal
+     * @return void
+     */
     private function paypal(): void
     {
         $_SESSION['payment_error'] = 'Paypal đang được phát triển';
         header('Location: /hutech-coffee/cart');
     }
 
+    /**
+     * Gửi email thông tin đơn hàng
+     * @param $email
+     * @param $id
+     * @param $total
+     * @param $payment_date
+     * @param $payment_method
+     * @return void
+     */
     private function sendEmailInvoice($email, $id, $total, $payment_date, $payment_method): void
     {
         $to = $email;
@@ -208,5 +282,38 @@ readonly class PaymentController
             $errorMessage = error_get_last()['message'];
             $_SESSION['payment_error'] = $errorMessage;
         }
+    }
+
+    /**
+     * Lưu thông tin đơn hàng vào database
+     * @param $id
+     * @param $payment
+     * @param $total
+     * @param $payment_date
+     * @return void
+     */
+    private function saveBill($id, $payment, $total, $payment_date): void
+    {
+        $paymentMethod = match ($payment) {
+            'striped' => PaymentMethod::STIPE,
+            'paypal' => PaymentMethod::PAYPAL,
+            'vnpay' => PaymentMethod::VNPAY,
+            default => PaymentMethod::CASH
+        };
+
+        $invoice = $this->invoiceFactory->create($id, $total, $payment_date, $paymentMethod->value);
+
+        $this->invoiceService->create($invoice);
+
+        $cartData = json_decode(base64_decode($_COOKIE['cart']), true);
+
+        foreach ($cartData as $coffee) {
+            $itemInvoice = $this->itemInvoiceFactory->create($id, $coffee['id'], $coffee['quantity']);
+            $this->itemInvoiceService->create($itemInvoice);
+        }
+
+        $this->sendEmailInvoice($_POST['email'] ?? '', $id, $total, $payment_date, $paymentMethod->value);
+
+        header('Location: /hutech-coffee/cart');
     }
 }

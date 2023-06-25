@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Hutech\Repositories;
 
-include_once './Repositories/BaseRepository.php';
-
 use PDO;
+
+include_once './Repositories/BaseRepository.php';
 
 class CouponRepository extends BaseRepository
 {
@@ -15,11 +15,10 @@ class CouponRepository extends BaseRepository
         parent::__construct('Coupon');
     }
 
-    public function isExistCode($value): bool
+    public function getCouponByValue($value): ?array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM $this->table WHERE value = :value");
-        $stmt->execute(['value' => $value]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result !== false;
+        $stmt = $this->pdo->prepare("SELECT * FROM $this->table WHERE code = :code");
+        $stmt->execute(['code' => $value]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
