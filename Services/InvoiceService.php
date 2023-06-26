@@ -6,8 +6,6 @@ namespace Hutech\Services;
 
 use Hutech\Repositories\InvoiceRepository;
 
-include_once './Repositories/InvoiceRepository.php';
-
 readonly class InvoiceService
 {
     public function __construct(protected InvoiceRepository $invoiceRepository)

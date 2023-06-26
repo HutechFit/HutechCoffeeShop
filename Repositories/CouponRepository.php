@@ -6,8 +6,6 @@ namespace Hutech\Repositories;
 
 use PDO;
 
-include_once './Repositories/BaseRepository.php';
-
 class CouponRepository extends BaseRepository
 {
     public function __construct()

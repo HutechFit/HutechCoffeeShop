@@ -9,11 +9,6 @@ use Hutech\Factories\ProductFactory;
 use Hutech\Services\CategoryService;
 use Hutech\Services\ProductService;
 
-include_once './Services/ProductService.php';
-include_once './Services/CategoryService.php';
-
-session_start();
-
 readonly class CoffeeController
 {
     private const FILE_PATH = '/Uploads/';

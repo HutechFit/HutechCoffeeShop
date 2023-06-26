@@ -11,23 +11,20 @@ use Hutech\Utils\Route;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-include_once './vendor/autoload.php';
-include_once './Controllers/CoffeeController.php';
-include_once './Controllers/CartController.php';
-include_once './Controllers/PaymentController.php';
-include_once './Controllers/HomeController.php';
-include_once './Controllers/UserController.php';
+require_once './vendor/autoload.php';
+
+session_start();
 
 $route = new Route();
 
 try {
     $route->setRoute('/', [HomeController::class, 'index'])
-        ->setRoute('/manager', [CoffeeController::class, 'getAll'])
-        ->setRoute('/add', [CoffeeController::class, 'add'])
-        ->setRoute('/edit', [CoffeeController::class, 'edit'])
-        ->setRoute('/insert', [CoffeeController::class, 'insert'])
-        ->setRoute('/update', [CoffeeController::class, 'update'])
-        ->setRoute('/delete', [CoffeeController::class, 'delete'])
+        ->setRoute('/manager', [CoffeeController::class, 'getAll'], ['Auth' =>['ADMIN', 'USER']])
+        ->setRoute('/add', [CoffeeController::class, 'add'], ['Auth'=>['ADMIN']])
+        ->setRoute('/edit', [CoffeeController::class, 'edit'], ['Auth'=>['ADMIN']])
+        ->setRoute('/insert', [CoffeeController::class, 'insert'], ['Auth'=>['ADMIN']])
+        ->setRoute('/update', [CoffeeController::class, 'update'], ['Auth'=>['ADMIN']])
+        ->setRoute('/delete', [CoffeeController::class, 'delete'], ['Auth'=>['ADMIN']])
         ->setRoute('/order', [CartController::class, 'index'])
         ->setRoute('/addToCart', [CartController::class, 'addToCart'])
         ->setRoute('/cart', [CartController::class, 'showCart'])
@@ -37,7 +34,7 @@ try {
         ->setRoute('/discount', [PaymentController::class, 'discount'])
         ->setRoute('/payment-result', [PaymentController::class, 'paymentResult'])
         ->setRoute('/login', [UserController::class, 'login'])
-        ->setRoute('/logout', [UserController::class, 'logout'])
+        ->setRoute('/logout', [UserController::class, 'logout'], ['auth'=>['ADMIN', 'USER']])
         ->setRoute('/signup', [UserController::class, 'addUser'])
         ->setRoute('/register', [UserController::class, 'index'])
         ->run();

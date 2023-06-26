@@ -116,35 +116,35 @@
                                     <label class="form-label"
                                            for="form1"></label>
                                     <?php if (isset($_SESSION['discount'])): ?>
-                                    <div class="alert
+                                        <div class="alert
                                                 alert-success
                                                 alert-dismissible
                                                 fade show" role="alert">
-                                        Đã áp dụng mã giảm giá <b><?= $_SESSION['discount'] ?></b> thành công!
-                                        <button type="button"
-                                                class="close"
-                                                data-dismiss="alert"
-                                                aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
+                                            Đã áp dụng mã giảm giá <b><?= $_SESSION['discount'] ?></b> thành công!
+                                            <button type="button"
+                                                    class="close"
+                                                    data-dismiss="alert"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
                                     <?php elseif (isset($_SESSION['discount_error'])): ?>
-                                    <div class="alert
+                                        <div class="alert
                                                 alert-danger
                                                 alert-dismissible
                                                 fade show"
-                                         role="alert">
-                                        <?=
-                                        $_SESSION['discount_error'];
-                                        unset($_SESSION['discount_error']);
-                                        ?>
-                                        <button type="button"
-                                                class="close"
-                                                data-dismiss="alert"
-                                                aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
+                                             role="alert">
+                                            <?=
+                                            $_SESSION['discount_error'];
+                                            unset($_SESSION['discount_error']);
+                                            ?>
+                                            <button type="button"
+                                                    class="close"
+                                                    data-dismiss="alert"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
                                     <?php endif; ?>
                                 </div>
 
@@ -204,14 +204,14 @@
                                 </span>
                                 </li>
                                 <?php if (isset($_SESSION['discount'])): ?>
-                                <li class="list-group-item
+                                    <li class="list-group-item
                                            d-flex
                                            justify-content-between
                                            border-0
                                            px-0">
-                                    <p>Giảm giá</p>
-                                    <span>-<?= $_SESSION['value'] ?? 0 ?></span>
-                                </li>
+                                        <p>Giảm giá</p>
+                                        <span>-<?= $_SESSION['value'] ?? 0 ?></span>
+                                    </li>
                                 <?php endif; ?>
                                 <li class="list-group-item
                                            d-flex
@@ -225,12 +225,12 @@
                                     <span>
                                         <?= numfmt_format_currency(
                                             numfmt_create('vi_VN', NumberFormatter::CURRENCY),
-                                            ceil(
-                                                array_sum(array_map(function ($item) {
-                                                    return $item['price'] * $item['quantity'] * 1.05 - ($_SESSION['total'] ?? 0);
-                                                    }, $cart)
-                                                ) / 1000
-                                            ) * 1000,
+                                            max(0, ceil(
+                                                    array_sum(array_map(function ($item) {
+                                                            return $item['price'] * $item['quantity'] * 1.05 - ($_SESSION['total'] ?? 0);
+                                                        }, $cart)
+                                                    ) / 1000
+                                                ) * 1000),
                                             'VND'
                                         ) ?>
                                     </span>
@@ -243,13 +243,13 @@
                                     <label>
                                         <input type="hidden"
                                                name="amount"
-                                               value="<?= ceil(
-                                                   array_sum(
-                                                       array_map(function ($item) {
-                                                           return $item['price'] * $item['quantity'] * 1.05 - ($_SESSION['total'] ?? 0);
-                                                       }, $cart)
-                                                   ) / 1000
-                                               ) * 1000 ?>">
+                                               value="<?= max(0, ceil(
+                                                       array_sum(
+                                                           array_map(function ($item) {
+                                                               return $item['price'] * $item['quantity'] * 1.05 - ($_SESSION['total'] ?? 0);
+                                                           }, $cart)
+                                                       ) / 1000
+                                                   ) * 1000) ?>">
                                     </label>
 
                                     <div class="form-group">

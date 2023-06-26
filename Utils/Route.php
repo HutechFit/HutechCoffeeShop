@@ -13,15 +13,10 @@ class Route extends Container
     private array $routes = [];
     private array $middleware = [];
 
-    public function setRoute($uri, $action): static
+    public function setRoute($uri, $action, $middleware = []): Route
     {
         $this->routes[$uri] = $action;
-        return $this;
-    }
-
-    public function addMiddleware($middleware): static
-    {
-        $this->middleware[] = $middleware;
+        $this->middleware[$uri] = $middleware;
         return $this;
     }
 
@@ -41,7 +36,6 @@ class Route extends Container
         if (array_key_exists($uri, $this->routes)) {
 
             $action = $this->routes[$uri];
-
             if (is_array($action)) {
                 $controller = $action[0];
                 $method = $action[1];
@@ -50,6 +44,22 @@ class Route extends Container
                     require_once './Views/Home/404.php';
                     die;
                 }
+
+//                if (!empty($this->middleware[$uri])
+//                    && array_keys($this->middleware[$uri])[0] === 'Auth') {
+//
+//                    $roles = $this->middleware[$uri][array_keys($this->middleware[$uri])[0]];
+//
+//                    if (!isset($_SESSION['user'])) {
+//                        header('Location: /login');
+//                        die;
+//                    }
+//                }
+//
+//                if (isset($_SESSION['user']) && $uri === '/login') {
+//                    header('Refresh: 0; url=/');
+//                    die;
+//                }
 
                 $this->register($controller, $controller);
                 $instance = $this->get($controller);
@@ -61,6 +71,7 @@ class Route extends Container
                     $this->get($callbackId);
                 }
             }
+
         } else {
             require_once './Views/Home/404.php';
         }

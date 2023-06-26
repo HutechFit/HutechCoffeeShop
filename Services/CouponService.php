@@ -6,8 +6,6 @@ namespace Hutech\Services;
 
 use Hutech\Repositories\CouponRepository;
 
-include_once './Repositories/CouponRepository.php';
-
 readonly class CouponService
 {
     public function __construct(protected CouponRepository $couponRepository)

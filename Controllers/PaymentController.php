@@ -12,10 +12,6 @@ use Hutech\Services\CouponService;
 use Hutech\Services\InvoiceService;
 use Hutech\Services\ItemInvoiceService;
 
-include_once './Services/InvoiceService.php';
-include_once './Services/ItemInvoiceService.php';
-include_once './Services/CouponService.php';
-
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 

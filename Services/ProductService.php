@@ -6,8 +6,6 @@ namespace Hutech\Services;
 
 use Hutech\Repositories\ProductRepository;
 
-include_once './Repositories/ProductRepository.php';
-
 readonly class ProductService
 {
     public function __construct(protected ProductRepository $productRepository)

@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Hutech\Repositories;
 
 use Exception;
+use Hutech\Utils\Database;
 use PDO;
-
-include_once './Utils/Database.php';
 
 abstract class BaseRepository
 {
-    public PDO $pdo;
+    public Database $pdo;
 
     public function __construct(protected $table)
     {
-        global $pdo;
+        $pdo = new Database();
         $this->pdo = $pdo;
     }
 

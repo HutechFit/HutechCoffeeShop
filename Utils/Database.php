@@ -2,25 +2,27 @@
 
 declare(strict_types=1);
 
+namespace Hutech\Utils;
+
 use Dotenv\Dotenv;
+use PDO;
 
-$pdo = createDatabaseConnection();
-
-function createDatabaseConnection(): PDO
+class Database extends PDO
 {
-    $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-    $dotenv->load();
+    public function __construct()
+    {
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+        $dotenv->load();
 
-    $dbDriver = $_ENV['DB_DRIVER'];
-    $dbHost = $_ENV['DB_HOST'] ?? 'localhost';
-    $dbName = $_ENV['DB_DATABASE'];
-    $dbUser = $_ENV['DB_USER'];
-    $dbPassword = $_ENV['DB_PASSWORD'] ?? '';
+        $dbDriver = $_ENV['DB_DRIVER'];
+        $dbHost = $_ENV['DB_HOST'] ?? 'localhost';
+        $dbName = $_ENV['DB_DATABASE'];
+        $dbUser = $_ENV['DB_USER'];
+        $dbPassword = $_ENV['DB_PASSWORD'] ?? '';
 
-    $dsn = "$dbDriver:host=$dbHost;dbname=$dbName";
+        $dsn = "$dbDriver:host=$dbHost;dbname=$dbName";
 
-    $pdo = new PDO($dsn, $dbUser, $dbPassword) or die('Không thể kết nối đến database');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    return $pdo;
+        parent::__construct($dsn, $dbUser, $dbPassword);
+        $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
 }

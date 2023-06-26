@@ -90,9 +90,9 @@
                     method: 'POST',
                     data: data,
                     success: function (response) {
-                        console.log(response);
                         if (response) {
                             alert('Thêm vào giỏ hàng thành công');
+                            $('.cart').load(location.href + ' .header .cart');
                         } else {
                             alert('Thêm vào giỏ hàng thất bại');
                         }

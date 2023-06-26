@@ -32,7 +32,7 @@
 							<li class="nav-item">
 								<a class="nav-link" href="/hutech-coffee/order">Gọi món</a>
 							</li>
-							<li class="nav-item disabled">
+							<li class="nav-item cart">
 								<a class="nav-link" href="/hutech-coffee/cart">Giỏ hàng <span class="badge badge-pill badge-warning">
                                         <?=
                                         isset($_COOKIE['cart'])

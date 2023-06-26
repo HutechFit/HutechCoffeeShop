@@ -6,9 +6,6 @@ namespace Hutech\Controllers;
 
 use Hutech\Services\ProductService;
 
-include_once './Services/ProductService.php';
-include_once './Services/CategoryService.php';
-
 readonly class CartController
 {
     public function __construct(protected ProductService $coffeeService)

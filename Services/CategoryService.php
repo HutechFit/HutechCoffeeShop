@@ -6,8 +6,6 @@ namespace Hutech\Services;
 
 use Hutech\Repositories\CategoryRepository;
 
-include_once './Repositories/CategoryRepository.php';
-
 readonly class CategoryService
 {
     public function __construct(protected CategoryRepository $categoryRepository)
