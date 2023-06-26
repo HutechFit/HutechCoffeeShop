@@ -45,21 +45,27 @@ class Route extends Container
                     die;
                 }
 
-//                if (!empty($this->middleware[$uri])
-//                    && array_keys($this->middleware[$uri])[0] === 'Auth') {
-//
-//                    $roles = $this->middleware[$uri][array_keys($this->middleware[$uri])[0]];
-//
-//                    if (!isset($_SESSION['user'])) {
-//                        header('Location: /login');
-//                        die;
-//                    }
-//                }
-//
-//                if (isset($_SESSION['user']) && $uri === '/login') {
-//                    header('Refresh: 0; url=/');
-//                    die;
-//                }
+                if (!empty($this->middleware[$uri])
+                    && array_keys($this->middleware[$uri])[0] === 'Auth') {
+
+                    $roles = $this->middleware[$uri][array_keys($this->middleware[$uri])[0]];
+
+                    if (!isset($_SESSION['user'])) {
+                        header('Refresh: 0; url=/login');
+                        die;
+                    }
+
+                    if (isset($_SESSION['user']['role']) &&
+                        !in_array($_SESSION['user']['role'], $roles)) {
+                        require_once './Views/Home/403.php';
+                        die;
+                    }
+                }
+
+                if (isset($_SESSION['user']) && $uri === '/login') {
+                    header('Refresh: 0; url=/');
+                    die;
+                }
 
                 $this->register($controller, $controller);
                 $instance = $this->get($controller);
