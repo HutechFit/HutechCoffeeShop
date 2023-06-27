@@ -33,53 +33,48 @@ class Route extends Container
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
 
-        if (array_key_exists($uri, $this->routes)) {
+        if (!array_key_exists($uri, $this->routes)) {
+            require_once './Views/Home/404.php';
+        }
 
-            $action = $this->routes[$uri];
-            if (is_array($action)) {
-                $controller = $action[0];
-                $method = $action[1];
+        $action = $this->routes[$uri];
 
-                if (!class_exists($controller) || !method_exists($controller, $method)) {
-                    require_once './Views/Home/404.php';
-                    die;
-                }
+        if (is_array($action)) {
+            $controller = $action[0];
+            $method = $action[1];
 
-                if (!empty($this->middleware[$uri])
-                    && array_keys($this->middleware[$uri])[0] === 'Auth') {
-
+            if (class_exists($controller) && method_exists($controller, $method)) {
+                if (!empty($this->middleware[$uri]) && array_keys($this->middleware[$uri])[0] === 'Auth') {
                     $roles = $this->middleware[$uri][array_keys($this->middleware[$uri])[0]];
 
                     if (!isset($_SESSION['user'])) {
                         header('Refresh: 0; url=/login');
-                        die;
+                        exit;
                     }
 
-                    if (isset($_SESSION['user']['role']) &&
-                        !in_array($_SESSION['user']['role'], $roles)) {
+                    if (isset($_SESSION['user']['role']) && !in_array($_SESSION['user']['role'], $roles)) {
                         require_once './Views/Home/403.php';
-                        die;
                     }
                 }
 
                 if (isset($_SESSION['user']) && $uri === '/login') {
                     header('Refresh: 0; url=/');
-                    die;
+                    exit;
                 }
 
                 $this->register($controller, $controller);
                 $instance = $this->get($controller);
                 $instance->$method();
-            } else {
-                if (is_callable($action)) {
-                    $callbackId = get_class((object)$action) . "_" . uniqid();
-                    $this->register($callbackId, $action);
-                    $this->get($callbackId);
-                }
             }
 
-        } else {
             require_once './Views/Home/404.php';
+
+        } else {
+            if (is_callable($action)) {
+                $callbackId = get_class((object)$action) . "_" . uniqid();
+                $this->register($callbackId, $action);
+                $this->get($callbackId);
+            }
         }
     }
 }

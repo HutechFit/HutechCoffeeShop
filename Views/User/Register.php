@@ -22,19 +22,13 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <form id="request" class="main_form" method="post" action="?uri=add" enctype="multipart/form-data">
+                            <form id="request" class="main_form" method="post" action="/signup" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <input class="contactus" placeholder="Họ tên khách hàng" type="text" name="Name">
                                     </div>
                                     <div class="col-md-12">
                                         <input class="contactus" placeholder="Email" type="email" name="Email">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <input class="contactus" placeholder="Số điện thoại" type="tel" name="Phone">
-                                    </div>
-                                    <div class="col-md-12 ">
-                                        <input class="contactus" placeholder="Tài khoản" type="text" name="Name">
                                     </div>
                                     <div class="col-md-12">
                                         <input class="contactus" placeholder="Mật khẩu" type="password" name="Password">
@@ -48,7 +42,7 @@
                                 </div>
                             </form>
                             <div class="col-md-12 text-center">
-                                <p class="mt-3 text-light">Đã có tài khoản? <a class="text-info" href="?uri=login">Đăng nhập</a></p>
+                                <p class="mt-3 text-light">Đã có tài khoản? <a class="text-info" href="/login">Đăng nhập</a></p>
                             </div>
                         </div>
                     </div>

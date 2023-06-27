@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hutech\Security;
 
 use Exception;
@@ -18,7 +20,7 @@ class Csrf
         }
 
         if (!isset($_SESSION['csrf_token'])) {
-            $token = bin2hex(random_bytes(32));
+            $token = bin2hex(random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES));
             $_SESSION['csrf_token'] = $token;
         }
 

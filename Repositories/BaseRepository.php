@@ -14,8 +14,7 @@ abstract class BaseRepository
 
     public function __construct(protected $table)
     {
-        $pdo = new Database();
-        $this->pdo = $pdo;
+        $this->pdo = new Database();
     }
 
     public function getAll() : ?array

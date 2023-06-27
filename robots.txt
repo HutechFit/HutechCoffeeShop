@@ -1,0 +1,5 @@
+User-argent: *
+Disallow: /vendor/
+Disallow: /Upload/
+Disallow: /Util/
+Allow: /Sitemap.xml
