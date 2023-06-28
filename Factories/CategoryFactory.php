@@ -8,8 +8,8 @@ use Hutech\Models\Category;
 
 readonly class CategoryFactory
 {
-    public static function create($id, $name) : Category
+    public static function create($id, $name): Category
     {
-        return new Category((int) $id, $name);
+        return new Category((int)$id, $name);
     }
 }

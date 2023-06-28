@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cập nhật sản phẩm</title>
 </head>
@@ -22,11 +23,13 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <form id="request" class="main_form" method="post" action="/update" enctype="multipart/form-data">
+                            <form id="request" class="main_form" method="post" action="/update"
+                                  enctype="multipart/form-data">
                                 <div class="row">
                                     <input type="hidden" name="Id" value="<?= $coffee->id; ?>">
                                     <div class="col-md-12 ">
-                                        <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name" value="<?= $coffee->name; ?>">
+                                        <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name"
+                                               value="<?= $coffee->name; ?>">
                                         <div class="col-md-12">
                                             <?php if (isset($_SESSION['name_error'])) : ?>
                                                 <p class="text-danger">
@@ -39,7 +42,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <input class="contactus" placeholder="Giá tiền" type="number" name="Price" step="1000" min="0" max="100000000" value="<?= $coffee->price; ?>">
+                                        <input class="contactus" placeholder="Giá tiền" type="number" name="Price"
+                                               step="1000" min="0" max="100000000" value="<?= $coffee->price; ?>">
                                         <div class="col-md-12">
                                             <?php if (isset($_SESSION['price_error'])) : ?>
                                                 <p class="text-danger">
@@ -53,7 +57,9 @@
                                     </div>
                                     <div class="col-md-12">
                                         <?php if ($coffee->image) : ?>
-                                            <a class="text-info" href="<?= 'https://localhost/hutech-coffee/' . ltrim($coffee->image, './'); ?>" target="_blank">
+                                            <a class="text-info"
+                                               href="<?= 'https://localhost/hutech-coffee/' . ltrim($coffee->image, './'); ?>"
+                                               target="_blank">
                                                 Nhấp vào đây để xem ảnh hiện tại
                                             </a>
                                         <?php endif; ?>
@@ -72,7 +78,8 @@
                                         <?php endif; ?>
                                     </div>
                                     <div class="col-md-12">
-                                        <textarea class="textarea" placeholder="Mô tả sản phẩm" type="type" name="Description"><?= $coffee->description; ?></textarea>
+                                        <textarea class="textarea" placeholder="Mô tả sản phẩm" type="type"
+                                                  name="Description"><?= $coffee->description; ?></textarea>
                                         <div class="col-md-12">
                                             <?php if (isset($_SESSION['description_error'])) : ?>
                                                 <p class="text-danger">
@@ -95,7 +102,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <button class="send_btn" onclick="return confirm('Bạn có chắc chắn muốn cập nhật sản phẩm này?')" type="submit" name="submit">Cập nhật</button>
+                                    <button class="send_btn"
+                                            onclick="return confirm('Bạn có chắc chắn muốn cập nhật sản phẩm này?')"
+                                            type="submit" name="submit">Cập nhật
+                                    </button>
                                 </div>
                             </form>
                         </div>

@@ -14,12 +14,18 @@ readonly class CoffeeController
     private const FILE_PATH = '/Uploads/';
 
     public function __construct(
-        protected ProductService $coffeeService,
-        protected ProductFactory $coffeeFactory,
+        protected ProductService  $coffeeService,
+        protected ProductFactory  $coffeeFactory,
         protected CategoryService $categoryService,
         protected CategoryFactory $categoryFactory
     )
     {
+    }
+
+    public function add(): void
+    {
+        $categories = $this->categoryService->getAll();
+        require_once './Views/Coffee/Add.php';
     }
 
     public function getAll(): void
@@ -27,12 +33,6 @@ readonly class CoffeeController
         $coffees = $this->coffeeService->getAll();
         $categories = $this->categoryService->getAll();
         require_once './Views/Coffee/Manager.php';
-    }
-
-    public function add(): void
-    {
-        $categories = $this->categoryService->getAll();
-        require_once './Views/Coffee/Add.php';
     }
 
     public function insert(): void
@@ -63,79 +63,6 @@ readonly class CoffeeController
             }
 
             $this->coffeeService->create($product);
-        }
-
-        header('Location: /hutech-coffee/manager');
-    }
-
-    public function edit(): void
-    {
-        $coffee = $this->coffeeService->getById((int) $_GET['id']);
-
-        if ($coffee) {
-            $categories = $this->categoryService->getAll();
-            require_once './Views/Coffee/Edit.php';
-        } else {
-            require_once './Views/Home/404.php';
-        }
-    }
-
-    public function update(): void
-    {
-        if (!isset($_POST['submit'])) {
-            header('Location: /hutech-coffee/manager');
-            return;
-        }
-
-        $coffee = $this->coffeeService->getById((int) $_POST['Id']);
-
-        if (!$coffee) {
-            require_once './Views/Home/404.php';
-            return;
-        }
-
-        $imgPath = $coffee->image;
-
-        if ($_FILES['Image']['name']) {
-            if ($imgPath && file_exists($this::FILE_PATH . $coffee->image)) {
-                unlink($coffee->image);
-            }
-
-            $imgPath = $this->uploadImage($_FILES['Image']) ?? '';
-
-            if (!$imgPath) {
-                header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
-                exit;
-            }
-        }
-
-        $product = $this->coffeeFactory->create(
-            id: $_POST['Id'],
-            name: $_POST['Name'],
-            price: $_POST['Price'],
-            image: $imgPath ?? '',
-            description: $_POST['Description'] ?? '',
-            category_id: $_POST['category_id']
-        );
-
-        if (!$this->validation($product)) {
-            header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
-            exit;
-        }
-
-        $this->coffeeService->update($product);
-        header('Location: /hutech-coffee/manager');
-    }
-
-    public function delete(): void
-    {
-        $coffee = $this->coffeeService->getById((int) $_GET['id']);
-
-        if ($coffee) {
-            if ($coffee->image && file_exists($coffee->image)) {
-                unlink($coffee->image);
-            }
-            $this->coffeeService->delete((int) $_GET['id']);
         }
 
         header('Location: /hutech-coffee/manager');
@@ -192,7 +119,7 @@ readonly class CoffeeController
                 'min_range' => 0,
                 'max_range' => 1000000000,
                 'default' => 0
-                ]
+            ]
             ]
         )) {
             $_SESSION['price_error'] = 'Giá sản phẩm phải là số nguyên dương và nhỏ hơn 1 tỷ';
@@ -214,5 +141,78 @@ readonly class CoffeeController
         }
 
         return true;
+    }
+
+    public function edit(): void
+    {
+        $coffee = $this->coffeeService->getById((int)$_GET['id']);
+
+        if ($coffee) {
+            $categories = $this->categoryService->getAll();
+            require_once './Views/Coffee/Edit.php';
+        } else {
+            require_once './Views/Home/404.php';
+        }
+    }
+
+    public function update(): void
+    {
+        if (!isset($_POST['submit'])) {
+            header('Location: /hutech-coffee/manager');
+            return;
+        }
+
+        $coffee = $this->coffeeService->getById((int)$_POST['Id']);
+
+        if (!$coffee) {
+            require_once './Views/Home/404.php';
+            return;
+        }
+
+        $imgPath = $coffee->image;
+
+        if ($_FILES['Image']['name']) {
+            if ($imgPath && file_exists($this::FILE_PATH . $coffee->image)) {
+                unlink($coffee->image);
+            }
+
+            $imgPath = $this->uploadImage($_FILES['Image']) ?? '';
+
+            if (!$imgPath) {
+                header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
+                exit;
+            }
+        }
+
+        $product = $this->coffeeFactory->create(
+            id: $_POST['Id'],
+            name: $_POST['Name'],
+            price: $_POST['Price'],
+            image: $imgPath ?? '',
+            description: $_POST['Description'] ?? '',
+            category_id: $_POST['category_id']
+        );
+
+        if (!$this->validation($product)) {
+            header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
+            exit;
+        }
+
+        $this->coffeeService->update($product);
+        header('Location: /hutech-coffee/manager');
+    }
+
+    public function delete(): void
+    {
+        $coffee = $this->coffeeService->getById((int)$_GET['id']);
+
+        if ($coffee) {
+            if ($coffee->image && file_exists($coffee->image)) {
+                unlink($coffee->image);
+            }
+            $this->coffeeService->delete((int)$_GET['id']);
+        }
+
+        header('Location: /hutech-coffee/manager');
     }
 }

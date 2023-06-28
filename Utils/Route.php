@@ -52,9 +52,9 @@ class Route extends Container
                         exit;
                     }
 
-                    if (isset($_SESSION['user']['role']) && !in_array($_SESSION['user']['role'], $roles)) {
-                        require_once './Views/Home/403.php';
-                    }
+//                    if (isset($_SESSION['user']['role']) && !in_array($_SESSION['user']['role'], $roles)) {
+//                        require_once './Views/Home/403.php';
+//                    }
                 }
 
                 if (isset($_SESSION['user']) && $uri === '/login') {

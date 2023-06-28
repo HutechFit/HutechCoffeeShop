@@ -11,7 +11,7 @@ class User
 
     public string $email;
     public string $password;
-    public bool $is_verify;
+    public int $is_verify;
 
     public function __construct($id, $full_name, $email, $password, $is_verify)
     {
@@ -28,6 +28,6 @@ class User
         $this->full_name = '';
         $this->email = '';
         $this->password = '';
-        $this->is_verify = false;
+        $this->is_verify = 0;
     }
 }

@@ -16,4 +16,14 @@ readonly class ProviderService
     {
         $this->providerRepository->add($provider);
     }
+
+    public function isExistUser($id, $token): bool
+    {
+        return $this->providerRepository->isExistUser($id, $token);
+    }
+
+    public function getProviderByEmail($email): object
+    {
+        return $this->providerRepository->getProviderByEmail($email);
+    }
 }

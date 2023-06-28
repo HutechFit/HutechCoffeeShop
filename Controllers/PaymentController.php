@@ -19,12 +19,12 @@ readonly class PaymentController
 {
 
     public function __construct(
-        protected InvoiceService $invoiceService,
+        protected InvoiceService     $invoiceService,
         protected ItemInvoiceService $itemInvoiceService,
-        protected CouponService $couponService,
-        protected InvoiceFactory $invoiceFactory,
+        protected CouponService      $couponService,
+        protected InvoiceFactory     $invoiceFactory,
         protected ItemInvoiceFactory $itemInvoiceFactory,
-        protected CouponFactory $couponFactory
+        protected CouponFactory      $couponFactory
     )
     {
     }
@@ -41,6 +41,93 @@ readonly class PaymentController
             'vnpay' => $this->vnpay(),
             default => header('Location: /hutech-coffee/cart')
         };
+    }
+
+    /**
+     * Xử lý thanh toán bằng Stripe
+     * @return void
+     */
+    private function striped(): void
+    {
+        $_SESSION['payment_error'] = 'Stripe đang được phát triển';
+        header('Location: /hutech-coffee/cart');
+    }
+
+    /**
+     * Xử lý thanh toán bằng Paypal
+     * @return void
+     */
+    private function paypal(): void
+    {
+        $_SESSION['payment_error'] = 'Paypal đang được phát triển';
+        header('Location: /hutech-coffee/cart');
+    }
+
+    /**
+     * Xử lý thanh toán bằng VNPAY
+     * @return never
+     */
+    private function vnpay(): never
+    {
+        $vnp_TxnRef = strval(rand(1, 1000000));
+        $vnp_Amount = $_POST['amount'];
+        $vnp_Locale = 'vn';
+
+        # Địa chỉ IP của khách hàng
+        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+
+        # Địa chỉ của merchant
+        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+
+        # Chuỗi bí mật (Secret Key)
+        $vnp_HashSecret = "NOFIDXGIVCXRMPYNIWMBKTUDJSHUENMO";
+
+        $inputData = [
+            "vnp_Version" => "2.1.0",
+
+            # Mã định danh merchant kết nối (Terminal Id)
+            "vnp_TmnCode" => "CQEZCMP9",
+
+            "vnp_Amount" => strval($vnp_Amount * 100),
+            "vnp_Command" => "pay",
+            "vnp_CreateDate" => date('YmdHis'),
+            "vnp_CurrCode" => "VND",
+            "vnp_IpAddr" => $vnp_IpAddr,
+            "vnp_Locale" => $vnp_Locale,
+            "vnp_OrderInfo" => "Thanh toan GD: " . $vnp_TxnRef,
+            "vnp_OrderType" => "other",
+
+            # Địa chỉ nhận kết quả trả về của merchant
+            "vnp_ReturnUrl" => "https://hutech-coffee.local/payment-result",
+            "vnp_TxnRef" => $vnp_TxnRef,
+
+            # Thời gian cho phép thanh toán (tính theo giây)
+            "vnp_ExpireDate" => date('YmdHis', strtotime('+15 minutes', strtotime(date("YmdHis"))))
+        ];
+
+        ksort($inputData);
+        $query = "";
+        $i = 0;
+        $hashData = "";
+
+        foreach ($inputData as $key => $value) {
+            if ($i == 1) {
+                $hashData .= '&' . urlencode($key) . "=" . urlencode($value);
+            } else {
+                $hashData .= urlencode($key) . "=" . urlencode($value);
+                $i = 1;
+            }
+            $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        }
+
+        $vnp_Url = $vnp_Url . "?" . $query;
+
+        # Tạo chữ ký điện tử
+        $vnpSecureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
+        $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
+
+        header('Location: ' . $vnp_Url);
+        die();
     }
 
     /**
@@ -137,7 +224,7 @@ readonly class PaymentController
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
 
         if ($secureHash == $vnp_SecureHash && $_GET['vnp_ResponseCode'] === '00') {
-              $this->saveBill($_GET['vnp_TxnRef'], 'vnpay', $_GET['vnp_Amount'] / 100, date('Y-m-d H:i:s', strtotime($_GET['vnp_PayDate'])));
+            $this->saveBill($_GET['vnp_TxnRef'], 'vnpay', $_GET['vnp_Amount'] / 100, date('Y-m-d H:i:s', strtotime($_GET['vnp_PayDate'])));
         }
 
         # Huỷ toàn bộ giỏ hàng
@@ -154,89 +241,35 @@ readonly class PaymentController
     }
 
     /**
-     * Xử lý thanh toán bằng VNPAY
-     * @return never
+     * Lưu thông tin đơn hàng vào database
+     * @param $id
+     * @param $payment
+     * @param $total
+     * @param $payment_date
+     * @return void
      */
-    private function vnpay(): never
+    private function saveBill($id, $payment, $total, $payment_date): void
     {
-        $vnp_TxnRef = strval(rand(1, 1000000));
-        $vnp_Amount = $_POST['amount'];
-        $vnp_Locale = 'vn';
+        $paymentMethod = match ($payment) {
+            'striped' => PaymentMethod::STIPE,
+            'paypal' => PaymentMethod::PAYPAL,
+            'vnpay' => PaymentMethod::VNPAY,
+            default => PaymentMethod::CASH
+        };
 
-        # Địa chỉ IP của khách hàng
-        $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
+        $invoice = $this->invoiceFactory->create($id, $total, $payment_date, $paymentMethod->value);
 
-        # Địa chỉ của merchant
-        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+        $this->invoiceService->create($invoice);
 
-        # Chuỗi bí mật (Secret Key)
-        $vnp_HashSecret = "NOFIDXGIVCXRMPYNIWMBKTUDJSHUENMO";
+        $cartData = json_decode(base64_decode($_COOKIE['cart']), true);
 
-        $inputData = [
-            "vnp_Version" => "2.1.0",
-
-            # Mã định danh merchant kết nối (Terminal Id)
-            "vnp_TmnCode" => "CQEZCMP9",
-
-            "vnp_Amount" => strval($vnp_Amount * 100),
-            "vnp_Command" => "pay",
-            "vnp_CreateDate" => date('YmdHis'),
-            "vnp_CurrCode" => "VND",
-            "vnp_IpAddr" => $vnp_IpAddr,
-            "vnp_Locale" => $vnp_Locale,
-            "vnp_OrderInfo" => "Thanh toan GD: " . $vnp_TxnRef,
-            "vnp_OrderType" => "other",
-
-            # Địa chỉ nhận kết quả trả về của merchant
-            "vnp_ReturnUrl" => "https://hutech-coffee.local/payment-result",
-            "vnp_TxnRef" => $vnp_TxnRef,
-
-            # Thời gian cho phép thanh toán (tính theo giây)
-            "vnp_ExpireDate"=> date('YmdHis', strtotime('+15 minutes', strtotime(date("YmdHis"))))
-        ];
-
-        ksort($inputData);
-        $query = "";
-        $i = 0;
-        $hashData = "";
-
-        foreach ($inputData as $key => $value) {
-            if ($i == 1) {
-                $hashData .= '&' . urlencode($key) . "=" . urlencode($value);
-            } else {
-                $hashData .= urlencode($key) . "=" . urlencode($value);
-                $i = 1;
-            }
-            $query .= urlencode($key) . "=" . urlencode($value) . '&';
+        foreach ($cartData as $coffee) {
+            $itemInvoice = $this->itemInvoiceFactory->create($id, $coffee['id'], $coffee['quantity']);
+            $this->itemInvoiceService->create($itemInvoice);
         }
 
-        $vnp_Url = $vnp_Url . "?" . $query;
+        $this->sendEmailInvoice($_POST['email'] ?? '', $id, $total, $payment_date, $paymentMethod->value);
 
-        # Tạo chữ ký điện tử
-        $vnpSecureHash =   hash_hmac('sha512', $hashData, $vnp_HashSecret);
-        $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
-
-        header('Location: ' . $vnp_Url);
-        die();
-    }
-
-    /**
-     * Xử lý thanh toán bằng Stripe
-     * @return void
-     */
-    private function striped(): void
-    {
-        $_SESSION['payment_error'] = 'Stripe đang được phát triển';
-        header('Location: /hutech-coffee/cart');
-    }
-
-    /**
-     * Xử lý thanh toán bằng Paypal
-     * @return void
-     */
-    private function paypal(): void
-    {
-        $_SESSION['payment_error'] = 'Paypal đang được phát triển';
         header('Location: /hutech-coffee/cart');
     }
 
@@ -278,38 +311,5 @@ readonly class PaymentController
             $errorMessage = error_get_last()['message'];
             $_SESSION['payment_error'] = $errorMessage;
         }
-    }
-
-    /**
-     * Lưu thông tin đơn hàng vào database
-     * @param $id
-     * @param $payment
-     * @param $total
-     * @param $payment_date
-     * @return void
-     */
-    private function saveBill($id, $payment, $total, $payment_date): void
-    {
-        $paymentMethod = match ($payment) {
-            'striped' => PaymentMethod::STIPE,
-            'paypal' => PaymentMethod::PAYPAL,
-            'vnpay' => PaymentMethod::VNPAY,
-            default => PaymentMethod::CASH
-        };
-
-        $invoice = $this->invoiceFactory->create($id, $total, $payment_date, $paymentMethod->value);
-
-        $this->invoiceService->create($invoice);
-
-        $cartData = json_decode(base64_decode($_COOKIE['cart']), true);
-
-        foreach ($cartData as $coffee) {
-            $itemInvoice = $this->itemInvoiceFactory->create($id, $coffee['id'], $coffee['quantity']);
-            $this->itemInvoiceService->create($itemInvoice);
-        }
-
-        $this->sendEmailInvoice($_POST['email'] ?? '', $id, $total, $payment_date, $paymentMethod->value);
-
-        header('Location: /hutech-coffee/cart');
     }
 }

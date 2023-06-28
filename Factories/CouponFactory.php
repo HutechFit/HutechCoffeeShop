@@ -10,6 +10,6 @@ readonly class CouponFactory
 {
     public static function create($id, $code, $expired, $value): Coupon
     {
-        return new Coupon((int) $id, $code, $expired, (float) $value);
+        return new Coupon((int)$id, $code, $expired, (float)$value);
     }
 }

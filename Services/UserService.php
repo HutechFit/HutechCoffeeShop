@@ -16,4 +16,14 @@ readonly class UserService
     {
         $this->userRepository->add($user);
     }
+
+    public function getUser($email): ?object
+    {
+        return $this->userRepository->getUser($email);
+    }
+
+    public function setVerify($id): void
+    {
+        $this->userRepository->setVerify($id);
+    }
 }

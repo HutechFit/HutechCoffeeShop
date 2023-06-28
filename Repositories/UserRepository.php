@@ -15,4 +15,17 @@ class UserRepository extends BaseRepository
     {
         $this->insert($user);
     }
+
+    public function getUser($email): ?object
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM $this->table WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetchObject();
+    }
+
+    public function setVerify($id): void
+    {
+        $stmt = $this->pdo->prepare("UPDATE $this->table SET is_verify = 1 WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+    }
 }

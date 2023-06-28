@@ -1,34 +1,34 @@
 {
-    "name": "hutech/hutech-coffee",
-    "description": "Thuc hanh phat trien phan mem ma nguon mo",
-    "license": "GPL-3.0-only",
-    "authors": [
-        {
-            "name": "Nguyen Xuan Nhan",
-            "email": "nguyenxuannhan407@gmail.com",
-            "role": "Software Engineer"
-        },
-        {
-            "name": "Nguyen Dinh Anh",
-            "email": "nd.anh@hutech.edu.vn",
-            "role": "Lecturer"
-        },
-        {
-            "name": "Tran Dang Khoa",
-            "email": "td.khoa@hutech.edu.vn",
-            "role": "Lecturer"
-        }
-    ],
-    "require": {
-        "psr/container": "^2.0",
-        "ext-intl": "*",
-        "ext-pdo": "*",
-        "vlucas/phpdotenv": "^5.5",
-        "ext-sodium": "*"
+  "name": "hutech/hutech-coffee",
+  "description": "Thuc hanh phat trien phan mem ma nguon mo",
+  "license": "GPL-3.0-only",
+  "authors": [
+    {
+      "name": "Nguyen Xuan Nhan",
+      "email": "nguyenxuannhan407@gmail.com",
+      "role": "Software Engineer"
     },
-    "autoload": {
-        "psr-4": {
-            "Hutech\\": "./"
-        }
+    {
+      "name": "Nguyen Dinh Anh",
+      "email": "nd.anh@hutech.edu.vn",
+      "role": "Lecturer"
+    },
+    {
+      "name": "Tran Dang Khoa",
+      "email": "td.khoa@hutech.edu.vn",
+      "role": "Lecturer"
     }
+  ],
+  "require": {
+    "psr/container": "^2.0",
+    "ext-intl": "*",
+    "ext-pdo": "*",
+    "vlucas/phpdotenv": "^5.5",
+    "ext-sodium": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Hutech\\": "./"
+    }
+  }
 }

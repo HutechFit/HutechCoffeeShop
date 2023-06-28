@@ -8,7 +8,7 @@ use Hutech\Models\Provider;
 
 readonly class ProviderFactory
 {
-    public static function create($user_id, $name, $token, $description) : Provider
+    public static function create($user_id, $name, $token, $description): Provider
     {
         return new Provider($user_id, $name, $token, $description);
     }

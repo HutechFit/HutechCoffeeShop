@@ -12,11 +12,11 @@
 <div class="d-flex align-items-center justify-content-center vh-25 service">
     <div class="text-center">
         <h1 class="display-1 fw-bold">403
-        <p class="fs-3"> <span class="text-danger">Opps!</span> Không có quyền truy cập.</p>
-        <p class="lead">
-            Có vẻ như bạn không có quyền truy cập vào trang này.
-        </p> <br>
-        <a href="/hutech-coffee" class="read_more">Trở về trang chủ</a>
+            <p class="fs-3"><span class="text-danger">Opps!</span> Không có quyền truy cập.</p>
+            <p class="lead">
+                Có vẻ như bạn không có quyền truy cập vào trang này.
+            </p> <br>
+            <a href="/hutech-coffee" class="read_more">Trở về trang chủ</a>
     </div>
 </div>
 <?php include_once 'Views/Partials/Footer.php'; ?>

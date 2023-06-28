@@ -8,8 +8,8 @@ use Hutech\Models\Product;
 
 readonly class ProductFactory
 {
-    public static function create($id, $name, $price, $image, $description, $category_id) : Product
+    public static function create($id, $name, $price, $image, $description, $category_id): Product
     {
-        return new Product((int) $id, $name, (float)  $price, $image, $description, (int) $category_id);
+        return new Product((int)$id, $name, (float)$price, $image, $description, (int)$category_id);
     }
 }
