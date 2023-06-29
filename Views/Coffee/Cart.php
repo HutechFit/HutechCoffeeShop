@@ -9,6 +9,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           crossorigin="anonymous"
           referrerpolicy="no-referrer"/>
+    <link rel="shortcut icon" href="./Static/icon/favicon.ico" type="image/x-icon">
     <title>Giỏ hàng</title>
 </head>
 <body class="main-layout inner_page">
@@ -38,6 +39,7 @@
                     <div class="card mb-4">
                         <div class="card-header py-3">
                             <h5 class="mb-0 text-dark">Giỏ hàng: <?= count($cart) ?> sản phẩm</h5>
+                            <input type="hidden" name="csrf_token" value="<?= $token ?>">
                         </div>
                         <div class="card-body">
                             <?php foreach ($cart as $item): ?>
@@ -156,6 +158,14 @@
                                                ms-3">
                                     Áp dụng
                                 </button>
+                                <?php if (isset($_SESSION['csrf_error'])): ?>
+                                    <p class="text-danger">
+                                        <?=
+                                        $_SESSION['csrf_error'];
+                                        unset($_SESSION['csrf_error']);
+                                        ?>
+                                    </p>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -294,6 +304,14 @@
                                     class="btn btn-outline-danger btn-lg btn-block mt-3">
                                 Xóa giỏ hàng
                             </button>
+                            <?php if (isset($_SESSION['csrf_error'])): ?>
+                                <p class="text-danger">
+                                    <?=
+                                    $_SESSION['csrf_error'];
+                                    unset($_SESSION['csrf_error']);
+                                    ?>
+                                </p>
+                            <?php endif; ?>
                             <hr>
                             <div class="text-center">
                                 <a href="/hutech-coffee/order"
@@ -324,7 +342,8 @@
                 type: 'POST',
                 data: {
                     id: $(this).data('id'),
-                    quantity: $(this).val()
+                    quantity: $(this).val(),
+                    csrf_token: '<?= $token ?>'
                 },
                 success: function () {
                     location.reload();
@@ -357,7 +376,8 @@
                 url: '/discount',
                 type: 'POST',
                 data: {
-                    code: $('.discount-input').val()
+                    code: $('.discount-input').val(),
+                    csrf_token: '<?= $token ?>'
                 },
                 success: function () {
                     location.reload();

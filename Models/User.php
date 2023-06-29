@@ -8,7 +8,6 @@ class User
 {
     public string $id;
     public string $full_name;
-
     public string $email;
     public string $password;
     public int $is_verify;

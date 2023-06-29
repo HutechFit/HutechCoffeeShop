@@ -6,6 +6,7 @@ namespace Hutech\Controllers;
 
 use Hutech\Factories\CategoryFactory;
 use Hutech\Factories\ProductFactory;
+use Hutech\Security\Csrf;
 use Hutech\Services\CategoryService;
 use Hutech\Services\ProductService;
 
@@ -17,13 +18,15 @@ readonly class CoffeeController
         protected ProductService  $coffeeService,
         protected ProductFactory  $coffeeFactory,
         protected CategoryService $categoryService,
-        protected CategoryFactory $categoryFactory
+        protected CategoryFactory $categoryFactory,
+        protected Csrf            $csrf
     )
     {
     }
 
     public function add(): void
     {
+        $token = $this->csrf->getToken();
         $categories = $this->categoryService->getAll();
         require_once './Views/Coffee/Add.php';
     }
@@ -38,6 +41,13 @@ readonly class CoffeeController
     public function insert(): void
     {
         if (isset($_POST['submit'])) {
+
+            if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+                $_SESSION['csrf_error'] = 'Token không hợp lệ';
+                header('Location: /hutech-coffee/register');
+                exit;
+            }
+
             $imgPath = '';
 
             if ($_FILES['Image']['name']) {
@@ -148,6 +158,7 @@ readonly class CoffeeController
         $coffee = $this->coffeeService->getById((int)$_GET['id']);
 
         if ($coffee) {
+            $token = $this->csrf->getToken();
             $categories = $this->categoryService->getAll();
             require_once './Views/Coffee/Edit.php';
         } else {
@@ -160,6 +171,12 @@ readonly class CoffeeController
         if (!isset($_POST['submit'])) {
             header('Location: /hutech-coffee/manager');
             return;
+        }
+
+        if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+            $_SESSION['csrf_error'] = 'Token không hợp lệ';
+            header('Location: /hutech-coffee/register');
+            exit;
         }
 
         $coffee = $this->coffeeService->getById((int)$_POST['Id']);

@@ -8,6 +8,7 @@ use Hutech\Enum\PaymentMethod;
 use Hutech\Factories\CouponFactory;
 use Hutech\Factories\InvoiceFactory;
 use Hutech\Factories\ItemInvoiceFactory;
+use Hutech\Security\Csrf;
 use Hutech\Services\CouponService;
 use Hutech\Services\InvoiceService;
 use Hutech\Services\ItemInvoiceService;
@@ -24,7 +25,8 @@ readonly class PaymentController
         protected CouponService      $couponService,
         protected InvoiceFactory     $invoiceFactory,
         protected ItemInvoiceFactory $itemInvoiceFactory,
-        protected CouponFactory      $couponFactory
+        protected CouponFactory      $couponFactory,
+        protected Csrf               $csrf
     )
     {
     }
@@ -35,6 +37,12 @@ readonly class PaymentController
      */
     public function payment(): void
     {
+        if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+            $_SESSION['csrf_error'] = 'Token không hợp lệ';
+            header('Location: /hutech-coffee/register');
+            exit;
+        }
+
         match ($_POST['payment-method']) {
             'striped' => $this->striped(),
             'paypal' => $this->paypal(),
@@ -136,6 +144,12 @@ readonly class PaymentController
      */
     public function discount(): void
     {
+        if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+            $_SESSION['csrf_error'] = 'Token không hợp lệ';
+            header('Location: /hutech-coffee/register');
+            exit;
+        }
+
         $discount = $_POST['code'] ?? '';
 
         $coupon = $this->couponService->getCoupon($discount);

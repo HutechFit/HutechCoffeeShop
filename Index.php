@@ -19,7 +19,7 @@ $route = new Route();
 
 try {
     $route->setRoute('/', [HomeController::class, 'index'])
-        ->setRoute('/manager', [CoffeeController::class, 'getAll'], ['Auth' => ['ADMIN', 'USER']])
+        ->setRoute('/manager', [CoffeeController::class, 'getAll'], ['Auth' => ['ADMIN']])
         ->setRoute('/add', [CoffeeController::class, 'add'], ['Auth' => ['ADMIN']])
         ->setRoute('/edit', [CoffeeController::class, 'edit'], ['Auth' => ['ADMIN']])
         ->setRoute('/insert', [CoffeeController::class, 'insert'], ['Auth' => ['ADMIN']])

@@ -6,9 +6,13 @@ namespace Hutech\Controllers;
 
 use Exception;
 use Hutech\Enum\LoginProvider;
+use Hutech\Enum\Role;
 use Hutech\Factories\ProviderFactory;
 use Hutech\Factories\UserFactory;
+use Hutech\Factories\UserRoleFactory;
+use Hutech\Security\Csrf;
 use Hutech\Services\ProviderService;
+use Hutech\Services\UserRoleService;
 use Hutech\Services\UserService;
 
 readonly class UserController
@@ -18,12 +22,16 @@ readonly class UserController
         protected UserService     $userService,
         protected UserFactory     $userFactory,
         protected ProviderService $providerService,
-        protected ProviderFactory $providerFactory)
+        protected ProviderFactory $providerFactory,
+        protected UserRoleService $userRoleService,
+        protected UserRoleFactory $userRoleFactory,
+        protected Csrf $csrf)
     {
     }
 
     public function login(): void
     {
+        $token = $this->csrf->getToken();
         require_once 'Views/User/Login.php';
     }
 
@@ -35,6 +43,7 @@ readonly class UserController
 
     public function index(): void
     {
+        $token = $this->csrf->getToken();
         require_once 'Views/User/Register.php';
     }
 
@@ -43,6 +52,12 @@ readonly class UserController
      */
     public function addUser(): void
     {
+        if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+            $_SESSION['csrf_error'] = 'Token không hợp lệ';
+            header('Location: /hutech-coffee/register');
+            exit;
+        }
+
         $id = uniqid('user_');
         $full_name = $_POST['Name'];
         $email = $_POST['Email'];
@@ -76,6 +91,13 @@ readonly class UserController
             )
         );
 
+        $this->userRoleService->add(
+            $this->userRoleFactory->create(
+                user_id: $id,
+                role_id: Role::USER->value
+            )
+        );
+
         $this->sendVerifyEmail($id, $email, $token);
 
         header('Location: /hutech-coffee/login');
@@ -103,10 +125,10 @@ readonly class UserController
             $user->password,
             FILTER_VALIDATE_REGEXP,
             ['options' => [
-                'regexp' => '/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm'
+                'regexp' => '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/'
             ]
             ])) {
-            $_SESSION['password_error'] = 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số';
+            $_SESSION['password_error'] = 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ và số';
         }
 
         if (isset($_SESSION['full_name_error'])
@@ -160,6 +182,12 @@ readonly class UserController
 
     public function signin(): void
     {
+        if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+            $_SESSION['csrf_error'] = 'Token không hợp lệ';
+            header('Location: /hutech-coffee/register');
+            exit;
+        }
+
         $email = $_POST['Email'];
         $password = $_POST['Password'];
 
@@ -167,19 +195,28 @@ readonly class UserController
 
         if (is_null($user) || !password_verify($password, $user->password)) {
             $_SESSION['account_error'] = 'Thông tin đăng nhập không chính xác';
-            header('Location: /hutech-coffee/login');
+            header('Location: /login');
             exit;
         }
 
         if (!$user->is_verify) {
             $_SESSION['verify_error'] = 'Tài khoản chưa được xác thực. Vui lòng kiểm tra email';
-            header('Location: /hutech-coffee/login');
+            header('Location: /login');
             exit;
         }
 
-        $_SESSION['user'] = $user;
+        $_SESSION['user'] = [
+            'id' => $user->id,
+            'full_name' => $user->full_name,
+            'email' => $user->email,
+            'role' => array_map(function ($item) {
+                return $item['role_id'] === 1
+                    ? Role::ADMIN->name
+                    : Role::USER->name;
+            }, $this->userRoleService->getRoleByUserId($user->id))
+        ];
 
-        header('Location: /hutech-coffee/');
+        header('Location: /');
     }
 
     public function resendEmail(): void

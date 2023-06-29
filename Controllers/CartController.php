@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Hutech\Controllers;
 
+use Hutech\Security\Csrf;
 use Hutech\Services\ProductService;
 
 readonly class CartController
 {
-    public function __construct(protected ProductService $coffeeService)
+    public function __construct(
+        protected ProductService $coffeeService,
+        protected Csrf $csrf
+    )
     {
     }
 
@@ -28,6 +32,7 @@ readonly class CartController
             }
         }
 
+        $token = $this->csrf->getToken();
         require_once 'Views/Coffee/Cart.php';
     }
 

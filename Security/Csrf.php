@@ -6,7 +6,7 @@ namespace Hutech\Security;
 
 use Exception;
 
-class Csrf
+readonly class Csrf
 {
     private string $token;
 

@@ -43,9 +43,13 @@
                                             : 0;
                                         ?></span></a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="cart" href="/hutech-coffee/manager">Quản lý</a>
-                            </li>
+                            <?php if(isset($_SESSION['user'])
+                                && array_map(fn($role) => in_array($role, $_SESSION['user']['role']), ['ADMIN'])) : ?>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/hutech-coffee/manager">Quản lý</a>
+                                </li>
+                            <?php endif; ?>
+
                             <?php if (isset($_SESSION['user'])) : ?>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/hutech-coffee/logout">Đăng xuất</a>

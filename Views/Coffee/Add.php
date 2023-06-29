@@ -6,6 +6,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="./Static/icon/favicon.ico" type="image/x-icon">
     <title>Thêm sản phẩm</title>
 </head>
 
@@ -26,6 +27,7 @@
                             <form id="request" class="main_form" method="post" action="/insert"
                                   enctype="multipart/form-data">
                                 <div class="row">
+                                    <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                                     <div class="col-md-12 ">
                                         <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name">
                                         <div class="col-md-12">
@@ -94,6 +96,14 @@
                                 </div>
                                 <div class="col-md-12">
                                     <button name="submit" type="submit" class="send_btn">Thêm</button>
+                                    <?php if (isset($_SESSION['csrf_error'])): ?>
+                                        <p class="text-danger">
+                                            <?=
+                                            $_SESSION['csrf_error'];
+                                            unset($_SESSION['csrf_error']);
+                                            ?>
+                                        </p>
+                                    <?php endif; ?>
                                 </div>
                             </form>
                         </div>
