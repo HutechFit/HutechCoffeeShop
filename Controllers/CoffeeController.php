@@ -48,6 +48,8 @@ readonly class CoffeeController
                 exit;
             }
 
+            unset($_SESSION['csrf_token']);
+
             $imgPath = '';
 
             if ($_FILES['Image']['name']) {
@@ -178,6 +180,8 @@ readonly class CoffeeController
             header('Location: /hutech-coffee/register');
             exit;
         }
+
+        unset($_SESSION['csrf_token']);
 
         $coffee = $this->coffeeService->getById((int)$_POST['Id']);
 

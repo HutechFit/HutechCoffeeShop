@@ -6,6 +6,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Hutech cofee là nơi bạn có thể thưởng thức những ly cà phê ngon nhất.">
+    <meta name="keywords" content="Hutech, Coffee, Cà phê, Cà phê ngon, Cà phê hutech, Hutech coffee">
+    <meta name="author" content="Hutech Coffee">
+    <meta name="geo.placename" content="Ho Chi Minh" />
     <link rel="shortcut icon" href="./Static/icon/favicon.ico" type="image/x-icon">
     <title>Đăng ký</title>
 </head>
@@ -28,9 +32,7 @@
                                   enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <input type="hidden"
-                                               name="csrf_token"
-                                               value="<?= $token ?>">
+                                        <input type="hidden" name="csrf_token" value="<?= $token ?>">
                                         <input class="contactus"
                                                placeholder="Họ tên khách hàng"
                                                type="text"

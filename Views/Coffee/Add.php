@@ -6,6 +6,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Hutech cofee là nơi bạn có thể thưởng thức những ly cà phê ngon nhất.">
+    <meta name="keywords" content="Hutech, Coffee, Cà phê, Cà phê ngon, Cà phê hutech, Hutech coffee">
+    <meta name="author" content="Hutech Coffee">
+    <meta name="geo.placename" content="Ho Chi Minh" />
     <link rel="shortcut icon" href="./Static/icon/favicon.ico" type="image/x-icon">
     <title>Thêm sản phẩm</title>
 </head>
@@ -27,12 +31,13 @@
                             <form id="request" class="main_form" method="post" action="/insert"
                                   enctype="multipart/form-data">
                                 <div class="row">
-                                    <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
+                                    <input type="hidden" name="csrf_token" value="<?= $token ?>">
                                     <div class="col-md-12 ">
                                         <input class="contactus" placeholder="Tên sản phẩm" type="text" name="Name">
                                         <div class="col-md-12">
                                             <?php if (isset($_SESSION['name_error'])) : ?>
-                                                <p class="text-danger">
+                                                <p class="text-danger"
+                                                   id="validate-error">
                                                     <?=
                                                     $_SESSION['name_error'];
                                                     unset($_SESSION['name_error']);
@@ -46,7 +51,8 @@
                                                step="1000" min="0" max="100000000">
                                         <div class="col-md-12">
                                             <?php if (isset($_SESSION['price_error'])) : ?>
-                                                <p class="text-danger">
+                                                <p class="text-danger"
+                                                   id="validate-error">
                                                     <?=
                                                     $_SESSION['price_error'];
                                                     unset($_SESSION['price_error']);
@@ -60,7 +66,8 @@
                                                id="Image">
                                         <?php if (isset($_SESSION['image_error'])) : ?>
                                             <div class="col-md-12">
-                                                <p class="text-danger">
+                                                <p class="text-danger"
+                                                   id="validate-error">
                                                     <?=
                                                     is_array($_SESSION['image_error'])
                                                         ? implode('<br/>', $_SESSION['image_error'])
@@ -77,7 +84,8 @@
                                                   name="Description"></textarea>
                                         <div class="col-md-12">
                                             <?php if (isset($_SESSION['description_error'])) : ?>
-                                                <p class="text-danger">
+                                                <p class="text-danger"
+                                                   id="validate-error">
                                                     <?=
                                                     $_SESSION['description_error'];
                                                     unset($_SESSION['description_error']);
@@ -97,7 +105,8 @@
                                 <div class="col-md-12">
                                     <button name="submit" type="submit" class="send_btn">Thêm</button>
                                     <?php if (isset($_SESSION['csrf_error'])): ?>
-                                        <p class="text-danger">
+                                        <p class="text-danger"
+                                           id="validate-error">
                                             <?=
                                             $_SESSION['csrf_error'];
                                             unset($_SESSION['csrf_error']);

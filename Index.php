@@ -19,7 +19,7 @@ $route = new Route();
 
 try {
     $route->setRoute('/', [HomeController::class, 'index'])
-        ->setRoute('/manager', [CoffeeController::class, 'getAll'], ['Auth' => ['ADMIN']])
+        ->setRoute('/manager', [CoffeeController::class, 'getAll'], ['Auth' => ['AD']])
         ->setRoute('/add', [CoffeeController::class, 'add'], ['Auth' => ['ADMIN']])
         ->setRoute('/edit', [CoffeeController::class, 'edit'], ['Auth' => ['ADMIN']])
         ->setRoute('/insert', [CoffeeController::class, 'insert'], ['Auth' => ['ADMIN']])
@@ -40,6 +40,10 @@ try {
         ->setRoute('/register', [UserController::class, 'index'])
         ->setRoute('/verify-email', [UserController::class, 'verifyEmail'])
         ->setRoute('/resend', [UserController::class, 'resendEmail'])
+        ->setRoute('/forgot-password', [UserController::class, 'forgotPassword'])
+        ->setRoute('/send-forgot-password', [UserController::class, 'sendForgotPassword'])
+        ->setRoute('/reset-password', [UserController::class, 'resetPassword'])
+        ->setRoute('/change-password', [UserController::class, 'changePassword'])
         ->run();
 } catch (NotFoundExceptionInterface|ContainerExceptionInterface|ReflectionException $e) {
     print_r($e->getMessage());

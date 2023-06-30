@@ -17,7 +17,7 @@ readonly class UserService
         $this->userRepository->add($user);
     }
 
-    public function getUser($email): ?object
+    public function getUser($email): object|false
     {
         return $this->userRepository->getUser($email);
     }
@@ -25,5 +25,15 @@ readonly class UserService
     public function setVerify($id): void
     {
         $this->userRepository->setVerify($id);
+    }
+
+    public function findById($id): object
+    {
+        return $this->userRepository->findById($id);
+    }
+
+    public function changePassword($id, $password): void
+    {
+        $this->userRepository->changePassword($id, $password);
     }
 }

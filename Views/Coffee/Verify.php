@@ -5,6 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Hutech cofee là nơi bạn có thể thưởng thức những ly cà phê ngon nhất.">
+    <meta name="keywords" content="Hutech, Coffee, Cà phê, Cà phê ngon, Cà phê hutech, Hutech coffee">
+    <meta name="author" content="Hutech Coffee">
+    <meta name="geo.placename" content="Ho Chi Minh" />
     <link rel="shortcut icon" href="./Static/icon/favicon.ico" type="image/x-icon">
     <title>Xác thực email</title>
 </head>
@@ -50,7 +54,7 @@
                     Hãy thử lại.
                 </p>
                 <br>
-                <a href="/" class="read_more">Trang chủ</a>
+                <a href="/resend" class="read_more">Xác thực lại</a>
             </div>
         </div>
     <?php else : ?>

@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Xác thực email</title>
+    <title>Khôi phục mật khẩu</title>
 </head>
 <body style="font-family: Helvetica, Arial, sans-serif;
              margin: 0;
@@ -36,11 +36,11 @@
                                     background-color: rgb(255, 255, 255);">
                             <div style="color: rgb(0, 0, 0);
                                  text-align: left;">
-                                <h1 style="margin: 1rem 0">Bước cuối cùng...</h1>
-                                <p style="padding-bottom: 16px">Truy cập vào đường dẫn bên dưới để xác thực email của
+                                <h1 style="margin: 1rem 0">Khôi phục mật khẩu</h1>
+                                <p style="padding-bottom: 16px">Truy cập vào đường dẫn bên dưới để khôi phục mật khẩu của
                                     bạn.</p>
                                 <p style="padding-bottom: 16px">
-                                    <a href="https://hutech-coffee.local/verify-email?user_id={{id}}&token={{token}}"
+                                    <a href="https://hutech-coffee.local/reset-password?user_id={{id}}&token={{token}}"
                                        rel="noopener noreferrer"
                                        target="_blank"
                                        style="padding: 12px 24px;
@@ -49,7 +49,7 @@
                                               background: #2B52F5;
                                               display: inline-block;
                                               margin: 0.5rem 0;">
-                                        Xác thực email
+                                        Reset password
                                     </a>
                                 </p>
                                 <p style="padding-bottom: 16px">

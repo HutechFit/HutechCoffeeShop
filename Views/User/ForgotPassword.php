@@ -11,7 +11,7 @@
     <meta name="author" content="Hutech Coffee">
     <meta name="geo.placename" content="Ho Chi Minh" />
     <link rel="shortcut icon" href="./Static/icon/favicon.ico" type="image/x-icon">
-    <title>Đăng nhập</title>
+    <title>Quên mật khẩu</title>
 </head>
 
 <body class="main-layout inner_page">
@@ -24,59 +24,31 @@
                     <div class="row ">
                         <div class="col-md-12">
                             <div class="titlepage text_align_center">
-                                <h2>Đăng nhập</h2>
+                                <h2>Quên mật khẩu</h2>
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <form id="request" class="main_form" method="post" action="/signin"
+                            <form id="request" class="main_form" method="post" action="/send-forgot-password"
                                   enctype="multipart/form-data">
                                 <div class="row">
                                     <input type="hidden" name="csrf_token" value="<?= $token ?>">
                                     <div class="col-md-12 ">
                                         <input class="contactus"
-                                               placeholder="Tài khoản"
+                                               placeholder="Nhâp email của bạn"
                                                type="email"
                                                name="Email"
                                                id="email">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <input class="contactus"
-                                               placeholder="Mật khẩu"
-                                               type="password"
-                                               name="Password">
+                                        <?php if (isset($_SESSION['email_forgot_error'])): ?>
+                                            <p class="text-danger">
+                                                <?=
+                                                $_SESSION['email_forgot_error'];
+                                                unset($_SESSION['email_forgot_error']);
+                                                ?>
+                                            </p>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 
-                                <?php if (isset($_SESSION['account_error'])) : ?>
-                                    <div class="col-md-12">
-                                        <p class="text-danger">
-                                            <?=
-                                            $_SESSION['account_error'];
-                                            unset($_SESSION['account_error']);
-                                            ?>
-                                        </p>
-                                    </div>
-                                <?php elseif (isset($_SESSION['verify_error'])) : ?>
-                                    <div class="col-md-12">
-                                        <p class="text-danger">
-                                            <?=
-                                            $_SESSION['verify_error'];
-                                            unset($_SESSION['verify_error']);
-                                            ?>&nbsp;
-                                            <button class="btn-outline-info" id="resend">Gửi lại email xác thực</button>
-                                        </p>
-                                    </div>
-                                    <?php if (isset($_SESSION['token_resend_error'])) : ?>
-                                        <div class="col-md-12">
-                                            <p class="text-danger">
-                                                <?=
-                                                $_SESSION['token_resend_error'];
-                                                unset($_SESSION['token_resend_error']);
-                                                ?>
-                                            </p>
-                                        </div>
-                                    <?php endif; ?>
-                                <?php endif; ?>
                                 <?php if (isset($_SESSION['csrf_error'])): ?>
                                     <p class="text-danger">
                                         <?=
@@ -87,20 +59,14 @@
                                 <?php endif; ?>
                                 <div class="col-md-12">
                                     <button class="send_btn"
-                                            type="submit">Đăng nhập</button>
+                                            type="submit">Lấy lại mật khẩu</button>
                                 </div>
                             </form>
                             <div class="col-md-12 text-center">
-                                <p class="mt-3 text-light">Bạn chưa có tài khoản?
+                                <p class="mt-3 text-light">Quay lại trang
                                     <a class="text-info"
-                                       href="/hutech-coffee/register">
-                                        Đăng ký
-                                    </a>
-                                </p>
-                                <p class="mt-3 text-light">Quên mật khẩu?
-                                    <a class="text-info"
-                                       href="/hutech-coffee/forgot-password">
-                                        Lấy lại mật khẩu
+                                       href="/login">
+                                        Đăng nhập
                                     </a>
                                 </p>
                             </div>
@@ -116,7 +82,7 @@
     $(document).ready(function () {
         $('#resend').click(function () {
             $.ajax({
-                url: '/resend',
+                url: '/send-forgot-password',
                 type: 'POST',
                 data {
                     email: $('#email').val()

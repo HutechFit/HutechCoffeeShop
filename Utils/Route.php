@@ -52,6 +52,8 @@ class Route extends Container
                         exit;
                     }
 
+//                    die(var_dump(array_map(fn($role) => in_array($role, $_SESSION['user']['role']), $roles)));
+
                     if (!array_map(fn($role) => in_array($role, $_SESSION['user']['role']), $roles)) {
                         require_once './Views/Home/403.php';
                         exit;
@@ -66,9 +68,9 @@ class Route extends Container
                 $this->register($controller, $controller);
                 $instance = $this->get($controller);
                 $instance->$method();
+            } else {
+                require_once './Views/Home/404.php';
             }
-
-            require_once './Views/Home/404.php';
 
         } else {
             if (is_callable($action)) {

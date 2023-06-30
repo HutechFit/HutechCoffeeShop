@@ -64,7 +64,14 @@ readonly class CartController
             }
 
             $encodedCartData = base64_encode(json_encode($cartData));
-            setcookie('cart', $encodedCartData, time() + 86400, '/');
+            setcookie('cart', $encodedCartData, [
+                'expires' => time() + 86400,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+                'domain' => 'hutech-coffee.local',
+                'samesite' => 'None'
+            ]);
         }
 
         header('Location: /hutech-coffee/order');
@@ -84,7 +91,14 @@ readonly class CartController
             }
 
             $encodedCartData = base64_encode(json_encode($cartData));
-            setcookie('cart', $encodedCartData, time() + 86400, '/');
+            setcookie('cart', $encodedCartData, [
+                'expires' => time() + 86400,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+                'domain' => 'hutech-coffee.local',
+                'samesite' => 'None'
+            ]);
         }
 
         header('Location: /hutech-coffee/cart');
@@ -109,7 +123,14 @@ readonly class CartController
             }
 
             $encodedCartData = base64_encode(json_encode($cartData));
-            setcookie('cart', $encodedCartData, time() + 86400, '/');
+            setcookie('cart', $encodedCartData, [
+                'expires' => time() + 86400,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+                'domain' => 'hutech-coffee.local',
+                'samesite' => 'None'
+            ]);
         }
 
         header('Location: /hutech-coffee/cart');

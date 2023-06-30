@@ -47,6 +47,89 @@ readonly class UserController
         require_once 'Views/User/Register.php';
     }
 
+    public function forgotPassword(): void
+    {
+        $token = $this->csrf->getToken();
+        require_once 'Views/User/ForgotPassword.php';
+    }
+
+    public function sendForgotPassword(): void
+    {
+        if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+            $_SESSION['csrf_error'] = 'Token không hợp lệ';
+            header('Location: /hutech-coffee/register');
+            exit;
+        }
+
+        unset($_SESSION['csrf_token']);
+
+        $email = $_POST['Email'];
+        $id = $this->userService->getUser($email)->id;
+
+        if (!$id) {
+            $_SESSION['email_forgot_error'] = 'Email không tồn tại';
+            header('Location: /hutech-coffee/forgot-password');
+            exit;
+        }
+
+        $provider = $this->providerService->getProviderByEmail($email);
+
+        if (is_null($provider->token)) {
+            $_SESSION['token_resend_error'] = 'Token không tồn tại';
+            header('Location: /hutech-coffee/login');
+            exit;
+        }
+
+        $subject = 'Khôi phục mật khẩu';
+        $message = file_get_contents('./Views/Templates/EmailForgotPassword.php');
+
+        $headers = [
+            'From' => 'Hutech Coffee <nguyenxuannhan.dev@gmail.com>',
+            'Reply-To' => 'nd.anh@hutech.edu.vn',
+            'Content-type' => 'text/html; charset=UTF-8',
+            'MIME-Version' => '1.0',
+            'X-Priority' => '1',
+            'X-Mailer' => 'PHP/' . phpversion()
+        ];
+
+        $message = str_replace('{{id}}', $id, $message);
+        $message = str_replace('{{token}}', $provider->token, $message);
+
+        mail($email, $subject, $message, $headers);
+    }
+
+    public function resetPassword(): void
+    {
+        $token = $this->csrf->getToken();
+        $userToken = $_GET['token'];
+        $id = $_GET['id'];
+        $isExistUser = $this->providerService->isExistUser($id, $token);
+        require_once 'Views/User/ResetPassword.php';
+    }
+
+    public function changePassword(): void
+    {
+        if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+            $_SESSION['csrf_error'] = 'Token không hợp lệ';
+            header('Location: /hutech-coffee/reset-password?id=' . $_POST['Id'] . '&token=' . $_POST['Token']);
+            exit;
+        }
+
+        if (password_verify($_POST['Password'], $this->userService->findById($_POST['Id'])->password)) {
+            $_SESSION['password_confirm_error'] = ['Mật khẩu mới không được trùng với mật khẩu cũ'];
+            header('Location: /hutech-coffee/reset-password?id=' . $_POST['Id'] . '&token=' . $_POST['Token']);
+            exit;
+        }
+
+        if ($_POST['Password'] !== $_POST['RePassword']) {
+            $_SESSION['password_confirm_error'] = ['Mật khẩu không khớp'];
+            header('Location: /hutech-coffee/reset-password?id=' . $_POST['Id'] . '&token=' . $_POST['Token']);
+            exit;
+        }
+
+        $this->userService->changePassword($_POST['Id'], password_hash($_POST['Password'], PASSWORD_ARGON2ID));
+    }
+
     /**
      * @throws Exception
      */
@@ -57,6 +140,8 @@ readonly class UserController
             header('Location: /hutech-coffee/register');
             exit;
         }
+
+        unset($_SESSION['csrf_token']);
 
         $id = uniqid('user_');
         $full_name = $_POST['Name'];
@@ -188,12 +273,14 @@ readonly class UserController
             exit;
         }
 
+        unset($_SESSION['csrf_token']);
+
         $email = $_POST['Email'];
         $password = $_POST['Password'];
 
         $user = $this->userService->getUser($email);
 
-        if (is_null($user) || !password_verify($password, $user->password)) {
+        if (!$user || !password_verify($password, $user->password)) {
             $_SESSION['account_error'] = 'Thông tin đăng nhập không chính xác';
             header('Location: /login');
             exit;

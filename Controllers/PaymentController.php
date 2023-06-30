@@ -43,6 +43,8 @@ readonly class PaymentController
             exit;
         }
 
+        unset($_SESSION['csrf_token']);
+
         match ($_POST['payment-method']) {
             'striped' => $this->striped(),
             'paypal' => $this->paypal(),
@@ -150,6 +152,8 @@ readonly class PaymentController
             exit;
         }
 
+        unset($_SESSION['csrf_token']);
+
         $discount = $_POST['code'] ?? '';
 
         $coupon = $this->couponService->getCoupon($discount);
@@ -191,7 +195,14 @@ readonly class PaymentController
             1 => $total - $coupon[0]['value']
         };
 
-        setcookie('discount', base64_encode(json_encode($coupon)), time() + 86400, '/');
+        setcookie('discount', base64_encode(json_encode($coupon)),[
+            'expires' => time() + 86400,
+            'path' => '/',
+            'secure' => true,
+            'httponly' => true,
+            'domain' => 'hutech-coffee.local',
+            'samesite' => 'None'
+        ]);
 
         $_SESSION['total'] = $total;
         $_SESSION['discount'] = $coupon[0]['code'];
