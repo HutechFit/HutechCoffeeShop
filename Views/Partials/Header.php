@@ -43,7 +43,7 @@
                                             : 0;
                                         ?></span></a>
                             </li>
-                            <?php if(isset($_SESSION['user'])
+                            <?php if (isset($_SESSION['user'])
                                 && array_map(fn($role) => in_array($role, $_SESSION['user']['role']), ['ADMIN'])) : ?>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/hutech-coffee/manager">Quản lý</a>

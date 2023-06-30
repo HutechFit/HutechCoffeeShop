@@ -37,7 +37,8 @@
                             <div style="color: rgb(0, 0, 0);
                                  text-align: left;">
                                 <h1 style="margin: 1rem 0">Khôi phục mật khẩu</h1>
-                                <p style="padding-bottom: 16px">Truy cập vào đường dẫn bên dưới để khôi phục mật khẩu của
+                                <p style="padding-bottom: 16px">Truy cập vào đường dẫn bên dưới để khôi phục mật khẩu
+                                    của
                                     bạn.</p>
                                 <p style="padding-bottom: 16px">
                                     <a href="https://hutech-coffee.local/reset-password?user_id={{id}}&token={{token}}"

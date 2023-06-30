@@ -25,7 +25,7 @@ readonly class UserController
         protected ProviderFactory $providerFactory,
         protected UserRoleService $userRoleService,
         protected UserRoleFactory $userRoleFactory,
-        protected Csrf $csrf)
+        protected Csrf            $csrf)
     {
     }
 

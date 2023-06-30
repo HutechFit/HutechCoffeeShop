@@ -24,7 +24,7 @@ readonly class InvoiceService
 
     public function create($invoice): void
     {
-        if($invoice->coupon_id === 0) {
+        if ($invoice->coupon_id === 0) {
             $invoice->coupon_id = null;
         }
         $this->invoiceRepository->add($invoice);

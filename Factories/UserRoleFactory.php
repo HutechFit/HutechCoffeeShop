@@ -10,6 +10,6 @@ readonly class UserRoleFactory
 {
     public static function create($user_id, $role_id): UserRole
     {
-        return new UserRole($user_id, (int) $role_id);
+        return new UserRole($user_id, (int)$role_id);
     }
 }

@@ -159,7 +159,7 @@ readonly class PaymentController
             1 => $total - $coupon[0]['value']
         };
 
-        setcookie('discount', base64_encode(json_encode($coupon)),[
+        setcookie('discount', base64_encode(json_encode($coupon)), [
             'expires' => time() + 86400,
             'path' => '/',
             'secure' => true,
@@ -192,7 +192,7 @@ readonly class PaymentController
             unset($_SESSION['value']);
         }
 
-        setcookie('discount', '',[
+        setcookie('discount', '', [
             'expires' => time() - 86400,
             'path' => '/',
             'secure' => true,

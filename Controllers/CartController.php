@@ -11,7 +11,7 @@ readonly class CartController
 {
     public function __construct(
         protected ProductService $coffeeService,
-        protected Csrf $csrf
+        protected Csrf           $csrf
     )
     {
     }

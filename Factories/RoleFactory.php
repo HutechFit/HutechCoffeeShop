@@ -10,6 +10,6 @@ readonly class RoleFactory
 {
     public static function create($id, $name): Role
     {
-        return new Role((int) $id, $name);
+        return new Role((int)$id, $name);
     }
 }

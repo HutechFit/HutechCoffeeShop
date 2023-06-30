@@ -10,6 +10,6 @@ readonly class InvoiceFactory
 {
     public static function create($id, $total, $payment_date, $payment_method, $coupon_id = null): Invoice
     {
-        return new Invoice((int)$id, (float)$total, $payment_date, $payment_method, (int) $coupon_id);
+        return new Invoice((int)$id, (float)$total, $payment_date, $payment_method, (int)$coupon_id);
     }
 }

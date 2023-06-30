@@ -12,7 +12,7 @@ class Role
     public function __construct(int $id, string $name)
     {
         $this->id = $id;
-        $this->name= $name;
+        $this->name = $name;
     }
 
     public function __destruct()

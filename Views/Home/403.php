@@ -9,7 +9,7 @@
     <meta name="description" content="Hutech cofee là nơi bạn có thể thưởng thức những ly cà phê ngon nhất.">
     <meta name="keywords" content="Hutech, Coffee, Cà phê, Cà phê ngon, Cà phê hutech, Hutech coffee">
     <meta name="author" content="Hutech Coffee">
-    <meta name="geo.placename" content="Ho Chi Minh" />
+    <meta name="geo.placename" content="Ho Chi Minh"/>
     <title>Không có quyền truy cập</title>
 </head>
 <body class="main-layout inner_page">
