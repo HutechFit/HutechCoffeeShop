@@ -52,8 +52,6 @@ class Route extends Container
                         exit;
                     }
 
-//                    die(var_dump(array_map(fn($role) => in_array($role, $_SESSION['user']['role']), $roles)));
-
                     if (!array_map(fn($role) => in_array($role, $_SESSION['user']['role']), $roles)) {
                         require_once './Views/Home/403.php';
                         exit;

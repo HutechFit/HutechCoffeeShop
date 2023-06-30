@@ -36,6 +36,14 @@
         </div>
     </div>
 <?php else : ?>
+    <?php if (isset($_SESSION['csrf_error'])): ?>
+        <p class="alert-danger">
+            <?=
+            $_SESSION['csrf_error'];
+            unset($_SESSION['csrf_error']);
+            ?>
+        </p>
+    <?php endif; ?>
     <section class="h-100 gradient-custom">
         <div class="container py-5">
             <div class="row d-flex justify-content-center my-4">
@@ -43,7 +51,6 @@
                     <div class="card mb-4">
                         <div class="card-header py-3">
                             <h5 class="mb-0 text-dark">Giỏ hàng: <?= count($cart) ?> sản phẩm</h5>
-                            <input type="hidden" name="csrf_token" value="<?= $token ?>">
                         </div>
                         <div class="card-body">
                             <?php foreach ($cart as $item): ?>
@@ -129,6 +136,7 @@
                                             Đã áp dụng mã giảm giá <b><?= $_SESSION['discount'] ?></b> thành công!
                                             <button type="button"
                                                     class="close"
+                                                    id="unDiscount"
                                                     data-dismiss="alert"
                                                     aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
@@ -267,6 +275,7 @@
                                     </label>
 
                                     <div class="form-group">
+                                        <input type="hidden" name="csrf_token" value="<?= $token ?>">
                                         <input type="email"
                                                class="form-control"
                                                id="email"
@@ -309,14 +318,6 @@
                                     class="btn btn-outline-danger btn-lg btn-block mt-3">
                                 Xóa giỏ hàng
                             </button>
-                            <?php if (isset($_SESSION['csrf_error'])): ?>
-                                <p class="text-danger">
-                                    <?=
-                                    $_SESSION['csrf_error'];
-                                    unset($_SESSION['csrf_error']);
-                                    ?>
-                                </p>
-                            <?php endif; ?>
                             <hr>
                             <div class="text-center">
                                 <a href="/hutech-coffee/order"
@@ -336,7 +337,7 @@
     $(document).ready(function () {
         $('#clear-cart').click(function () {
             if (confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?')) {
-                document.cookie = "cart=; expires=Thu, 30 Apr 1975 11:30:00 UTC; path=/;";
+                document.cookie = 'cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=hutech-coffee.local; samesite=Strict; secure';
                 location.reload();
             }
         });
@@ -384,6 +385,17 @@
                     code: $('.discount-input').val(),
                     csrf_token: '<?= $token ?>'
                 },
+                success: function () {
+                    location.reload();
+                }
+            });
+        });
+
+        $('#unDiscount').click(function () {
+            $.ajax({
+                url: '/unDiscount',
+                type: 'POST',
+
                 success: function () {
                     location.reload();
                 }

@@ -14,7 +14,7 @@ class Invoice extends BaseModel
 
     public string $payment_method;
 
-    public int $coupon_id;
+    public ?int $coupon_id;
 
     public function __construct($id, $total, $payment_date, $payment_method, $coupon_id)
     {

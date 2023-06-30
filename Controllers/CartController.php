@@ -68,9 +68,8 @@ readonly class CartController
                 'expires' => time() + 86400,
                 'path' => '/',
                 'secure' => true,
-                'httponly' => true,
-                'domain' => 'hutech-coffee.local',
-                'samesite' => 'None'
+                'samesite' => 'Strict',
+                'domain' => 'hutech-coffee.local'
             ]);
         }
 
@@ -95,9 +94,8 @@ readonly class CartController
                 'expires' => time() + 86400,
                 'path' => '/',
                 'secure' => true,
-                'httponly' => true,
-                'domain' => 'hutech-coffee.local',
-                'samesite' => 'None'
+                'samesite' => 'Strict',
+                'domain' => 'hutech-coffee.local'
             ]);
         }
 
@@ -114,6 +112,18 @@ readonly class CartController
 
                 if (count($cartData) == 1) {
                     setcookie('cart', '', time() - 86400, '/');
+                    if (isset($_SESSION['total'])) {
+                        unset($_SESSION['total']);
+                    }
+
+                    if (isset($_SESSION['discount'])) {
+                        unset($_SESSION['discount']);
+                    }
+
+                    if (isset($_SESSION['value'])) {
+                        unset($_SESSION['value']);
+                    }
+
                 }
 
                 if (is_array($cartData) && array_key_exists($id, $cartData)) {
@@ -127,9 +137,8 @@ readonly class CartController
                 'expires' => time() + 86400,
                 'path' => '/',
                 'secure' => true,
-                'httponly' => true,
-                'domain' => 'hutech-coffee.local',
-                'samesite' => 'None'
+                'samesite' => 'Strict',
+                'domain' => 'hutech-coffee.local'
             ]);
         }
 

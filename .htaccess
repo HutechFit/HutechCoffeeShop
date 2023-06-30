@@ -19,3 +19,27 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteCond %{HTTP_HOST} ^localhost$ [NC,OR]
 RedirectMatch ^/hutech-coffee/(.*)$ https://hutech-coffee.local/$1
 RedirectMatch ^/hutech-coffee$ https://hutech-coffee.local/
+
+# Bảo vệ file .htaccess và .htpasswd
+RedirectMatch 403 /\.ht(.*)$
+
+# Limit get request
+<Limit GET HEAD POST>
+    order deny,allow
+    deny from all
+    allow from 127.0.0.1
+</Limit>
+
+# Chặn truy cập vào thư mục
+Options All -Indexes
+
+# Image hotlinking protection
+RewriteEngine on
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https://hutech-coffee.local/.*$ [NC]
+RewriteRule \.(gif|jpg|jpeg|bmp|zip|rar|mp3|flv|swf|xml|php|png|css|pdf)$ - [F]
+
+# Chặn author scan
+RewriteBase /
+RewriteCond %{QUERY_STRING} (author=\d+) [NC]
+RewriteRule .* - [F]

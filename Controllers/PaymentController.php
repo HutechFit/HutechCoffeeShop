@@ -31,18 +31,13 @@ readonly class PaymentController
     {
     }
 
-    /**
-     * Xử lý thanh toán
-     * @return void
-     */
     public function payment(): void
     {
         if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
             $_SESSION['csrf_error'] = 'Token không hợp lệ';
-            header('Location: /hutech-coffee/register');
+            header('Location: /hutech-coffee/cart');
             exit;
         }
-
         unset($_SESSION['csrf_token']);
 
         match ($_POST['payment-method']) {
@@ -53,51 +48,30 @@ readonly class PaymentController
         };
     }
 
-    /**
-     * Xử lý thanh toán bằng Stripe
-     * @return void
-     */
     private function striped(): void
     {
         $_SESSION['payment_error'] = 'Stripe đang được phát triển';
         header('Location: /hutech-coffee/cart');
     }
 
-    /**
-     * Xử lý thanh toán bằng Paypal
-     * @return void
-     */
     private function paypal(): void
     {
         $_SESSION['payment_error'] = 'Paypal đang được phát triển';
         header('Location: /hutech-coffee/cart');
     }
 
-    /**
-     * Xử lý thanh toán bằng VNPAY
-     * @return never
-     */
     private function vnpay(): never
     {
         $vnp_TxnRef = strval(rand(1, 1000000));
         $vnp_Amount = $_POST['amount'];
         $vnp_Locale = 'vn';
-
-        # Địa chỉ IP của khách hàng
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
-
-        # Địa chỉ của merchant
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-
-        # Chuỗi bí mật (Secret Key)
         $vnp_HashSecret = "NOFIDXGIVCXRMPYNIWMBKTUDJSHUENMO";
 
         $inputData = [
             "vnp_Version" => "2.1.0",
-
-            # Mã định danh merchant kết nối (Terminal Id)
             "vnp_TmnCode" => "CQEZCMP9",
-
             "vnp_Amount" => strval($vnp_Amount * 100),
             "vnp_Command" => "pay",
             "vnp_CreateDate" => date('YmdHis'),
@@ -106,12 +80,8 @@ readonly class PaymentController
             "vnp_Locale" => $vnp_Locale,
             "vnp_OrderInfo" => "Thanh toan GD: " . $vnp_TxnRef,
             "vnp_OrderType" => "other",
-
-            # Địa chỉ nhận kết quả trả về của merchant
             "vnp_ReturnUrl" => "https://hutech-coffee.local/payment-result",
             "vnp_TxnRef" => $vnp_TxnRef,
-
-            # Thời gian cho phép thanh toán (tính theo giây)
             "vnp_ExpireDate" => date('YmdHis', strtotime('+15 minutes', strtotime(date("YmdHis"))))
         ];
 
@@ -131,8 +101,6 @@ readonly class PaymentController
         }
 
         $vnp_Url = $vnp_Url . "?" . $query;
-
-        # Tạo chữ ký điện tử
         $vnpSecureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
         $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
 
@@ -140,10 +108,6 @@ readonly class PaymentController
         die();
     }
 
-    /**
-     * Xử lý mã giảm giá
-     * @return void
-     */
     public function discount(): void
     {
         if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
@@ -199,9 +163,8 @@ readonly class PaymentController
             'expires' => time() + 86400,
             'path' => '/',
             'secure' => true,
-            'httponly' => true,
-            'domain' => 'hutech-coffee.local',
-            'samesite' => 'None'
+            'samesite' => 'Strict',
+            'domain' => 'hutech-coffee.local'
         ]);
 
         $_SESSION['total'] = $total;
@@ -215,10 +178,29 @@ readonly class PaymentController
         header('Location: /hutech-coffee/cart');
     }
 
-    /**
-     * Trả về kết quả thanh toán
-     * @return void
-     */
+    public function unDiscount(): void
+    {
+        if (isset($_SESSION['total'])) {
+            unset($_SESSION['total']);
+        }
+
+        if (isset($_SESSION['discount'])) {
+            unset($_SESSION['discount']);
+        }
+
+        if (isset($_SESSION['value'])) {
+            unset($_SESSION['value']);
+        }
+
+        setcookie('discount', '',[
+            'expires' => time() - 86400,
+            'path' => '/',
+            'secure' => true,
+            'samesite' => 'Strict',
+            'domain' => 'hutech-coffee.local'
+        ]);
+    }
+
     public function paymentResult(): void
     {
         $vnp_SecureHash = $_GET['vnp_SecureHash'] ?? '';
@@ -249,40 +231,51 @@ readonly class PaymentController
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
 
         if ($secureHash == $vnp_SecureHash && $_GET['vnp_ResponseCode'] === '00') {
-            $this->saveBill($_GET['vnp_TxnRef'], 'vnpay', $_GET['vnp_Amount'] / 100, date('Y-m-d H:i:s', strtotime($_GET['vnp_PayDate'])));
+            $this->saveBill($_GET['vnp_TxnRef'], PaymentMethod::VNPAY->name, $_GET['vnp_Amount'] / 100, date('Y-m-d H:i:s', strtotime($_GET['vnp_PayDate'])));
         }
 
-        # Huỷ toàn bộ giỏ hàng
-        unset($_SESSION['cart']);
-        unset($_SESSION['total']);
-        unset($_SESSION['discount']);
-        unset($_SESSION['value']);
-        unset($_SESSION['discount_error']);
-        unset($_SESSION['error']);
-        setcookie('cart', '', time() - 86400, '/');
-        setcookie('discount', '', time() - 86400, '/');
+        if (isset($_SESSION['total'])) {
+            unset($_SESSION['total']);
+        }
+
+
+        if (isset($_SESSION['discount'])) {
+            unset($_SESSION['discount']);
+        }
+
+        if (isset($_SESSION['value'])) {
+            unset($_SESSION['value']);
+        }
+
+        setcookie('cart', '', [
+            'expires' => time() + 86400,
+            'path' => '/',
+            'secure' => true,
+            'samesite' => 'Strict',
+            'domain' => 'hutech-coffee.local'
+        ]);
+
+        setcookie('discount', '', [
+            'expires' => time() + 86400,
+            'path' => '/',
+            'secure' => true,
+            'samesite' => 'Strict',
+            'domain' => 'hutech-coffee.local'
+        ]);
 
         require_once 'Views/Coffee/Payment.php';
     }
 
-    /**
-     * Lưu thông tin đơn hàng vào database
-     * @param $id
-     * @param $payment
-     * @param $total
-     * @param $payment_date
-     * @return void
-     */
     private function saveBill($id, $payment, $total, $payment_date): void
     {
         $paymentMethod = match ($payment) {
-            'striped' => PaymentMethod::STIPE,
-            'paypal' => PaymentMethod::PAYPAL,
-            'vnpay' => PaymentMethod::VNPAY,
-            default => PaymentMethod::CASH
+            PaymentMethod::STIPE->name => PaymentMethod::STIPE->value,
+            PaymentMethod::PAYPAL->name => PaymentMethod::PAYPAL->value,
+            PaymentMethod::VNPAY->name => PaymentMethod::VNPAY->value,
+            default => PaymentMethod::CASH->value
         };
 
-        $invoice = $this->invoiceFactory->create($id, $total, $payment_date, $paymentMethod->value);
+        $invoice = $this->invoiceFactory->create($id, $total, $payment_date, $paymentMethod);
 
         $this->invoiceService->create($invoice);
 
@@ -293,20 +286,11 @@ readonly class PaymentController
             $this->itemInvoiceService->create($itemInvoice);
         }
 
-        $this->sendEmailInvoice($_POST['email'] ?? '', $id, $total, $payment_date, $paymentMethod->value);
+        $this->sendEmailInvoice($_POST['email'] ?? '', $id, $total, $payment_date, $paymentMethod);
 
         header('Location: /hutech-coffee/cart');
     }
 
-    /**
-     * Gửi email thông tin đơn hàng
-     * @param $email
-     * @param $id
-     * @param $total
-     * @param $payment_date
-     * @param $payment_method
-     * @return void
-     */
     private function sendEmailInvoice($email, $id, $total, $payment_date, $payment_method): void
     {
         $to = $email;
@@ -314,9 +298,7 @@ readonly class PaymentController
         $message = file_get_contents('./Views/Templates/EmailInvoice.php');
 
         $headers = [
-            # Địa chỉ email của người gửi
             'From' => 'Hutech Coffee <nguyenxuannhan.dev@gmail.com>',
-            # Địa chỉ email trả lời
             'Reply-To' => 'nd.anh@hutech.edu.vn',
             'Content-type' => 'text/html; charset=UTF-8',
             'MIME-Version' => '1.0',
