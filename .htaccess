@@ -23,13 +23,6 @@ RedirectMatch ^/hutech-coffee$ https://hutech-coffee.local/
 # Bảo vệ file .htaccess và .htpasswd
 RedirectMatch 403 /\.ht(.*)$
 
-# Limit get request
-<Limit GET HEAD POST>
-    order deny,allow
-    deny from all
-    allow from 127.0.0.1
-</Limit>
-
 # Chặn truy cập vào thư mục
 Options All -Indexes
 

@@ -20,7 +20,9 @@ readonly class Csrf
         }
 
         if (!isset($_SESSION['csrf_token'])) {
-            $token = bin2hex(random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES));
+            $token = bin2hex(
+                random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES)
+            );
             $_SESSION['csrf_token'] = $token;
         }
 

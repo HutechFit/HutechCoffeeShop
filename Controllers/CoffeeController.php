@@ -62,11 +62,11 @@ readonly class CoffeeController
 
             $product = $this->coffeeFactory->create(
                 id: null,
-                name: $_POST['Name'],
-                price: $_POST['Price'],
+                name: htmlspecialchars($_POST['Name'], ENT_QUOTES, 'UTF-8'),
+                price: htmlspecialchars($_POST['Price'], ENT_QUOTES, 'UTF-8'),
                 image: $imgPath,
-                description: $_POST['Description'] ?? '',
-                category_id: $_POST['category_id']
+                description: htmlspecialchars($_POST['Description'], ENT_QUOTES, 'UTF-8') ?? '',
+                category_id: htmlspecialchars($_POST['category_id'], ENT_QUOTES, 'UTF-8')
             );
 
             if (!$this->validation($product)) {
@@ -157,7 +157,9 @@ readonly class CoffeeController
 
     public function edit(): void
     {
-        $coffee = $this->coffeeService->getById((int)$_GET['id']);
+        $coffee = $this->coffeeService->getById(
+            (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')
+        );
 
         if ($coffee) {
             $token = $this->csrf->getToken();
@@ -183,7 +185,9 @@ readonly class CoffeeController
 
         unset($_SESSION['csrf_token']);
 
-        $coffee = $this->coffeeService->getById((int)$_POST['Id']);
+        $coffee = $this->coffeeService->getById(
+            (int) htmlspecialchars($_POST['Id'], ENT_QUOTES, 'UTF-8')
+        );
 
         if (!$coffee) {
             require_once './Views/Home/404.php';
@@ -200,22 +204,22 @@ readonly class CoffeeController
             $imgPath = $this->uploadImage($_FILES['Image']) ?? '';
 
             if (!$imgPath) {
-                header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
+                header('Location: /hutech-coffee/edit?id=' . htmlspecialchars($_POST['Id'], ENT_QUOTES, 'UTF-8'));
                 exit;
             }
         }
 
         $product = $this->coffeeFactory->create(
-            id: $_POST['Id'],
-            name: $_POST['Name'],
-            price: $_POST['Price'],
+            id: htmlspecialchars($_POST['Id'], ENT_QUOTES, 'UTF-8'),
+            name: htmlspecialchars($_POST['Name'], ENT_QUOTES, 'UTF-8'),
+            price: htmlspecialchars($_POST['Price'], ENT_QUOTES, 'UTF-8'),
             image: $imgPath ?? '',
-            description: $_POST['Description'] ?? '',
-            category_id: $_POST['category_id']
+            description:htmlspecialchars($_POST['Description'], ENT_QUOTES, 'UTF-8') ?? '',
+            category_id: htmlspecialchars($_POST['category_id'], ENT_QUOTES, 'UTF-8')
         );
 
         if (!$this->validation($product)) {
-            header('Location: /hutech-coffee/edit?id=' . $_POST['Id']);
+            header('Location: /hutech-coffee/edit?id=' . htmlspecialchars($_POST['Id'], ENT_QUOTES, 'UTF-8'));
             exit;
         }
 
@@ -225,13 +229,17 @@ readonly class CoffeeController
 
     public function delete(): void
     {
-        $coffee = $this->coffeeService->getById((int)$_GET['id']);
+        $coffee = $this->coffeeService->getById(
+            (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')
+        );
 
         if ($coffee) {
             if ($coffee->image && file_exists($coffee->image)) {
                 unlink($coffee->image);
             }
-            $this->coffeeService->delete((int)$_GET['id']);
+            $this->coffeeService->delete(
+                (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')
+            );
         }
 
         header('Location: /hutech-coffee/manager');

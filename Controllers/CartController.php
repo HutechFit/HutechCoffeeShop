@@ -39,11 +39,11 @@ readonly class CartController
     public function addToCart(): void
     {
         if (isset($_POST['id'])) {
-            $id = $_POST['id'];
-            $name = $_POST['name'];
-            $price = $_POST['price'];
-            $image = $_POST['image'];
-            $quantity = $_POST['quantity'];
+            $id = htmlspecialchars($_POST['id'], ENT_QUOTES, 'UTF-8');
+            $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+            $price = htmlspecialchars($_POST['price'], ENT_QUOTES, 'UTF-8');
+            $image = htmlspecialchars($_POST['image'], ENT_QUOTES, 'UTF-8');
+            $quantity = htmlspecialchars($_POST['quantity'], ENT_QUOTES, 'UTF-8');
 
             $cart = [
                 'id' => $id,
@@ -79,8 +79,8 @@ readonly class CartController
     public function cartUpdate(): void
     {
         if (isset($_POST['id'])) {
-            $id = $_POST['id'];
-            $quantity = $_POST['quantity'];
+            $id = htmlspecialchars($_POST['id'], ENT_QUOTES, 'UTF-8');
+            $quantity = htmlspecialchars($_POST['quantity'], ENT_QUOTES, 'UTF-8');
 
             if (isset($_COOKIE['cart'])) {
                 $cartData = json_decode(base64_decode($_COOKIE['cart']), true);
@@ -105,7 +105,7 @@ readonly class CartController
     public function cartDelete(): void
     {
         if (isset($_POST['id'])) {
-            $id = $_POST['id'];
+            $id = htmlspecialchars($_POST['id'], ENT_QUOTES, 'UTF-8');
 
             if (isset($_COOKIE['cart'])) {
                 $cartData = json_decode(base64_decode($_COOKIE['cart']), true);

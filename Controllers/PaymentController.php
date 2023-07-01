@@ -40,7 +40,7 @@ readonly class PaymentController
         }
         unset($_SESSION['csrf_token']);
 
-        match ($_POST['payment-method']) {
+        match (htmlspecialchars($_POST['payment-method'], ENT_QUOTES, 'UTF-8')) {
             'striped' => $this->striped(),
             'paypal' => $this->paypal(),
             'vnpay' => $this->vnpay(),
@@ -118,7 +118,7 @@ readonly class PaymentController
 
         unset($_SESSION['csrf_token']);
 
-        $discount = $_POST['code'] ?? '';
+        $discount = htmlspecialchars($_POST['code'], ENT_QUOTES, 'UTF-8') ?? '';
 
         $coupon = $this->couponService->getCoupon($discount);
 

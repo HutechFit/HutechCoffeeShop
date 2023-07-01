@@ -28,8 +28,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <form id="request" class="main_form" method="post" action="/signin"
-                                  enctype="multipart/form-data">
+                            <form id="request" class="main_form" method="post" action="/signin">
                                 <div class="row">
                                     <input type="hidden" name="csrf_token" value="<?= $token ?>">
                                     <div class="col-md-12 ">
@@ -46,6 +45,15 @@
                                                name="Password">
                                     </div>
                                 </div>
+
+                                <?php if (isset($_SESSION['csrf_error'])): ?>
+                                    <p class="text-danger">
+                                        <?=
+                                        $_SESSION['csrf_error'];
+                                        unset($_SESSION['csrf_error']);
+                                        ?>
+                                    </p>
+                                <?php endif; ?>
 
                                 <?php if (isset($_SESSION['account_error'])) : ?>
                                     <div class="col-md-12">
@@ -76,17 +84,22 @@
                                             </p>
                                         </div>
                                     <?php endif; ?>
-                                <?php endif; ?>
-                                <?php if (isset($_SESSION['csrf_error'])): ?>
-                                    <p class="text-danger">
-                                        <?=
-                                        $_SESSION['csrf_error'];
-                                        unset($_SESSION['csrf_error']);
-                                        ?>
-                                    </p>
+                                    <?php if (isset($_SESSION['csrf_error'])) : ?>
+                                        <div class="col-md-12">
+                                            <p class="text-danger">
+                                                <?=
+                                                $_SESSION['csrf_error'];
+                                                unset($_SESSION['csrf_error']);
+                                                ?>
+                                            </p>
+                                        </div>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                                 <div class="col-md-12">
-                                    <button class="send_btn"
+                                    <button class="send_btn g-recaptcha"
+                                            data-sitekey="<?= $siteKey ?>"
+                                            data-callback='onSubmit'
+                                            data-action='submit'
                                             type="submit">Đăng nhập
                                     </button>
                                 </div>
@@ -113,6 +126,7 @@
     </div>
 </div>
 <?php include_once 'Views/Partials/Footer.php'; ?>
+<script src="https://www.google.com/recaptcha/api.js?&render=explicit" async defer></script>
 <script>
     $(document).ready(function () {
         $('#resend').click(function () {

@@ -10,6 +10,7 @@ use Hutech\Enum\Role;
 use Hutech\Factories\ProviderFactory;
 use Hutech\Factories\UserFactory;
 use Hutech\Factories\UserRoleFactory;
+use Hutech\Security\Capcha;
 use Hutech\Security\Csrf;
 use Hutech\Services\ProviderService;
 use Hutech\Services\UserRoleService;
@@ -25,13 +26,15 @@ readonly class UserController
         protected ProviderFactory $providerFactory,
         protected UserRoleService $userRoleService,
         protected UserRoleFactory $userRoleFactory,
-        protected Csrf            $csrf)
+        protected Csrf            $csrf,
+        protected Capcha          $capcha)
     {
     }
 
     public function login(): void
     {
         $token = $this->csrf->getToken();
+        $siteKey = $this->capcha->getSiteKey();
         require_once 'Views/User/Login.php';
     }
 
@@ -63,7 +66,7 @@ readonly class UserController
 
         unset($_SESSION['csrf_token']);
 
-        $email = $_POST['Email'];
+        $email = htmlspecialchars($_POST['Email'], ENT_QUOTES, 'UTF-8');
         $id = $this->userService->getUser($email)->id;
 
         if (!$id) {
@@ -101,8 +104,8 @@ readonly class UserController
     public function resetPassword(): void
     {
         $token = $this->csrf->getToken();
-        $userToken = $_GET['token'];
-        $id = $_GET['id'];
+        $userToken = htmlspecialchars($_GET['token'], ENT_QUOTES, 'UTF-8');
+        $id = htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8');
         $isExistUser = $this->providerService->isExistUser($id, $token);
         require_once 'Views/User/ResetPassword.php';
     }
@@ -144,9 +147,9 @@ readonly class UserController
         unset($_SESSION['csrf_token']);
 
         $id = uniqid('user_');
-        $full_name = $_POST['Name'];
-        $email = $_POST['Email'];
-        $password = $_POST['Password'];
+        $full_name = htmlspecialchars($_POST['Name'], ENT_QUOTES, 'UTF-8');
+        $email = htmlspecialchars($_POST['Email'], ENT_QUOTES, 'UTF-8');
+        $password = htmlspecialchars($_POST['Password'], ENT_QUOTES, 'UTF-8');
 
         if ($password !== $_POST['RePassword']) {
             $_SESSION['password_confirm_error'] = 'Mật khẩu không khớp';
@@ -253,8 +256,8 @@ readonly class UserController
 
     public function verifyEmail(): void
     {
-        $token = $_GET['token'] ?? '';
-        $userId = $_GET['user_id'] ?? '';
+        $token = htmlspecialchars($_GET['token'], ENT_QUOTES, 'UTF-8') ?? '';
+        $userId = htmlspecialchars($_GET['user_id'], ENT_QUOTES, 'UTF-8') ?? '';
 
         $isExistUser = $this->providerService->isExistUser($userId, $token);
 
@@ -275,8 +278,14 @@ readonly class UserController
 
         unset($_SESSION['csrf_token']);
 
-        $email = $_POST['Email'];
-        $password = $_POST['Password'];
+        if(isset($_POST['g-recaptcha-response']) && !$this->capcha->verify($_POST['g-recaptcha-response'], $_SERVER['REMOTE_ADDR'])) {
+            $_SESSION['capcha_error'] = 'Vui lòng xác thực capcha';
+            header('Location: /hutech-coffee/login');
+            exit;
+        }
+
+        $email = htmlspecialchars($_POST['Email'], ENT_QUOTES, 'UTF-8');
+        $password = htmlspecialchars($_POST['Password'], ENT_QUOTES, 'UTF-8');
 
         $user = $this->userService->getUser($email);
 
@@ -308,7 +317,7 @@ readonly class UserController
 
     public function resendEmail(): void
     {
-        $email = $_POST['Email'];
+        $email = htmlspecialchars($_POST['Email'], ENT_QUOTES, 'UTF-8');
 
         $provider = $this->providerService->getProviderByEmail($email);
 
