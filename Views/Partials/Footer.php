@@ -78,5 +78,19 @@
     $(document).ready(function () {
         const currentPath = window.location.pathname;
         $('#navbar li a[href="' + '/hutech-coffee' + currentPath + '"]').parent().addClass('active');
+
+        $(window).scroll(function(){
+            const showAfter = 100;
+            if ($(this).scrollTop() > showAfter ) {
+                $('.back-to-top').fadeIn();
+            } else {
+                $('.back-to-top').fadeOut();
+            }
+        });
+
+        $('.back-to-top').click(function(){
+            $('html, body').animate({scrollTop : 0},800);
+            return false;
+        });
     });
 </script>

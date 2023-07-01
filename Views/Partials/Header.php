@@ -7,7 +7,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css"
       media="screen">
 <link rel="stylesheet" href="https://rawgit.com/LeshikJanz/libraries/master/Bootstrap/baguetteBox.min.css">
+<style>
+    .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 64px;
+        height: 64px;
+        z-index: 9999;
+        cursor: pointer;
+        text-decoration: none;
+        transition: opacity 0.2s ease-out;
+        background-color: orange;
+    }
 
+    .back-to-top:hover{
+        opacity: 0.7;
+    }
+</style>
+
+<button href="#" class="back-to-top"></button>
 <div class="header">
     <div class="container-fluid">
         <div class="row d_flex">
