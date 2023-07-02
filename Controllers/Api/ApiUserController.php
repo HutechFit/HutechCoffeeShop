@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hutech\Controllers\Api;
 
 use Firebase\JWT\JWT;
