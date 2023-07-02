@@ -1,0 +1,9 @@
+GET https://hutech-coffee.local/api/v1/categories
+
+###
+
+GET https://hutech-coffee.local/api/v1/products
+
+###
+
+GET https://hutech-coffee.local/api/v1/getById?id=1

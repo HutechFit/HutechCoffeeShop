@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hutech\Utils;
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
@@ -33,6 +35,22 @@ class Route extends Container
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
 
+        if (str_contains($uri, '/api')) {
+            header("Access-Control-Allow-Origin: *");
+            header("Content-Type: application/json; charset=UTF-8");
+            header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
+            header("Access-Control-Max-Age: 3600");
+            header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
+            if (!array_key_exists($uri, $this->routes) ||
+                !class_exists($this->routes[$uri][0]) ||
+                !method_exists($this->routes[$uri][0], $this->routes[$uri][1])) {
+                http_response_code(404);
+                echo json_encode('URL không hợp lệ');
+                exit;
+            }
+        }
+
         if (!array_key_exists($uri, $this->routes)) {
             require_once './Views/Home/404.php';
         }
@@ -47,19 +65,50 @@ class Route extends Container
                 if (!empty($this->middleware[$uri]) && array_keys($this->middleware[$uri])[0] === 'Auth') {
                     $roles = $this->middleware[$uri][array_keys($this->middleware[$uri])[0]];
 
-                    if (!isset($_SESSION['user'])) {
-                        header('Refresh: 0; url=/login');
+                    if (!str_contains($uri, '/api')) {
+                        if (!isset($_SESSION['user'])) {
+                            header('Refresh: 0; url=/login');
+                            exit;
+                        }
+
+                        if (!array_map(fn($role) => in_array($role, $_SESSION['user']['role']), $roles)) {
+                            require_once './Views/Home/403.php';
+                            exit;
+                        }
+                    }
+
+                    if (!isset(getallheaders()['Authorization']) || !isset($_COOKIE['token'])) {
+                        http_response_code(401);
+                        echo json_encode(['message' => 'Bạn chưa đăng nhập']);
                         exit;
                     }
 
-                    if (!array_map(fn($role) => in_array($role, $_SESSION['user']['role']), $roles)) {
-                        require_once './Views/Home/403.php';
+                    $decoded = JWT::decode(
+                        trim(substr(getallheaders()['Authorization'], 7)) ?? $_COOKIE['token'],
+                        new Key('hutech', 'HS512')
+                    );
+
+                    if ($decoded->exp < time()) {
+                        http_response_code(401);
+                        echo json_encode(['message' => 'Phiên đăng nhập đã hết hạn']);
+                        exit;
+                    }
+
+                    if (!array_map(fn($role) => in_array($role, $decoded->data->role), $roles)) {
+                        http_response_code(403);
+                        echo json_encode(['message' => 'Bạn không có quyền truy cập']);
                         exit;
                     }
                 }
 
-                if (isset($_SESSION['user']) && $uri === '/login') {
+                if (isset($_SESSION['user']) && ($uri === '/login' || $uri === '/register')) {
                     header('Refresh: 0; url=/');
+                    exit;
+                }
+
+                if ((isset($_COOKIE['token']) || isset(getallheaders()['Authorization'])) &&
+                    ($uri === '/login' || $uri === '/register')) {
+                    echo json_encode(['message' => 'Bạn đã đăng nhập']);
                     exit;
                 }
 
@@ -67,7 +116,13 @@ class Route extends Container
                 $instance = $this->get($controller);
                 $instance->$method();
             } else {
-                require_once './Views/Home/404.php';
+                if(!str_contains($uri, '/api')) {
+                    require_once './Views/Home/404.php';
+                } else {
+                    http_response_code(404);
+                    echo json_encode('URL không hợp lệ');
+                    exit;
+                }
             }
 
         } else {

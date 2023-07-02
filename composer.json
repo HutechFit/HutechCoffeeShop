@@ -24,7 +24,8 @@
     "ext-intl": "*",
     "ext-pdo": "*",
     "vlucas/phpdotenv": "^5.5",
-    "ext-sodium": "*"
+    "ext-sodium": "*",
+    "firebase/php-jwt": "^6.8"
   },
   "autoload": {
     "psr-4": {

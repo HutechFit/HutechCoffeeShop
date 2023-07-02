@@ -3,13 +3,22 @@
         'name' => 'hutech/hutech-coffee',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '2fb8aa9ad9d268ececde5cb436c882d99de903e9',
+        'reference' => '9e811e065f3544a7dbac1ba4c875731e9a919068',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
+        'firebase/php-jwt' => array(
+            'pretty_version' => 'v6.8.0',
+            'version' => '6.8.0.0',
+            'reference' => '48b0210c51718d682e53210c24d25c5a10a2299b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../firebase/php-jwt',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'graham-campbell/result-type' => array(
             'pretty_version' => 'v1.1.1',
             'version' => '1.1.1.0',
@@ -22,7 +31,7 @@
         'hutech/hutech-coffee' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '2fb8aa9ad9d268ececde5cb436c882d99de903e9',
+            'reference' => '9e811e065f3544a7dbac1ba4c875731e9a919068',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

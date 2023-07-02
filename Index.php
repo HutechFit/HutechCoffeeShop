@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Hutech\Controllers\Api\ApiUserController;
+use Hutech\Controllers\Api\ApiController;
 use Hutech\Controllers\CartController;
 use Hutech\Controllers\CoffeeController;
 use Hutech\Controllers\HomeController;
@@ -36,7 +38,7 @@ try {
         ->setRoute('/payment-result', [PaymentController::class, 'paymentResult'])
         ->setRoute('/login', [UserController::class, 'login'])
         ->setRoute('/signin', [UserController::class, 'signin'])
-        ->setRoute('/logout', [UserController::class, 'logout'], ['auth' => ['ADMIN', 'USER']])
+        ->setRoute('/logout', [UserController::class, 'logout'], ['Auth' => ['ADMIN', 'USER']])
         ->setRoute('/signup', [UserController::class, 'addUser'])
         ->setRoute('/register', [UserController::class, 'index'])
         ->setRoute('/verify-email', [UserController::class, 'verifyEmail'])
@@ -45,6 +47,11 @@ try {
         ->setRoute('/send-forgot-password', [UserController::class, 'sendForgotPassword'])
         ->setRoute('/reset-password', [UserController::class, 'resetPassword'])
         ->setRoute('/change-password', [UserController::class, 'changePassword'])
+        ->setRoute('/api/v1/products', [ApiController::class, 'getAllProducts'], ['Auth' => ['ADMIN']])
+        ->setRoute('/api/v1/categories', [ApiController::class, 'getAllCategories'])
+        ->setRoute('/api/v1/add', [ApiController::class, 'add'])
+        ->setRoute('/api/v1/getById', [ApiController::class, 'getById'])
+            ->setRoute('/api/v1/token', [ApiUserController::class, 'getToken'])
         ->run();
 } catch (NotFoundExceptionInterface|ContainerExceptionInterface|ReflectionException $e) {
     print_r($e->getMessage());
