@@ -45,49 +45,6 @@
                 <th scope="col">Thao tác</th>
             </tr>
             </thead>
-            <tbody>
-            <?php foreach ($coffees as $coffee) : ?>
-                <tr>
-                    <td><?= $coffee['id'] ?></td>
-                    <td><?= $coffee['name'] ?></td>
-                    <td>
-                        <?php if ($coffee['price']) : ?>
-                            <?= numfmt_format_currency(numfmt_create('vi_VN', NumberFormatter::CURRENCY), $coffee['price'], 'VND') ?>
-                        <?php else : ?>
-                            <?= numfmt_format_currency(numfmt_create('vi_VN', NumberFormatter::CURRENCY), 0, 'VND') ?>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <?php if ($coffee['image']) : ?>
-                            <img loading="lazy" src="<?= $coffee['image'] ?>" alt="<?= $coffee['name'] ?>" width="100"
-                                 height="100">
-                        <?php else : ?>
-                            <img loading="lazy" src="https://fakeimg.pl/100x100?text=No+image"
-                                 alt="<?= $coffee['name'] ?>" width="100" height="100">
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <?php if ($coffee['description']) : ?>
-                            <?= $coffee['description'] ?>
-                        <?php else : ?>
-                            <i>Chưa có mô tả</i>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <?php if ($coffee['category_id']) : ?>
-                            <?= $categories[$coffee['category_id'] - 1]['name'] ?>
-                        <?php else : ?>
-                            <i>Chưa phân loại</i>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <a href="/hutech-coffee/edit?id=<?= $coffee['id'] ?>" class="btn btn-info">Sửa</a>
-                        <a href="/hutech-coffee/delete?id=<?= $coffee['id'] ?>" class="btn btn-danger"
-                           onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">Xóa</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
         </table>
     </div>
     <div class="text-center">
@@ -99,7 +56,32 @@
 <script>
     $(document).ready(function () {
         $('#myTable').DataTable({
-            "autoWidth": false,
+            ajax: {
+                url: 'https://hutech-coffee.local/api/v1/products',
+                dataSrc: ''
+            },
+            columns: [
+                {data: 'id'},
+                {data: 'name'},
+                {data: 'price'},
+                {data: 'image',
+                    render: function (data, type, row) {
+                        if (data) {
+                            return '<img loading="lazy" src="' + data + '" alt="' + row.name + '" width="100" height="100">';
+                        } else {
+                            return '<img loading="lazy" src="https://fakeimg.pl/100x100?text=No+image" alt="' + row.name + '" width="100" height="100">';
+                        }
+                    }
+                },
+                {data: 'description'},
+                {data: 'category_id'},
+                {data: 'id',
+                    render: function (data, type, row) {
+                        return '<a href="/hutech-coffee/edit?id=' + data + '" class="btn btn-info">Sửa</a>' +
+                            '<a href="/hutech-coffee/delete?id=' + data + '" class="btn btn-danger" onclick="return confirm(\'Bạn có chắc chắn muốn xóa sản phẩm này?\')">Xóa</a>';
+                    }
+                },
+            ],
             "language": {
                 "lengthMenu": "Hiển thị _MENU_ dòng",
                 "zeroRecords": "Không tìm thấy dữ liệu",

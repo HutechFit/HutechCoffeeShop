@@ -10,6 +10,8 @@ use Hutech\Factories\UserRoleFactory;
 use Hutech\Services\ProviderService;
 use Hutech\Services\UserRoleService;
 use Hutech\Services\UserService;
+use OpenApi\Attributes\Post;
+use OpenApi\Attributes\Response;
 
 class ApiUserController extends ApiBaseController
 {
@@ -23,6 +25,17 @@ class ApiUserController extends ApiBaseController
     {
     }
 
+    #[Post(
+        path: '/api/v1/login',
+        summary: 'Đăng nhập',
+        tags: ['User'],
+        responses: [
+            new Response(response: '200', description: 'Đăng nhập thành công'),
+            new Response(response: '400', description: 'Email hoặc mật khẩu không chính xác'),
+            new Response(response: '400', description: 'Tài khoản chưa được xác thực'),
+            new Response(response: '405', description: 'Phương thức không được hỗ trợ')
+        ]
+    )]
     public function getToken(): void
     {
         $input = json_decode(file_get_contents('php://input'), true);
@@ -33,13 +46,13 @@ class ApiUserController extends ApiBaseController
 
         if (!$user || !password_verify($password, $user->password)) {
             http_response_code(400);
-            echo json_encode(['status' => false, 'message' => 'Email hoặc mật khẩu không chính xác']);
+            echo json_encode(['status' => false, 'message' => 'Email hoặc mật khẩu không chính xác'], JSON_UNESCAPED_UNICODE);
             exit;
         }
 
         if (!$user->is_verify) {
             http_response_code(400);
-            echo json_encode(['status' => false, 'message' => 'Tài khoản chưa được xác thực']);
+            echo json_encode(['status' => false, 'message' => 'Tài khoản chưa được xác thực'], JSON_UNESCAPED_UNICODE);
             exit;
         }
 
@@ -55,17 +68,39 @@ class ApiUserController extends ApiBaseController
         ];
 
         $key = 'hutech';
+        $header = ['alg' => 'HS512', 'typ' => 'JWT'];
         $payload = [
             "iss" => "https://hutech-coffee.local",
             "aud" => "https://hutech-coffee.local",
-            "iat" => 1356999524,
-            "nbf" => 1357000000,
+            "iat" => time(),
             "exp" => time() + 3600,
             "data" => $user
         ];
 
-        $jwt = JWT::encode($payload, $key, 'HS512');
-        echo json_encode(['status' => true, 'message' => 'Đăng nhập thành công', 'token' => $jwt], JSON_UNESCAPED_UNICODE);
+        $jwt = JWT::encode($payload, $key, 'HS512', null, $header);
+
+        echo json_encode([
+            'status' => true,
+            'message' => 'Đăng nhập thành công',
+            'token' => $jwt,
+            'expires' => time() + 3600
+        ], JSON_UNESCAPED_UNICODE);
+
         setcookie('token', $jwt, time() + 3600, '/', '', false, true);
+    }
+
+    #[Post(
+        path: '/api/v1/logout',
+        summary: 'Đăng xuất',
+        tags: ['User'],
+        responses: [
+            new Response(response: '200', description: 'Đăng xuất thành công'),
+            new Response(response: '405', description: 'Phương thức không được hỗ trợ')
+        ]
+    )]
+    public function logout(): void
+    {
+        setcookie('token', '', time() - 3600, '/', '', false, true);
+        echo json_encode(['status' => true, 'message' => 'Đăng xuất thành công']);
     }
 }

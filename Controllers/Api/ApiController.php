@@ -6,9 +6,13 @@ namespace Hutech\Controllers\Api;
 
 use Hutech\Factories\CategoryFactory;
 use Hutech\Factories\ProductFactory;
-use Hutech\Security\Csrf;
 use Hutech\Services\CategoryService;
 use Hutech\Services\ProductService;
+use OpenApi\Attributes\Delete;
+use OpenApi\Attributes\Get;
+use OpenApi\Attributes\Post;
+use OpenApi\Attributes\Put;
+use OpenApi\Attributes\Response;
 
 class ApiController extends ApiBaseController
 {
@@ -18,12 +22,22 @@ class ApiController extends ApiBaseController
         protected ProductService  $coffeeService,
         protected ProductFactory  $coffeeFactory,
         protected CategoryService $categoryService,
-        protected CategoryFactory $categoryFactory,
-        protected Csrf            $csrf
+        protected CategoryFactory $categoryFactory
     )
     {
     }
 
+    #[Get(
+        path: '/api/v1/products',
+        summary: 'Lấy danh sách sản phẩm',
+        tags: ['Product'],
+        responses: [
+            new Response(response: '200', description: 'Thành công'),
+            new Response(response: '401', description: 'Chưa xác thực'),
+            new Response(response: '403', description: 'Không có quyền truy cập'),
+            new Response(response: '405', description: 'Phương thức không hợp lệ')
+        ]
+    )]
     public function getAllProducts(): void
     {
         $this->validMethod('GET');
@@ -31,6 +45,17 @@ class ApiController extends ApiBaseController
         echo json_encode($coffees, JSON_UNESCAPED_UNICODE);
     }
 
+    #[Get(
+        path: '/api/v1/categories',
+        summary: 'Lấy danh sách danh mục',
+        tags: ['Category'],
+        responses: [
+            new Response(response: '200', description: 'Thành công'),
+            new Response(response: '401', description: 'Chưa xác thực'),
+            new Response(response: '403', description: 'Không có quyền truy cập'),
+            new Response(response: '405', description: 'Phương thức không hợp lệ')
+        ]
+    )]
     public function getAllCategories(): void
     {
         $this->validMethod('GET');
@@ -38,33 +63,22 @@ class ApiController extends ApiBaseController
         echo json_encode($categories, JSON_UNESCAPED_UNICODE);
     }
 
-    public function getById(): void
-    {
-        $this->validMethod('GET');
-        $coffee = $this->coffeeService->getById(
-            (int) htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')
-        );
-
-        if ($coffee) {
-            $token = $this->csrf->getToken();
-            echo json_encode(['coffee' => $coffee, 'token' => $token], JSON_UNESCAPED_UNICODE);
-        } else {
-            http_response_code(404);
-            echo json_encode(['error' => 'Không tìm thấy sản phẩm']);
-        }
-    }
-
+    #[Post(
+        path: '/api/v1/products',
+        summary: 'Thêm sản phẩm',
+        tags: ['Product'],
+        responses: [
+            new Response(response: '201', description: 'Thêm thành công'),
+            new Response(response: '400', description: 'Dữ liệu không hợp lệ'),
+            new Response(response: '401', description: 'Chưa xác thực'),
+            new Response(response: '403', description: 'Không có quyền truy cập'),
+            new Response(response: '405', description: 'Phương thức không hợp lệ')
+        ]
+    )]
     public function add(): void
     {
         $this->validMethod('POST');
         $input = json_decode(file_get_contents('php://input'), true);
-
-        if (!isset($input['csrf_token']) || !$this->csrf->validateToken($input['csrf_token'])) {
-            http_response_code(400);
-            echo json_encode(['csrf_token' => 'Token không hợp lệ']);
-            exit;
-        }
-
         $imgPath = '';
 
         if ($_FILES['Image']['name']) {
@@ -168,5 +182,131 @@ class ApiController extends ApiBaseController
         }
 
         return true;
+    }
+
+    #[Delete(
+        path: '/api/v1/delete',
+        summary: 'Xóa sản phẩm',
+        tags: ['Product'],
+        responses: [
+            new Response(response: '200', description: 'Xóa thành công'),
+            new Response(response: '400', description: 'Dữ liệu không hợp lệ'),
+            new Response(response: '401', description: 'Chưa xác thực'),
+            new Response(response: '403', description: 'Không có quyền truy cập'),
+            new Response(response: '405', description: 'Phương thức không hợp lệ')
+        ]
+    )]
+    public function delete(): void
+    {
+        $this->validMethod('DELETE');
+        $input = json_decode(file_get_contents('php://input'), true);
+        $coffee = $this->coffeeService->getById(
+            (int)htmlspecialchars($input['id'], ENT_QUOTES, 'UTF-8')
+        );
+
+        if ($coffee) {
+            if ($coffee->image && file_exists($coffee->image)) {
+                unlink($coffee->image);
+            }
+            $this->coffeeService->delete(
+                (int)htmlspecialchars($input['id'], ENT_QUOTES, 'UTF-8')
+            );
+        }
+
+        http_response_code(200);
+        echo json_encode(['success' => 'Xóa thành công']);
+    }
+
+    #[Get(
+        path: '/api/v1/getById',
+        summary: 'Lấy danh sách sản phẩm theo id',
+        tags: ['Product'],
+        responses: [
+            new Response(response: '200', description: 'Lấy thành công'),
+            new Response(response: '401', description: 'Chưa xác thực'),
+            new Response(response: '403', description: 'Không có quyền truy cập'),
+            new Response(response: '405', description: 'Phương thức không hợp lệ')
+        ]
+    )]
+    public function getById(): void
+    {
+        $this->validMethod('GET');
+        $coffee = $this->coffeeService->getById(
+            (int)htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8')
+        );
+
+        if ($coffee) {
+            echo json_encode(['coffee' => $coffee], JSON_UNESCAPED_UNICODE);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Không tìm thấy sản phẩm']);
+        }
+    }
+
+    #[Put(
+        path: '/api/v1/update',
+        summary: 'Cập nhật sản phẩm',
+        tags: ['Product'],
+        responses: [
+            new Response(response: '200', description: 'Cập nhật thành công'),
+            new Response(response: '400', description: 'Dữ liệu không hợp lệ'),
+            new Response(response: '401', description: 'Chưa xác thực'),
+            new Response(response: '403', description: 'Không có quyền truy cập'),
+            new Response(response: '405', description: 'Phương thức không hợp lệ')
+        ]
+    )]
+    public function update(): void
+    {
+        $this->validMethod('PUT');
+        $input = json_decode(file_get_contents('php://input'), true);
+        $coffee = $this->coffeeService->getById(
+            (int)htmlspecialchars($input['Id'], ENT_QUOTES, 'UTF-8')
+        );
+
+        if (!$coffee) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Không tìm thấy sản phẩm'], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        $imgPath = $coffee->image;
+
+        if ($_FILES['Image']['name']) {
+            if ($imgPath && file_exists($this::FILE_PATH . $coffee->image)) {
+                unlink($coffee->image);
+            }
+
+            $imgPath = $this->uploadImage($_FILES['Image']) ?? '';
+
+            if (!$imgPath) {
+                http_response_code(400);
+                echo json_encode(
+                    ['image_error' => $_SESSION['image_error']],
+                    JSON_UNESCAPED_UNICODE
+                );
+                unset($_SESSION['image_error']);
+                exit;
+            }
+        }
+
+        $product = $this->coffeeFactory->create(
+            id: htmlspecialchars($input['Id'], ENT_QUOTES, 'UTF-8'),
+            name: htmlspecialchars($input['Name'], ENT_QUOTES, 'UTF-8'),
+            price: htmlspecialchars($input['Price'], ENT_QUOTES, 'UTF-8'),
+            image: $imgPath ?? '',
+            description: htmlspecialchars($input['Description'], ENT_QUOTES, 'UTF-8') ?? '',
+            category_id: htmlspecialchars($input['category_id'], ENT_QUOTES, 'UTF-8')
+        );
+
+        if (!$this->validation($product)) {
+            http_response_code(400);
+            echo json_encode($_SESSION['errors'], JSON_UNESCAPED_UNICODE);
+            unset($_SESSION['errors']);
+            exit;
+        }
+
+        $this->coffeeService->update($product);
+        http_response_code(200);
+        echo json_encode(['success' => 'Cập nhật thành công'], JSON_UNESCAPED_UNICODE);
     }
 }

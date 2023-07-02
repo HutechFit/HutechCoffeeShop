@@ -21,7 +21,7 @@ $route = new Route();
 
 try {
     $route->setRoute('/', [HomeController::class, 'index'])
-        ->setRoute('/manager', [CoffeeController::class, 'getAll'], ['Auth' => ['AD']])
+        ->setRoute('/manager', [CoffeeController::class, 'getAll'], ['Auth' => ['ADMIN']])
         ->setRoute('/add', [CoffeeController::class, 'add'], ['Auth' => ['ADMIN']])
         ->setRoute('/edit', [CoffeeController::class, 'edit'], ['Auth' => ['ADMIN']])
         ->setRoute('/insert', [CoffeeController::class, 'insert'], ['Auth' => ['ADMIN']])
@@ -48,10 +48,13 @@ try {
         ->setRoute('/reset-password', [UserController::class, 'resetPassword'])
         ->setRoute('/change-password', [UserController::class, 'changePassword'])
         ->setRoute('/api/v1/products', [ApiController::class, 'getAllProducts'], ['Auth' => ['ADMIN']])
-        ->setRoute('/api/v1/categories', [ApiController::class, 'getAllCategories'])
-        ->setRoute('/api/v1/add', [ApiController::class, 'add'])
-        ->setRoute('/api/v1/getById', [ApiController::class, 'getById'])
-            ->setRoute('/api/v1/token', [ApiUserController::class, 'getToken'])
+        ->setRoute('/api/v1/categories', [ApiController::class, 'getAllCategories'], ['Auth' => ['ADMIN']])
+        ->setRoute('/api/v1/add', [ApiController::class, 'add'], ['Auth' => ['ADMIN']])
+        ->setRoute('/api/v1/getById', [ApiController::class, 'getById'], ['Auth' => ['ADMIN']])
+        ->setRoute('/api/v1/update', [ApiController::class, 'update'], ['Auth' => ['ADMIN']])
+        ->setRoute('/api/v1/delete', [ApiController::class, 'delete'], ['Auth' => ['ADMIN']])
+        ->setRoute('/api/v1/login', [ApiUserController::class, 'getToken'])
+        ->setRoute('/api/v1/logout', [ApiUserController::class, 'logout'])
         ->run();
 } catch (NotFoundExceptionInterface|ContainerExceptionInterface|ReflectionException $e) {
     print_r($e->getMessage());

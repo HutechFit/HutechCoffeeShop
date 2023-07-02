@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hutech\Security;
 
+use Dotenv\Dotenv;
+
 readonly class Capcha
 {
     private string $siteKey;
@@ -11,8 +13,11 @@ readonly class Capcha
 
     public function __construct()
     {
-        $this->siteKey = "6Le6SugmAAAAAP4SdvUoSKLjf3bpfb0H9J-YV3Os";
-        $this->secretKey = "6Le6SugmAAAAAHdlYnxRB6Nr5l5dphn5ZAuIy8bI";
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+        $dotenv->load();
+
+        $this->siteKey = $_ENV['CAPCHA_SITE_KEY'];
+        $this->secretKey = $_ENV['CAPCHA_SECRET_KEY'];
     }
 
     public function getSiteKey(): string

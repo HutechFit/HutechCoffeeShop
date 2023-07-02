@@ -1,9 +1,35 @@
+@token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2h1dGVjaC1jb2ZmZWUubG9jYWwiLCJhdWQiOiJodHRwczovL2h1dGVjaC1jb2ZmZWUubG9jYWwiLCJpYXQiOjE2ODgzMjgzMzksImV4cCI6MTY4ODMzMTkzOSwiZGF0YSI6eyJpZCI6InVzZXJfNjQ5YzExYjRlYjllOSIsImZ1bGxfbmFtZSI6Ik5ndXlcdTFlYzVuIFh1XHUwMGUybiBOaFx1MDBlMm4iLCJlbWFpbCI6Im5ndXllbnh1YW5uaGFuNDA3QGdtYWlsLmNvbSIsInJvbGUiOlsiQURNSU4iLCJVU0VSIl19fQ.5xC6k-y1rwd0m9_gjG9ldAheSaUpOHM8oPPWvwK-QHgKVWEmz7lYC-tvuqYg_0dzb7F7yUkW9Lq3dqm6mpKjdA
+
 GET https://hutech-coffee.local/api/v1/categories
 
 ###
 
 GET https://hutech-coffee.local/api/v1/products
+Authorization: Bearer {{token}}
 
 ###
 
 GET https://hutech-coffee.local/api/v1/getById?id=1
+
+###
+
+POST https://hutech-coffee.local/api/v1/add
+Content-Type: application/json
+
+{
+  "Name": "Cà phê sữa đá",
+  "Price": 23000,
+  "Image": "",
+  "Description": "Cà phê sữa đá",
+  "Category_id": 1
+}
+
+###
+
+POST https://hutech-coffee.local/api/v1/login
+Content-Type: application/json
+
+{
+  "Email": "nguyenxuannhan407@gmail.com",
+  "Password": "Xuannhan123"
+}

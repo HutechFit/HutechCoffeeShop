@@ -46,7 +46,7 @@ class Route extends Container
                 !class_exists($this->routes[$uri][0]) ||
                 !method_exists($this->routes[$uri][0], $this->routes[$uri][1])) {
                 http_response_code(404);
-                echo json_encode('URL không hợp lệ');
+                echo json_encode('URL không hợp lệ', JSON_UNESCAPED_UNICODE);
                 exit;
             }
         }
@@ -76,28 +76,29 @@ class Route extends Container
                             exit;
                         }
                     }
+                    else {
+                        if (!isset(getallheaders()['authorization']) && !isset($_COOKIE['token'])) {
+                            http_response_code(401);
+                            echo json_encode(['message' => 'Bạn chưa đăng nhập'], JSON_UNESCAPED_UNICODE);
+                            exit;
+                        }
 
-                    if (!isset(getallheaders()['Authorization']) || !isset($_COOKIE['token'])) {
-                        http_response_code(401);
-                        echo json_encode(['message' => 'Bạn chưa đăng nhập']);
-                        exit;
-                    }
+                        $decoded = JWT::decode(
+                            trim(substr(getallheaders()['authorization'], 7)) ?? $_COOKIE['token'],
+                            new Key('hutech', 'HS512')
+                        );
 
-                    $decoded = JWT::decode(
-                        trim(substr(getallheaders()['Authorization'], 7)) ?? $_COOKIE['token'],
-                        new Key('hutech', 'HS512')
-                    );
+                        if ($decoded->exp < time()) {
+                            http_response_code(401);
+                            echo json_encode(['message' => 'Phiên đăng nhập đã hết hạn']);
+                            exit;
+                        }
 
-                    if ($decoded->exp < time()) {
-                        http_response_code(401);
-                        echo json_encode(['message' => 'Phiên đăng nhập đã hết hạn']);
-                        exit;
-                    }
-
-                    if (!array_map(fn($role) => in_array($role, $decoded->data->role), $roles)) {
-                        http_response_code(403);
-                        echo json_encode(['message' => 'Bạn không có quyền truy cập']);
-                        exit;
+                        if (!array_map(fn($role) => in_array($role, $decoded->data->role), $roles)) {
+                            http_response_code(403);
+                            echo json_encode(['message' => 'Bạn không có quyền truy cập'], JSON_UNESCAPED_UNICODE);
+                            exit;
+                        }
                     }
                 }
 
@@ -108,7 +109,7 @@ class Route extends Container
 
                 if ((isset($_COOKIE['token']) || isset(getallheaders()['Authorization'])) &&
                     ($uri === '/login' || $uri === '/register')) {
-                    echo json_encode(['message' => 'Bạn đã đăng nhập']);
+                    echo json_encode(['message' => 'Bạn đã đăng nhập'], JSON_UNESCAPED_UNICODE);
                     exit;
                 }
 
@@ -120,7 +121,7 @@ class Route extends Container
                     require_once './Views/Home/404.php';
                 } else {
                     http_response_code(404);
-                    echo json_encode('URL không hợp lệ');
+                    echo json_encode('URL không hợp lệ', JSON_UNESCAPED_UNICODE);
                     exit;
                 }
             }

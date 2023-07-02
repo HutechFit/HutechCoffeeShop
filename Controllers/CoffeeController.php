@@ -35,7 +35,7 @@ readonly class CoffeeController
     {
         $coffees = $this->coffeeService->getAll();
         $categories = $this->categoryService->getAll();
-        require_once './Views/Coffee/Manager.php';
+        require_once './Views/Coffee/ManagerNoApi.php';
     }
 
     public function insert(): void
