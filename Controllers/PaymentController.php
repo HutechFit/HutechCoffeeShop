@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hutech\Controllers;
 
+use Dotenv\Dotenv;
+use Exception;
 use Hutech\Enum\PaymentMethod;
 use Hutech\Factories\CouponFactory;
 use Hutech\Factories\InvoiceFactory;
@@ -12,6 +14,9 @@ use Hutech\Security\Csrf;
 use Hutech\Services\CouponService;
 use Hutech\Services\InvoiceService;
 use Hutech\Services\ItemInvoiceService;
+use Srmklive\PayPal\Services\PayPal;
+use Stripe\StripeClient;
+use Throwable;
 
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 date_default_timezone_set('Asia/Ho_Chi_Minh');
@@ -29,6 +34,8 @@ readonly class PaymentController
         protected Csrf               $csrf
     )
     {
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+        $dotenv->load();
     }
 
     public function payment(): void
@@ -50,13 +57,56 @@ readonly class PaymentController
 
     private function striped(): void
     {
-        $_SESSION['payment_error'] = 'Stripe đang được phát triển';
+        $stripe = new StripeClient($_ENV['STRIPE_SECRET_KEY']);
+
+        $invoice = $this->invoiceFactory->create(
+            rand(1, 1000000),
+            $_POST['amount'],
+            date('Y-m-d H:i:s'),
+            PaymentMethod::STIPE);
+
+        $this->invoiceService->create($invoice);
+
         header('Location: /hutech-coffee/cart');
     }
 
+    /**
+     * @throws Exception
+     * @throws Throwable
+     */
     private function paypal(): void
     {
-        $_SESSION['payment_error'] = 'Paypal đang được phát triển';
+        $paypal = [
+            'mode' => $_ENV['PAYPAL_MODE'] ?? 'sandbox',
+            'sandbox' => [
+                'client_id' => $_ENV['PAYPAL_SANDBOX_CLIENT_ID'],
+                'client_secret' => $_ENV['PAYPAL_SANDBOX_CLIENT_SECRET'],
+                'app_id' => 'APP-80W284485P519543T'
+            ],
+            'live' => [
+                'client_id' => $_ENV['PAYPAL_LIVE_CLIENT_ID'],
+                'client_secret' => $_ENV['PAYPAL_LIVE_CLIENT_SECRET'],
+                'app_id' => ''
+            ],
+            'payment_action' => 'Sale',
+            'currency' => 'USD',
+            'notify_url' => 'https://hutech-coffee.local/payment-result',
+            'locale' => 'en_US',
+            'validate_ssl' => true,
+        ];
+
+        $provider = new PayPal;
+        $provider->setApiCredentials($paypal);
+        $provider->setAccessToken($provider->getAccessToken());
+
+        $invoice = $this->invoiceFactory->create(
+            rand(1, 1000000),
+            $_POST['amount'],
+            date('Y-m-d H:i:s'),
+            PaymentMethod::PAYPAL);
+
+        $this->invoiceService->create($invoice);
+
         header('Location: /hutech-coffee/cart');
     }
 
