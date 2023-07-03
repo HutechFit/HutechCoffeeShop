@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Hutech\Exceptions\InvalidRoute;
 use PHPUnit\Framework\TestCase;
 
