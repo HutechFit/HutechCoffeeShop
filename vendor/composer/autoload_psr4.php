@@ -16,6 +16,7 @@ return array(
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'OpenApi\\' => array($vendorDir . '/zircote/swagger-php/src'),
+    'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Hutech\\' => array($baseDir . '/'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),

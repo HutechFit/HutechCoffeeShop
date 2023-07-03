@@ -9,10 +9,12 @@ use Hutech\Factories\ProductFactory;
 use Hutech\Security\Csrf;
 use Hutech\Services\CategoryService;
 use Hutech\Services\ProductService;
+use Hutech\Utils\Logging;
 
 readonly class CoffeeController
 {
     private const FILE_PATH = '/Uploads/';
+    private Logging $logger;
 
     public function __construct(
         protected ProductService  $coffeeService,
@@ -22,12 +24,14 @@ readonly class CoffeeController
         protected Csrf            $csrf
     )
     {
+        $this->logger = new Logging();
     }
 
     public function add(): void
     {
         $token = $this->csrf->getToken();
         $categories = $this->categoryService->getAll();
+        $this->logger->info('Thêm sản phẩm', ['user' => $_SERVER['REMOTE_ADDR']]);
         require_once './Views/Coffee/Add.php';
     }
 
@@ -35,6 +39,7 @@ readonly class CoffeeController
     {
         $coffees = $this->coffeeService->getAll();
         $categories = $this->categoryService->getAll();
+        $this->logger->info('Danh sách sản phẩm', ['user' => $_SERVER['REMOTE_ADDR']]);
         require_once './Views/Coffee/ManagerNoApi.php';
     }
 
@@ -43,6 +48,7 @@ readonly class CoffeeController
         if (isset($_POST['submit'])) {
 
             if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+                $this->logger->warning('Token không hợp lệ', ['user' => $_SERVER['REMOTE_ADDR']]);
                 $_SESSION['csrf_error'] = 'Token không hợp lệ';
                 header('Location: /hutech-coffee/register');
                 exit;
@@ -55,6 +61,7 @@ readonly class CoffeeController
             if ($_FILES['Image']['name']) {
                 $imgPath = $this->uploadImage($_FILES['Image']) ?? '';
                 if (!$imgPath) {
+                    $this->logger->warning($_SESSION['image_error'], ['user' => $_SERVER['REMOTE_ADDR']]);
                     header('Location: /hutech-coffee/add');
                     exit;
                 }
@@ -74,6 +81,7 @@ readonly class CoffeeController
                 exit;
             }
 
+            $this->logger->info('Thêm sản phẩm thành công', ['user' => $_SERVER['REMOTE_ADDR']]);
             $this->coffeeService->create($product);
         }
 
@@ -122,6 +130,7 @@ readonly class CoffeeController
     {
         if (!strlen($product->name) || strlen($product->name) > 50) {
             $_SESSION['name_error'] = 'Tên sản phẩm không được để trống và tối đa 50 ký tự';
+            $this->logger->warning($_SESSION['name_error'], ['user' => $_SERVER['REMOTE_ADDR']]);
         }
 
         if (!filter_var(
@@ -135,14 +144,17 @@ readonly class CoffeeController
             ]
         )) {
             $_SESSION['price_error'] = 'Giá sản phẩm phải là số nguyên dương và nhỏ hơn 1 tỷ';
+            $this->logger->warning($_SESSION['price_error'], ['user' => $_SERVER['REMOTE_ADDR']]);
         }
 
         if (!strlen($product->description) > 255) {
             $_SESSION['description_error'] = 'Mô tả sản phẩm tối đa 255 ký tự';
+            $this->logger->warning($_SESSION['description_error'], ['user' => $_SERVER['REMOTE_ADDR']]);
         }
 
         if (!strlen($product->image) > 255) {
             $_SESSION['image_error'] = 'Đường dẫn ảnh sản phẩm tối đa 255 ký tự';
+            $this->logger->warning($_SESSION['image_error'], ['user' => $_SERVER['REMOTE_ADDR']]);
         }
 
         if (isset($_SESSION['price_error'])
@@ -164,8 +176,10 @@ readonly class CoffeeController
         if ($coffee) {
             $token = $this->csrf->getToken();
             $categories = $this->categoryService->getAll();
+            $this->logger->info('Lấy danh sách danh mục sản phẩm', ['user' => $_SERVER['REMOTE_ADDR']]);
             require_once './Views/Coffee/Edit.php';
         } else {
+            $this->logger->warning('Không tìm thấy sản phẩm', ['user' => $_SERVER['REMOTE_ADDR']]);
             require_once './Views/Home/404.php';
         }
     }
@@ -173,11 +187,13 @@ readonly class CoffeeController
     public function update(): void
     {
         if (!isset($_POST['submit'])) {
+            $this->logger->warning('Không tìm thấy phương thức POST', ['user' => $_SERVER['REMOTE_ADDR']]);
             header('Location: /hutech-coffee/manager');
             return;
         }
 
         if (!isset($_POST['csrf_token']) || !$this->csrf->validateToken($_POST['csrf_token'])) {
+            $this->logger->warning('Token không hợp lệ', ['user' => $_SERVER['REMOTE_ADDR']]);
             $_SESSION['csrf_error'] = 'Token không hợp lệ';
             header('Location: /hutech-coffee/register');
             exit;
@@ -204,6 +220,7 @@ readonly class CoffeeController
             $imgPath = $this->uploadImage($_FILES['Image']) ?? '';
 
             if (!$imgPath) {
+                $this->logger->warning('Upload ảnh không thành công', ['user' => $_SERVER['REMOTE_ADDR']]);
                 header('Location: /hutech-coffee/edit?id=' . htmlspecialchars($_POST['Id'], ENT_QUOTES, 'UTF-8'));
                 exit;
             }
@@ -219,11 +236,13 @@ readonly class CoffeeController
         );
 
         if (!$this->validation($product)) {
+            $this->logger->warning('Dữ liệu không hợp lệ', ['user' => $_SERVER['REMOTE_ADDR']]);
             header('Location: /hutech-coffee/edit?id=' . htmlspecialchars($_POST['Id'], ENT_QUOTES, 'UTF-8'));
             exit;
         }
 
         $this->coffeeService->update($product);
+        $this->logger->info('Cập nhật sản phẩm', ['user' => $_SERVER['REMOTE_ADDR']]);
         header('Location: /hutech-coffee/manager');
     }
 
@@ -242,6 +261,7 @@ readonly class CoffeeController
             );
         }
 
+        $this->logger->info('Xóa sản phẩm', ['user' => $_SERVER['REMOTE_ADDR']]);
         header('Location: /hutech-coffee/manager');
     }
 }

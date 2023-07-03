@@ -3,7 +3,7 @@
         'name' => 'hutech/hutech-coffee',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8eebd7a06902302fb2d1ed7242bb15694443d088',
+        'reference' => 'f539169144e974c1d8fd2eb3b208dd741c562a9d',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -49,9 +49,18 @@
         'hutech/hutech-coffee' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8eebd7a06902302fb2d1ed7242bb15694443d088',
+            'reference' => 'f539169144e974c1d8fd2eb3b208dd741c562a9d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'monolog/monolog' => array(
+            'pretty_version' => '3.4.0',
+            'version' => '3.4.0.0',
+            'reference' => 'e2392369686d420ca32df3803de28b5d6f76867d',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../monolog/monolog',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -90,6 +99,12 @@
             'install_path' => __DIR__ . '/../psr/log',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'psr/log-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '3.0.0',
+            ),
         ),
         'symfony/deprecation-contracts' => array(
             'pretty_version' => 'v3.3.0',

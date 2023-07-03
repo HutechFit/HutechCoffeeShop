@@ -26,7 +26,8 @@
     "vlucas/phpdotenv": "^5.5",
     "ext-sodium": "*",
     "firebase/php-jwt": "^6.8",
-    "zircote/swagger-php": "^4.7"
+    "zircote/swagger-php": "^4.7",
+    "monolog/monolog": "^3.4"
   },
   "autoload": {
     "psr-4": {

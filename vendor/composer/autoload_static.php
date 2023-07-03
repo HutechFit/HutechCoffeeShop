@@ -33,6 +33,10 @@ class ComposerStaticInit69f34f89f904c844f369124e62eb9d0d
         array (
             'OpenApi\\' => 8,
         ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
+        ),
         'H' => 
         array (
             'Hutech\\' => 7,
@@ -93,6 +97,10 @@ class ComposerStaticInit69f34f89f904c844f369124e62eb9d0d
         'OpenApi\\' => 
         array (
             0 => __DIR__ . '/..' . '/zircote/swagger-php/src',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
         'Hutech\\' => 
         array (
