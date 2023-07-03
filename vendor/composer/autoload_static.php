@@ -24,6 +24,7 @@ class ComposerStaticInit69f34f89f904c844f369124e62eb9d0d
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\Finder\\' => 25,
+            'Stripe\\' => 7,
         ),
         'P' => 
         array (
@@ -83,6 +84,10 @@ class ComposerStaticInit69f34f89f904c844f369124e62eb9d0d
         array (
             0 => __DIR__ . '/..' . '/symfony/finder',
         ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
@@ -138,6 +143,16 @@ class ComposerStaticInit69f34f89f904c844f369124e62eb9d0d
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'P' => 
+        array (
+            'PayPal' => 
+            array (
+                0 => __DIR__ . '/..' . '/paypal/rest-api-sdk-php/lib',
+            ),
         ),
     );
 
@@ -1273,6 +1288,7 @@ class ComposerStaticInit69f34f89f904c844f369124e62eb9d0d
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit69f34f89f904c844f369124e62eb9d0d::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit69f34f89f904c844f369124e62eb9d0d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit69f34f89f904c844f369124e62eb9d0d::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit69f34f89f904c844f369124e62eb9d0d::$classMap;
 
         }, null, ClassLoader::class);
