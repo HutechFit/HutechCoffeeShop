@@ -29,7 +29,7 @@
     "zircote/swagger-php": "^4.7",
     "monolog/monolog": "^3.4",
     "paragonie/sodium_compat": "^1.20",
-    "paypal/rest-api-sdk-php": "*",
+    "paypal/rest-api-sdk-php": "^1.14",
     "stripe/stripe-php": "^10.16"
   },
   "autoload": {
