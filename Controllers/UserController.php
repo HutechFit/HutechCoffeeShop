@@ -98,7 +98,13 @@ readonly class UserController
         $message = str_replace('{{id}}', $id, $message);
         $message = str_replace('{{token}}', $provider->token, $message);
 
-        mail($email, $subject, $message, $headers);
+        $success = mail($email, $subject, $message, $headers);
+
+        if (!$success) {
+            $_SESSION['email_forgot_error'] = 'Gửi email thất bại';
+            header('Location: /hutech-coffee/forgot-password');
+            exit;
+        }
     }
 
     public function resetPassword(): void

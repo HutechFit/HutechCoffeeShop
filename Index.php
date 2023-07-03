@@ -9,6 +9,7 @@ use Hutech\Controllers\CoffeeController;
 use Hutech\Controllers\HomeController;
 use Hutech\Controllers\PaymentController;
 use Hutech\Controllers\UserController;
+use Hutech\Exceptions\InvalidRoute;
 use Hutech\Utils\Route;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -55,7 +56,10 @@ try {
         ->setRoute('/api/v1/delete', [ApiController::class, 'delete'], ['Auth' => ['ADMIN']])
         ->setRoute('/api/v1/login', [ApiUserController::class, 'getToken'])
         ->setRoute('/api/v1/logout', [ApiUserController::class, 'logout'])
+        ->setRoute('/api/v1/send-forgot-password', [ApiUserController::class, 'sendForgotPassword'])
+        ->setRoute('/api/v1/register', [ApiUserController::class, 'addUser'])
+        ->setRoute('/api/v1/resend', [ApiUserController::class, 'resendEmail'])
         ->run();
 } catch (NotFoundExceptionInterface|ContainerExceptionInterface|ReflectionException $e) {
-    print_r($e->getMessage());
+    throw new InvalidRoute();
 }
